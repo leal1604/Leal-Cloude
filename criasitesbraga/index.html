@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add("js")</script>
 <style>
   /* ========= Configure aqui ========= */
   /* Troque o número do WhatsApp em WHATSAPP (no script, final da página) */
@@ -185,6 +186,46 @@
   .diff-item h3 { font-size: 18px; margin-bottom: 8px; }
   .diff-item p { color: var(--muted); font-size: 15px; }
 
+  /* Portfólio */
+  .works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .work { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: border-color .25s, transform .25s; }
+  .work:hover { border-color: rgba(255,106,31,.6); transform: translateY(-4px); }
+  .work-shot { aspect-ratio: 16/10; position: relative; overflow: hidden; padding: 18px; display: flex; flex-direction: column; justify-content: center; }
+  .work-shot .bar { position: absolute; top: 0; left: 0; right: 0; height: 22px; background: rgba(0,0,0,.35); display: flex; gap: 5px; align-items: center; padding-left: 10px; }
+  .work-shot .bar i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.35); }
+  .work-shot h4 { font-family: "Montserrat", system-ui, sans-serif; font-size: 20px; line-height: 1.15; max-width: 70%; position: relative; z-index: 1; }
+  .work-shot span { display: inline-block; margin-top: 12px; font-size: 11px; padding: 5px 12px; border-radius: 99px; background: #fff; color: #111; font-weight: 600; width: max-content; position: relative; z-index: 1; }
+  .work-shot svg { position: absolute; right: -15%; bottom: -25%; width: 75%; height: auto; aspect-ratio: 3/2; opacity: .9; }
+  .ws-1 { background: linear-gradient(135deg, #0f2a2e, #0b1416); }
+  .ws-1 span { background: #2dd4bf; }
+  .ws-2 { background: linear-gradient(135deg, #2a1608, #120a05); }
+  .ws-2 span { background: var(--orange); color: #fff; }
+  .ws-3 { background: linear-gradient(135deg, #1b1b2e, #0c0c14); }
+  .ws-3 span { background: #c7a55a; }
+  .work-info { padding: 22px 24px 26px; }
+  .work-info small { color: var(--orange); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; font-weight: 600; }
+  .work-info h3 { font-size: 19px; margin: 6px 0 6px; }
+  .work-info p { color: var(--muted); font-size: 15px; }
+  .works-note { text-align: center; margin-top: 40px; }
+
+  /* Sobre */
+  .about { background: var(--bg-2); }
+  .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 70px; align-items: center; }
+  .about-card {
+    aspect-ratio: 4/5; border-radius: 26px; position: relative; overflow: hidden;
+    background: radial-gradient(circle at 30% 20%, #2a2a30, #121214 70%); border: 1px solid var(--line);
+    display: grid; place-items: center;
+  }
+  .about-card .big { font-family: "Montserrat", system-ui, sans-serif; font-weight: 900; font-size: clamp(90px, 14vw, 170px); color: #fff; letter-spacing: -.06em; position: relative; z-index: 1; }
+  .about-card .big i { color: var(--orange); font-style: normal; }
+  .about-card svg { position: absolute; left: -20%; bottom: -30%; width: 140%; height: auto; aspect-ratio: 3/2; }
+  .about-card .caption { position: absolute; left: 24px; bottom: 22px; z-index: 1; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #fff; }
+  .about h2 { font-size: clamp(30px, 4.2vw, 48px); font-weight: 800; margin: 14px 0 20px; }
+  .about p { color: var(--muted); font-size: 17px; margin-bottom: 16px; }
+  .about-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 26px 0 32px; }
+  .about-list li { display: flex; gap: 10px; color: #d4d4d8; font-size: 15px; }
+  .about-list li::before { content: "✓"; color: var(--orange); font-weight: 700; }
+
   /* Processo */
   .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: s; }
   .step { position: relative; padding: 30px 26px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
@@ -251,10 +292,10 @@
   .wa-float svg { width: 30px; height: 30px; }
 
   /* Animação de entrada */
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
-  .reveal.in { opacity: 1; transform: none; }
+  .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .js .reveal.in { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
-    .reveal { opacity: 1; transform: none; transition: none; }
+    .js .reveal { opacity: 1; transform: none; transition: none; }
     html { scroll-behavior: auto; }
   }
 
@@ -263,7 +304,9 @@
     .nav-links { display: none; }
     .cards, .plans { grid-template-columns: 1fr; }
     .diff-grid, .steps { grid-template-columns: 1fr 1fr; }
-    .pain-grid { grid-template-columns: 1fr; gap: 40px; }
+    .pain-grid, .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .works { grid-template-columns: 1fr; }
+    .about-card { max-width: 420px; aspect-ratio: 1/1; width: 100%; }
     .devices { height: 360px; }
     .phone { top: 50px; }
   }
@@ -284,7 +327,7 @@
     .benefits { grid-template-columns: 1fr; }
     .benefit + .benefit { border-left: 0; border-top: 1px solid var(--line); }
     .benefit { padding: 20px 4px; }
-    .diff-grid, .steps { grid-template-columns: 1fr; }
+    .diff-grid, .steps, .about-list { grid-template-columns: 1fr; }
     .nav .btn span { display: none; }
     .nav .btn { padding: 11px 14px; }
     .logo { font-size: 16px; }
@@ -323,6 +366,8 @@
     </a>
     <nav class="nav-links">
       <a href="#servicos">Serviços</a>
+      <a href="#portfolio">Portfólio</a>
+      <a href="#sobre">Sobre</a>
       <a href="#processo">Como funciona</a>
       <a href="#planos">Planos</a>
       <a href="#faq">Dúvidas</a>
@@ -468,6 +513,61 @@
     </div>
   </section>
 
+  <!-- ===== PORTFÓLIO ===== -->
+  <section id="portfolio">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Portfólio</div>
+        <h2>Sites criados para <span class="accent">vender mais</span></h2>
+        <p>Cada segmento pede um estilo diferente. Veja alguns modelos de projetos que a CriaSites Braga desenvolve.</p>
+      </div>
+      <div class="works">
+        <article class="work reveal">
+          <div class="work-shot ws-1"><div class="bar"><i></i><i></i><i></i></div><h4>Cuidar de você é a nossa especialidade.</h4><span>Agendar consulta</span><svg aria-hidden="true"><use href="#wave"/></svg></div>
+          <div class="work-info"><small>Saúde</small><h3>Clínicas e consultórios</h3><p>Agendamento pelo WhatsApp, especialidades e localização em destaque.</p></div>
+        </article>
+        <article class="work reveal">
+          <div class="work-shot ws-2"><div class="bar"><i></i><i></i><i></i></div><h4>Sabor que vale a visita.</h4><span>Ver cardápio</span><svg aria-hidden="true"><use href="#wave"/></svg></div>
+          <div class="work-info"><small>Gastronomia</small><h3>Restaurantes e delivery</h3><p>Cardápio online, fotos que dão fome e pedido direto pelo celular.</p></div>
+        </article>
+        <article class="work reveal">
+          <div class="work-shot ws-3"><div class="bar"><i></i><i></i><i></i></div><h4>Seus direitos em boas mãos.</h4><span>Fale com um especialista</span><svg aria-hidden="true"><use href="#wave"/></svg></div>
+          <div class="work-info"><small>Serviços</small><h3>Escritórios e profissionais</h3><p>Autoridade, confiança e contato fácil para quem presta serviços.</p></div>
+        </article>
+      </div>
+      <div class="works-note reveal">
+        <a class="btn btn-ghost wa-link" href="#" data-msg="Olá! Quero ver mais exemplos de sites que você já fez.">Pedir mais exemplos no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SOBRE ===== -->
+  <section id="sobre" class="about">
+    <div class="wrap about-grid">
+      <div class="about-card reveal">
+        <div class="big">C<i>S</i></div>
+        <svg aria-hidden="true"><use href="#wave"/></svg>
+        <div class="caption">Ideias em sites reais</div>
+      </div>
+      <div class="reveal">
+        <div class="eyebrow">Sobre a CriaSites Braga</div>
+        <h2>Um parceiro para colocar o seu negócio <span class="accent">no mapa.</span></h2>
+        <p>A CriaSites Braga nasceu para ajudar empresas e profissionais a terem uma presença digital à altura do que eles entregam. Unimos design, estratégia e tecnologia para criar sites bonitos, rápidos e que geram contatos de verdade.</p>
+        <p>Aqui você não é mais um número: o atendimento é próximo, direto pelo WhatsApp, do primeiro briefing até o site no ar.</p>
+        <ul class="about-list">
+          <li>Atendimento personalizado</li>
+          <li>Projetos sob medida</li>
+          <li>Orçamento sem compromisso</li>
+          <li>Suporte após a entrega</li>
+        </ul>
+        <a class="btn wa-link" href="#" data-msg="Olá! Quero conhecer melhor o trabalho da CriaSites Braga.">
+          Vamos conversar
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== PROCESSO ===== -->
   <section id="processo">
     <div class="wrap">
@@ -601,6 +701,8 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
   }, { threshold: .12 }) : null;
   document.querySelectorAll(".reveal").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+  // Garantia: nada fica escondido se a animação não disparar
+  setTimeout(() => document.querySelectorAll(".reveal:not(.in)").forEach(el => el.classList.add("in")), 2500);
 </script>
 </body>
 </html>
