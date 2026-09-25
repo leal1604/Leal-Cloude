@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CriaSites Braga | Sites e Landing Pages Profissionais</title>
 <meta name="description" content="CriaSitesbraga.com — sites profissionais sob medida, com design, estratégia e resultado. Seu negócio merece um site à altura.">
-<meta name="theme-color" content="#0b0b0c">
+<meta name="theme-color" content="#0f0d0c">
 <link rel="canonical" href="https://criasitesbraga.com/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="og-image.png">
@@ -30,15 +30,17 @@
   /* Número do WhatsApp: constante WHATSAPP (no script, final da página) */
 
   :root {
-    --bg: #0b0b0c;
-    --bg-2: #121214;
-    --card: #17171a;
-    --line: #26262b;
-    --text: #f4f4f5;
-    --muted: #a1a1aa;
+    --bg: #0f0d0c;
+    --bg-2: #151210;
+    --card: #1b1816;
+    --line: #2c2724;
+    --text: #f0eee9;
+    --muted: #aca49d;
     --orange: #ff6a1f;
     --orange-2: #ff8a3d;
     --orange-glow: rgba(255, 106, 31, .35);
+    --btn: #cc4b0a;
+    --btn-hover: #b8430a;
     --radius: 18px;
     --max: 1180px;
   }
@@ -67,21 +69,22 @@
   /* ========= Botões ========= */
   .btn {
     display: inline-flex; align-items: center; gap: 10px;
-    background: var(--orange); color: #fff; font-weight: 600;
+    background: var(--btn); color: #fff; font-weight: 700;
     padding: 16px 30px; border-radius: 999px; font-size: 16px;
     box-shadow: 0 10px 40px -10px var(--orange-glow);
     transition: transform .2s, box-shadow .2s, background .2s;
     border: 0; cursor: pointer;
   }
-  .btn:hover { transform: translateY(-2px); background: var(--orange-2); box-shadow: 0 16px 50px -10px var(--orange-glow); }
-  .btn-ghost { background: transparent; border: 1px solid var(--line); box-shadow: none; }
+  .btn:hover { transform: translateY(-2px); background: var(--btn-hover); box-shadow: 0 16px 50px -10px var(--orange-glow); }
+  .btn-ghost { background: transparent; border: 1px solid var(--line); box-shadow: none; color: var(--text); }
+  .btn-ghost:hover { color: #fff; }
   .btn-ghost:hover { background: var(--card); border-color: var(--orange); }
   .btn svg { width: 16px; height: 16px; }
 
   /* ========= Header ========= */
   header {
     position: sticky; top: 0; z-index: 50;
-    background: rgba(11, 11, 12, .78);
+    background: rgba(15, 13, 12, .78);
     backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(255,255,255,.05);
   }
@@ -125,7 +128,7 @@
   }
   .monitor { position: absolute; left: 0; top: 0; width: 76%; }
   .monitor-screen {
-    aspect-ratio: 16/10; background: #0e0e10; border: 10px solid #1d1d20; border-radius: 16px;
+    aspect-ratio: 16/10; background: #12100e; border: 10px solid #221e1b; border-radius: 16px;
     box-shadow: 0 30px 80px -20px #000, inset 0 0 0 1px #2a2a2e;
     position: relative; overflow: hidden; padding: 5% 6%;
   }
@@ -133,7 +136,7 @@
   .monitor-base { width: 40%; height: 10px; margin: 0 auto; border-radius: 6px; background: linear-gradient(#b8b8c0, #6a6a72); }
   .phone {
     position: absolute; right: 2%; top: 70px; width: 22%;
-    aspect-ratio: 9/18; background: #0e0e10; border: 8px solid #1d1d20; border-radius: 34px;
+    aspect-ratio: 9/18; background: #12100e; border: 8px solid #221e1b; border-radius: 34px;
     box-shadow: 0 30px 70px -10px #000, inset 0 0 0 1px #2a2a2e;
     overflow: hidden; padding: 34px 14px 0;
   }
@@ -143,7 +146,7 @@
   .screen-nav span { display: flex; gap: 14px; }
   .screen-h { font-family: "Montserrat", system-ui, sans-serif; font-weight: 700; font-size: clamp(14px, 2.6vw, 26px); line-height: 1.15; margin-top: 11%; max-width: 55%; position: relative; z-index: 1; }
   .screen-p { font-size: clamp(8px, 1vw, 11px); color: var(--muted); margin-top: 3%; position: relative; z-index: 1; }
-  .screen-btn { display: inline-block; margin-top: 5%; background: var(--orange); color: #fff; border-radius: 99px; padding: .5em 1.2em; font-size: clamp(7px, .95vw, 10px); position: relative; z-index: 1; }
+  .screen-btn { display: inline-block; margin-top: 5%; background: var(--btn); color: #fff; border-radius: 99px; padding: .5em 1.2em; font-size: clamp(7px, .95vw, 10px); position: relative; z-index: 1; }
   .screen-wave { position: absolute; right: -10%; bottom: -10%; width: 80%; height: auto; aspect-ratio: 3/2; z-index: 0; }
   .phone .screen-h { font-size: clamp(10px, 1.8vw, 17px); max-width: 100%; margin-top: 30px; }
   .phone .screen-nav b { font-size: clamp(8px, 1.1vw, 12px); white-space: nowrap; }
@@ -218,7 +221,7 @@
   .ws-1 { background: linear-gradient(135deg, #0f2a2e, #0b1416); }
   .ws-1 span { background: #2dd4bf; }
   .ws-2 { background: linear-gradient(135deg, #2a1608, #120a05); }
-  .ws-2 span { background: var(--orange); color: #fff; }
+  .ws-2 span { background: var(--btn); color: #fff; }
   .ws-3 { background: linear-gradient(135deg, #1b1b2e, #0c0c14); }
   .ws-3 span { background: #c7a55a; }
   .work-info { padding: 22px 24px 26px; }
@@ -232,10 +235,10 @@
   .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 70px; align-items: center; }
   .about-card {
     aspect-ratio: 4/5; border-radius: 26px; position: relative; overflow: hidden;
-    background: radial-gradient(circle at 30% 20%, #2a2a30, #121214 70%); border: 1px solid var(--line);
+    background: radial-gradient(circle at 30% 20%, #2e2926, #151210 70%); border: 1px solid var(--line);
     display: grid; place-items: center;
   }
-  .about-card .big { font-family: "Montserrat", system-ui, sans-serif; font-weight: 900; font-size: clamp(90px, 14vw, 170px); color: #fff; letter-spacing: -.06em; position: relative; z-index: 1; }
+  .about-card .big { font-family: "Montserrat", system-ui, sans-serif; font-weight: 900; font-size: clamp(90px, 14vw, 170px); color: var(--text); letter-spacing: -.06em; position: relative; z-index: 1; }
   .about-card .big i { color: var(--orange); font-style: normal; }
   .about-card svg { position: absolute; left: -20%; bottom: -30%; width: 140%; height: auto; aspect-ratio: 3/2; }
   .about-card .caption { position: absolute; left: 24px; bottom: 22px; z-index: 1; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #fff; }
@@ -264,7 +267,7 @@
     background: linear-gradient(180deg, rgba(255,106,31,.12), var(--card) 45%);
     box-shadow: 0 30px 80px -30px var(--orange-glow);
   }
-  .plan-badge { position: absolute; top: -13px; left: 32px; background: var(--orange); color: #fff; font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 99px; }
+  .plan-badge { position: absolute; top: -13px; left: 32px; background: var(--btn); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 99px; }
   .plan h3 { font-size: 22px; }
   .plan .for { color: var(--muted); font-size: 14.5px; margin-top: 6px; }
   .plan .price { font-family: "Montserrat", system-ui, sans-serif; font-weight: 800; font-size: 20px; margin: 26px 0 22px; color: var(--muted); }
