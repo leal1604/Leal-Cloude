@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,6 +90,9 @@
     text-align: center; font-weight: 900;
     font-size: clamp(40px, 7.4vw, 88px);
   }
+  .countries { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; font-size: 13px; }
+  .countries span { border: 1px solid var(--line); background: var(--card); border-radius: 99px; padding: 6px 14px; font-weight: 500; }
+  .countries em { font-style: normal; color: var(--muted); padding-left: 6px; }
   .hero-sub { text-align: center; color: var(--muted); max-width: 620px; margin: 22px auto 0; font-size: 18px; }
   .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
   .swoosh { position: absolute; pointer-events: none; z-index: 0; height: auto; aspect-ratio: 3/2; }
@@ -391,6 +394,7 @@
         <div class="tag-lines">Ideias<br>em sites<br>reais</div>
       </div>
 
+      <div class="countries"><span>🇧🇷 Brasil</span><span>🇵🇹 Portugal</span><em>Atendimento 100% online</em></div>
       <h1>Seu negócio<br>merece um site<br><span class="accent">à altura.</span></h1>
       <p class="hero-sub">Sites profissionais sob medida, rápidos e pensados para transformar visitantes em clientes. Design, estratégia e resultado — do jeito que a sua marca merece.</p>
       <div class="hero-ctas">
@@ -448,7 +452,7 @@
       <ul class="pain-list reveal">
         <li>Sua empresa não aparece quando o cliente pesquisa no Google.</li>
         <li>Você depende só do Instagram e perde vendas quando o alcance cai.</li>
-        <li>Seu site atual é lento, desatualizado ou não funciona no celular.</li>
+        <li>Seu site atual é lento, desatualizado ou não funciona no smartphone.</li>
         <li>O cliente não confia porque não encontra informações profissionais.</li>
       </ul>
     </div>
@@ -481,12 +485,12 @@
         <article class="card reveal">
           <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.5" cy="10.5" r="7"/><path d="m21 21-5.5-5.5"/></svg></div>
           <h3>SEO e Google</h3>
-          <p>Estrutura otimizada e cadastro no Google para seu negócio ser encontrado por quem procura.</p>
+          <p>Estrutura otimizada e configuração no Google para o seu negócio ser encontrado por quem procura.</p>
         </article>
         <article class="card reveal">
           <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
           <h3>100% responsivo</h3>
-          <p>Perfeito no celular, tablet e computador — onde o seu cliente estiver.</p>
+          <p>Perfeito no smartphone, tablet e computador — onde o seu cliente estiver.</p>
         </article>
         <article class="card reveal">
           <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 4 6v6c0 5 3.4 8.3 8 9 4.6-.7 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
@@ -527,8 +531,8 @@
           <div class="work-info"><small>Saúde</small><h3>Clínicas e consultórios</h3><p>Agendamento pelo WhatsApp, especialidades e localização em destaque.</p></div>
         </article>
         <article class="work reveal">
-          <div class="work-shot ws-2"><div class="bar"><i></i><i></i><i></i></div><h4>Sabor que vale a visita.</h4><span>Ver cardápio</span><svg aria-hidden="true"><use href="#wave"/></svg></div>
-          <div class="work-info"><small>Gastronomia</small><h3>Restaurantes e delivery</h3><p>Cardápio online, fotos que dão fome e pedido direto pelo celular.</p></div>
+          <div class="work-shot ws-2"><div class="bar"><i></i><i></i><i></i></div><h4>Sabor que vale a visita.</h4><span>Ver menu</span><svg aria-hidden="true"><use href="#wave"/></svg></div>
+          <div class="work-info"><small>Gastronomia</small><h3>Restaurantes e delivery</h3><p>Menu online, fotos que dão fome e pedido direto pelo smartphone.</p></div>
         </article>
         <article class="work reveal">
           <div class="work-shot ws-3"><div class="bar"><i></i><i></i><i></i></div><h4>Seus direitos em boas mãos.</h4><span>Fale com um especialista</span><svg aria-hidden="true"><use href="#wave"/></svg></div>
@@ -552,7 +556,7 @@
       <div class="reveal">
         <div class="eyebrow">Sobre a CriaSites Braga</div>
         <h2>Um parceiro para colocar o seu negócio <span class="accent">no mapa.</span></h2>
-        <p>A CriaSites Braga nasceu para ajudar empresas e profissionais a terem uma presença digital à altura do que eles entregam. Unimos design, estratégia e tecnologia para criar sites bonitos, rápidos e que geram contatos de verdade.</p>
+        <p>A CriaSites Braga nasceu para ajudar empresas e profissionais no Brasil e em Portugal a terem uma presença digital à altura do que eles entregam. Unimos design, estratégia e tecnologia para criar sites bonitos, rápidos e que geram contatos de verdade.</p>
         <p>Aqui você não é mais um número: o atendimento é próximo, direto pelo WhatsApp, do primeiro briefing até o site no ar.</p>
         <ul class="about-list">
           <li>Atendimento personalizado</li>
@@ -614,7 +618,7 @@
           <ul>
             <li>Até 6 páginas personalizadas</li>
             <li>Design exclusivo da sua marca</li>
-            <li>SEO completo + Google Meu Negócio</li>
+            <li>SEO completo + Perfil da Empresa no Google</li>
             <li>Domínio, hospedagem e SSL</li>
             <li>Integração com WhatsApp e redes</li>
             <li>30 dias de suporte</li>
@@ -627,8 +631,8 @@
           <div class="price"><strong>Loja virtual</strong></div>
           <ul>
             <li>Loja com catálogo de produtos</li>
-            <li>Pagamentos online (Pix e cartão)</li>
-            <li>Cálculo de frete</li>
+            <li>Pagamentos online (Pix, MB WAY, Multibanco e cartão)</li>
+            <li>Cálculo de frete / portes de envio</li>
             <li>Painel fácil de gerenciar</li>
             <li>Treinamento de uso</li>
           </ul>
@@ -646,9 +650,10 @@
         <h2>Perguntas <span class="accent">frequentes</span></h2>
       </div>
       <div class="faq-list">
+        <details class="reveal"><summary>Vocês atendem clientes no Brasil e em Portugal?</summary><p>Sim! O atendimento é 100% online, pelo WhatsApp e por videochamada. Trabalhamos com clientes nos dois países, com orçamento em reais (R$) ou em euros (€), e o site pode ser preparado para o público de cada país.</p></details>
         <details class="reveal"><summary>Quanto tempo leva para o meu site ficar pronto?</summary><p>Depende do projeto: landing pages costumam ficar prontas em poucos dias, e sites completos em algumas semanas. O prazo exato é combinado antes de começar.</p></details>
         <details class="reveal"><summary>Eu preciso entender de tecnologia?</summary><p>Não. Cuidamos de tudo — domínio, hospedagem, configuração e publicação. Você só precisa nos contar sobre o seu negócio.</p></details>
-        <details class="reveal"><summary>O site vai funcionar no celular?</summary><p>Sim. Todos os sites são 100% responsivos e testados em celulares, tablets e computadores.</p></details>
+        <details class="reveal"><summary>O site vai funcionar no smartphone?</summary><p>Sim. Todos os sites são 100% responsivos e testados em smartphones, tablets e computadores.</p></details>
         <details class="reveal"><summary>Meu site vai aparecer no Google?</summary><p>Todos os projetos são construídos com boas práticas de SEO e configuração no Google, para aumentar as chances de a sua empresa ser encontrada.</p></details>
         <details class="reveal"><summary>Posso pedir alterações durante o projeto?</summary><p>Claro. Você acompanha cada etapa e pode solicitar ajustes até o site ficar do jeito que você imaginou.</p></details>
         <details class="reveal"><summary>Como faço para pedir um orçamento?</summary><p>É só clicar em qualquer botão desta página e falar direto comigo pelo WhatsApp. O orçamento é gratuito e sem compromisso.</p></details>
