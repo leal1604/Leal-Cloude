@@ -11,7 +11,7 @@
 <script>document.documentElement.classList.add("js")</script>
 <style>
   /* ========= Configure aqui ========= */
-  /* Troque o número do WhatsApp em WHATSAPP (no script, final da página) */
+  /* Número do WhatsApp: constante WHATSAPP (no script, final da página) */
 
   :root {
     --bg: #0b0b0c;
@@ -685,8 +685,8 @@
 </a>
 
 <script>
-  // >>> Coloque aqui o seu número de WhatsApp (DDI + DDD + número, só dígitos) <<<
-  const WHATSAPP = "5500000000000";
+  // >>> Número de WhatsApp (código do país + número, só dígitos) <<<
+  const WHATSAPP = "351934667931";
 
   document.querySelectorAll(".wa-link").forEach(a => {
     const msg = a.dataset.msg || "Olá! Vim pelo site.";
