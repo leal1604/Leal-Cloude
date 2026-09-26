@@ -1,0 +1,104 @@
+# BRASIL — guardado para quando o orçamento permitir. Não está em uso.
+
+account:
+  customer_id: "000-000-0000"     # A PREENCHER: ID da nova conta (topo do Google Ads)
+  currency: EUR
+  timezone: Europe/Lisbon
+
+budget:
+  monthly_limit: 50.00            # máximo absoluto por mês, em euros
+  safety_margin: 0.10
+  pause_at: 0.98
+  overspend_factor: 2.0
+  min_daily: 1.00
+  rebalance_threshold: 0.05
+  auto_resume_next_month: true
+  scope: account
+  pause_unmanaged: true           # conta nova: no limite, pausa TUDO (inclusive a campanha do assistente do Google)
+
+campaigns:
+  - name: "BR | Pesquisa | Criação de Sites"
+    weight: 1
+    bidding:
+      strategy: MAXIMIZE_CLICKS
+      max_cpc: 1.00
+    locations: [2076]             # Brasil
+    languages: [1014]
+    negative_keywords:
+      - grátis
+      - gratis
+      - gratuito
+      - curso
+      - aula
+      - tutorial
+      - emprego
+      - vaga
+      - vagas
+      - estágio
+      - salário
+      - template
+      - download
+      - pdf
+      - '"como criar"'
+      - '"como fazer"'
+      - '"o que é"'
+    stop_rules:
+      max_daily_spend: 10.00
+    ad_groups:
+      - name: "BR - Criação de Sites"
+        keywords:
+          - "[criação de sites]"
+          - '"criação de sites"'
+          - '"empresa de criação de sites"'
+          - '"fazer site para empresa"'
+          - '"site profissional"'
+          - '"criar site para empresa"'
+          - '"desenvolvimento de sites"'
+          - '"orçamento de site"'
+          - '"quanto custa um site"'
+        ads:
+          - final_url: https://criasitesbraga.com
+            path1: criacao-sites
+            headlines:
+              - Criação de Sites Profissionais
+              - Sites para Empresas
+              - Peça Seu Orçamento Hoje
+              - Site Pronto para Celular
+              - Design Moderno e Rápido
+              - Atendimento Personalizado
+              - Mais Clientes com Seu Site
+              - Otimizado para o Google
+              - Atendemos Todo o Brasil
+              - Landing Pages que Convertem
+            descriptions:
+              - Criamos o site da sua empresa com design moderno, rápido e pronto para celular.
+              - Sites e landing pages feitos para gerar contatos. Peça seu orçamento sem compromisso.
+              - Atendimento online em todo o Brasil. Fale com a gente e tire seu projeto do papel.
+              - Do design à publicação, cuidamos de tudo para sua empresa estar online com qualidade.
+      - name: "BR - Landing Pages"
+        keywords:
+          - "[landing page]"
+          - '"criação de landing page"'
+          - '"landing page para empresa"'
+          - '"página de vendas"'
+          - '"criar landing page"'
+          - '"landing page profissional"'
+        ads:
+          - final_url: https://criasitesbraga.com
+            path1: landing-page
+            headlines:
+              - Criação de Landing Pages
+              - Landing Pages que Convertem
+              - Página de Vendas Eficaz
+              - Peça Seu Orçamento Hoje
+              - Ideal para Tráfego Pago
+              - Pronta para Celular
+              - Design Focado em Resultado
+              - Atendimento Personalizado
+              - Mais Contatos e Vendas
+              - Atendemos Todo o Brasil
+            descriptions:
+              - Landing pages rápidas e focadas em conversão para suas campanhas de anúncios.
+              - Transforme visitas em contatos com uma página feita para vender. Peça seu orçamento.
+              - Design moderno, texto persuasivo e pronta para celular. Fale com a gente hoje.
+              - Atendimento online em todo o Brasil. Do planejamento à publicação da sua página.
