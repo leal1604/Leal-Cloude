@@ -184,7 +184,18 @@
   .pain-quote { font-family: "Montserrat", system-ui, sans-serif; font-weight: 800; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.15; }
   .pain-quote p { font-family: "Inter"; font-weight: 400; font-size: 17px; color: var(--muted); margin-top: 20px; line-height: 1.6; }
 
+  /* Por que ter um site */
+  .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .why { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 26px; }
+  .why b { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: rgba(255,106,31,.14); color: var(--orange); font-family: "Montserrat", system-ui, sans-serif; font-size: 14px; margin-bottom: 16px; }
+  .why h3 { font-size: 18px; margin-bottom: 8px; }
+  .why p { color: var(--muted); font-size: 15px; }
+  .why-cta { margin-top: 44px; display: flex; gap: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+    background: linear-gradient(90deg, rgba(255,106,31,.14), transparent); border: 1px solid rgba(255,106,31,.35); border-radius: var(--radius); padding: 26px 30px; }
+  .why-cta p { font-family: "Montserrat", system-ui, sans-serif; font-weight: 700; font-size: clamp(18px, 2.2vw, 24px); line-height: 1.3; max-width: 640px; }
+
   /* Serviços */
+  #servicos { border-top: 1px solid var(--line); }
   .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
@@ -327,7 +338,7 @@
     .cards, .plans { grid-template-columns: 1fr; }
     .diff-grid, .steps { grid-template-columns: 1fr 1fr; }
     .pain-grid, .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .works { grid-template-columns: 1fr; }
+    .works, .why-grid { grid-template-columns: 1fr; }
     .about-card { max-width: 420px; aspect-ratio: 1/1; width: 100%; }
     .devices { height: 360px; }
     .phone { top: 50px; }
@@ -387,6 +398,7 @@
       <span>CriaSites<small>braga</small></span>
     </a>
     <nav class="nav-links">
+      <a href="#por-que">Motivos</a>
       <a href="#servicos">Serviços</a>
       <a href="#portfolio">Portfólio</a>
       <a href="#sobre">Sobre</a>
@@ -474,6 +486,35 @@
         <li>Seu site atual é lento, desatualizado ou não funciona no smartphone.</li>
         <li>O cliente não confia porque não encontra informações profissionais.</li>
       </ul>
+    </div>
+  </section>
+
+  <!-- ===== POR QUE TER UM SITE ===== -->
+  <section id="por-que">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow">Por que ter um site</div>
+        <h2>9 motivos para o seu negócio ter um <span class="accent">site ativo</span></h2>
+        <p>Rede social ajuda, mas não substitui. O site é a base da sua presença digital: é ali que o cliente pesquisa, confia e decide.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why reveal"><b>01</b><h3>Seu cliente procura no Google</h3><p>Quem pesquisa “dentista perto de mim” já quer comprar. Sem site, sua empresa fica de fora dessa busca.</p></div>
+        <div class="why reveal"><b>02</b><h3>Credibilidade imediata</h3><p>Um site profissional mostra que o negócio é sério. Muitos clientes desconfiam de quem só existe no Instagram.</p></div>
+        <div class="why reveal"><b>03</b><h3>Vendedor 24 horas</h3><p>O site apresenta seus serviços e recebe contatos de madrugada, aos fins de semana e nos feriados.</p></div>
+        <div class="why reveal"><b>04</b><h3>Um espaço que é seu</h3><p>Nas redes, o algoritmo muda e a conta pode ser bloqueada. No site, quem manda é você.</p></div>
+        <div class="why reveal"><b>05</b><h3>Mais contatos e melhores</h3><p>Botões de WhatsApp e páginas pensadas para vender transformam visitantes em clientes mais decididos.</p></div>
+        <div class="why reveal"><b>06</b><h3>Anúncios que rendem mais</h3><p>Tráfego pago precisa de um destino. Uma boa landing page faz cada real ou euro investido render mais.</p></div>
+        <div class="why reveal"><b>07</b><h3>Frente à concorrência</h3><p>Muitos concorrentes ainda não têm site, ou têm um ultrapassado. A primeira impressão fica com você.</p></div>
+        <div class="why reveal"><b>08</b><h3>Domínio e e-mail próprios</h3><p>contato@suaempresa.com passa muito mais confiança do que um Gmail ou só um número de celular.</p></div>
+        <div class="why reveal"><b>09</b><h3>Resultados medidos</h3><p>Saiba quantas pessoas visitaram, de onde vieram e o que procuraram. Decisões com dados, não com achismo.</p></div>
+      </div>
+      <div class="why-cta reveal">
+        <p>Um site parado é quase como não ter. Com a manutenção da CriaSites Braga, o seu fica <span class="accent">sempre rápido, seguro e atualizado.</span></p>
+        <a class="btn wa-link" href="#" data-msg="Olá! Quero ter um site ativo para o meu negócio. Pode me ajudar?">
+          Quero meu site ativo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </a>
+      </div>
     </div>
   </section>
 
