@@ -59,6 +59,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--dry-run", action="store_true", help="só mostra as ações, não altera nada")
     p.add_argument("--state", default="guard-state.json", help="arquivo de estado do guardião")
     p.add_argument("--webhook", default=os.environ.get("GADS_WEBHOOK_URL"), help="URL para avisar quando houver ações")
+    p.add_argument("--json", metavar="ARQUIVO", help="grava as ações decididas em JSON (para executar por outro meio)")
 
     sub.add_parser("status", help="gasto do mês por campanha")
 
@@ -259,6 +260,29 @@ def cmd_guard(cfg: Config, client, args) -> int:
         status = f"  ERRO: {a.error}" if a.error else ""
         print(f"  {prefix}{line}{status}")
 
+    if args.json:
+        payload = {
+            "date": today.isoformat(),
+            "spent_month": plan.spent,
+            "usable": plan.usable,
+            "hard_stop": round(cfg.budget.hard_stop, 2),
+            "warnings": result.warnings,
+            "actions": [
+                {
+                    "kind": a.kind,
+                    "campaign": a.campaign,
+                    "campaign_id": result.snapshots[a.campaign].resource_name if a.campaign in result.snapshots else "",
+                    "reason": a.reason,
+                    "detail": a.detail,
+                    "until": a.until,
+                    "new_budget": a.new_budget,
+                    "new_budget_micros": round((a.new_budget or 0) * 100) * 10_000 if a.new_budget else None,
+                }
+                for a in result.actions
+            ],
+        }
+        with open(args.json, "w", encoding="utf-8") as fh:
+            json.dump(payload, fh, ensure_ascii=False, indent=2)
     if args.webhook and result.actions and not args.dry_run:
         _notify(args.webhook, result, cur)
     return 1 if result.errors else 0
