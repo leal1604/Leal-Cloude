@@ -24,8 +24,11 @@ ALLOC_TEXT = {
 
 def money(value: float, currency: str = "BRL") -> str:
     text = f"{value:,.2f}"
+    local = text.replace(",", "_").replace(".", ",").replace("_", ".")
     if currency == "BRL":
-        return "R$ " + text.replace(",", "_").replace(".", ",").replace("_", ".")
+        return f"R$ {local}"
+    if currency == "EUR":
+        return f"{local} €"
     return f"{currency} {text}"
 
 
