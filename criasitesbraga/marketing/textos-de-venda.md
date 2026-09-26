@@ -67,10 +67,23 @@ Eu crio sites profissionais para negócios como o seu. Posso te mostrar em 2 min
 
 Dá para começar ainda esta semana. O que acha?
 
+### Mensagem com números (para quem ainda não está convencido)
+
+[Nome], separei alguns dados de pesquisas para você ver por que o site faz diferença:
+
+📊 *97%* das pessoas pesquisam na internet para encontrar negócios locais (BrightLocal, 2025).
+🤝 *75%* julgam a credibilidade de uma empresa pelo design do site (Stanford).
+📍 *76%* de quem pesquisa algo "perto de mim" no celular visita o negócio em até 1 dia (Google).
+🎯 Uma boa landing page converte em média *6,6%* dos visitantes em contato ou venda (Unbounce, 2024, 41 mil páginas).
+
+Na prática: a cada 100 pessoas que visitam o site, cerca de 7 entram em contato. Sem site, essas pessoas encontram o seu concorrente. 😉
+
+Quer que eu te mostre como ficaria o site da [empresa]?
+
 ### Respostas para objeções
 
 **"Está caro."**
-Entendo, [nome]. Pensa assim: se o site trouxer só [1 ou 2] clientes novos, ele já se paga, e continua trabalhando para você todos os dias, 24 horas. Diferente de um anúncio, que acaba quando o dinheiro acaba. Posso parcelar o pagamento para ficar mais leve. Te ajuda?
+Entendo, [nome]. Pensa assim: em média, uma boa landing page converte 6,6% dos visitantes em contato (Unbounce, 2024). Com 300 visitas por mês, são cerca de 20 contatos. Se só [1 ou 2] virarem clientes, o site já se paga, e continua trabalhando para você todos os dias, 24 horas. Diferente de um anúncio, que acaba quando o dinheiro acaba. Posso parcelar o pagamento para ficar mais leve. Te ajuda?
 
 **"Já tenho Instagram, não preciso de site."**
 O Instagram é ótimo, e o site não substitui, ele soma! Mas o Instagram não é seu: o alcance cai, o algoritmo muda e a conta pode até ser bloqueada. E quando alguém pesquisa no Google, quem aparece são os sites. O ideal é o Instagram levar as pessoas para o site, onde elas confiam e decidem.
@@ -103,6 +116,15 @@ A partir daí, em até [prazo] o seu site está no ar. 🚀
 
 ---
 
+## Fontes dos números
+
+- BrightLocal, Local Consumer Review Survey 2025: https://www.brightlocal.com/research/local-consumer-review-survey-2025/
+- Stanford Web Credibility Project: https://credibility.stanford.edu/guidelines/
+- Google, pesquisa sobre buscas locais no celular: https://www.thinkwithgoogle.com/_qs/documents/620/mobile-search-trends-consumers-to-stores.pdf
+- Unbounce, Conversion Benchmark Report 2024: https://unbounce.com/average-conversion-rates-landing-pages/
+
+Os números são médias de mercado, não promessa de resultado para um cliente específico.
+
 ## 3. Landing page
 
-Nova seção "9 motivos para o seu negócio ter um site ativo" (menu: Motivos), logo depois de "Quem não é visto, não é lembrado".
+Nova seção "9 motivos para o seu negócio ter um site ativo" (menu: Motivos), logo depois de "Quem não é visto, não é lembrado", com 4 números de pesquisas (97%, 75%, 76% e 6,6%) no topo.

@@ -184,6 +184,15 @@
   .pain-quote { font-family: "Montserrat", system-ui, sans-serif; font-weight: 800; font-size: clamp(26px, 3.4vw, 40px); line-height: 1.15; }
   .pain-quote p { font-family: "Inter"; font-weight: 400; font-size: 17px; color: var(--muted); margin-top: 20px; line-height: 1.6; }
 
+  /* Números */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 26px; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 24px; }
+  .stat strong { display: block; font-family: "Montserrat", system-ui, sans-serif; font-weight: 900; font-size: clamp(40px, 4.6vw, 56px); line-height: 1; color: var(--orange); margin-bottom: 14px; }
+  .stat p { color: var(--text); font-size: 15.5px; line-height: 1.45; }
+  .stat small { display: block; margin-top: 12px; color: var(--muted); font-size: 12.5px; }
+  .stat small a { text-decoration: underline; text-underline-offset: 2px; }
+  .stats-note { color: var(--muted); font-size: 13px; margin-bottom: 56px; }
+
   /* Por que ter um site */
   .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .why { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 26px; }
@@ -339,6 +348,7 @@
     .diff-grid, .steps { grid-template-columns: 1fr 1fr; }
     .pain-grid, .about-grid { grid-template-columns: 1fr; gap: 40px; }
     .works, .why-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
     .about-card { max-width: 420px; aspect-ratio: 1/1; width: 100%; }
     .devices { height: 360px; }
     .phone { top: 50px; }
@@ -361,6 +371,8 @@
     .benefit + .benefit { border-left: 0; border-top: 1px solid var(--line); }
     .benefit { padding: 20px 4px; }
     .diff-grid, .steps, .about-list { grid-template-columns: 1fr; }
+    .stat { padding: 22px 18px; }
+    .stat p { font-size: 14.5px; }
     .nav .btn span { display: none; }
     .nav .btn { padding: 11px 14px; }
     .logo { font-size: 16px; }
@@ -497,6 +509,13 @@
         <h2>9 motivos para o seu negócio ter um <span class="accent">site ativo</span></h2>
         <p>Rede social ajuda, mas não substitui. O site é a base da sua presença digital: é ali que o cliente pesquisa, confia e decide.</p>
       </div>
+      <div class="stats">
+        <div class="stat reveal"><strong>97%</strong><p>das pessoas pesquisam na internet para encontrar negócios locais.</p><small>Fonte: <a href="https://www.brightlocal.com/research/local-consumer-review-survey-2025/" target="_blank" rel="noopener">BrightLocal, 2025</a></small></div>
+        <div class="stat reveal"><strong>75%</strong><p>julgam a credibilidade de uma empresa pelo design do site.</p><small>Fonte: <a href="https://credibility.stanford.edu/guidelines/" target="_blank" rel="noopener">Stanford Web Credibility</a></small></div>
+        <div class="stat reveal"><strong>76%</strong><p>de quem pesquisa algo “perto de mim” no celular visita o negócio em até 1 dia.</p><small>Fonte: <a href="https://www.thinkwithgoogle.com/_qs/documents/620/mobile-search-trends-consumers-to-stores.pdf" target="_blank" rel="noopener">Google</a></small></div>
+        <div class="stat reveal"><strong>6,6%</strong><p>dos visitantes de uma landing page viram contato ou venda (mediana de 41 mil páginas).</p><small>Fonte: <a href="https://unbounce.com/average-conversion-rates-landing-pages/" target="_blank" rel="noopener">Unbounce, 2024</a></small></div>
+      </div>
+      <p class="stats-note reveal">Na prática: a cada 100 pessoas que visitam uma boa landing page, cerca de 7 entram em contato. Sem site, essas pessoas encontram o seu concorrente.</p>
       <div class="why-grid">
         <div class="why reveal"><b>01</b><h3>Seu cliente procura no Google</h3><p>Quem pesquisa “dentista perto de mim” já quer comprar. Sem site, sua empresa fica de fora dessa busca.</p></div>
         <div class="why reveal"><b>02</b><h3>Credibilidade imediata</h3><p>Um site profissional mostra que o negócio é sério. Muitos clientes desconfiam de quem só existe no Instagram.</p></div>
