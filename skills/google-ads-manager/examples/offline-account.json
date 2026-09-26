@@ -1,0 +1,27 @@
+{
+  "account": {"currency": "BRL", "timezone": "America/Sao_Paulo", "name": "Conta simulada"},
+  "campaigns": [
+    {
+      "name": "Pesquisa | Serviço Principal",
+      "status": "ENABLED",
+      "resource_name": "customers/1234567890/campaigns/111",
+      "budget_resource": "customers/1234567890/campaignBudgets/211",
+      "daily_budget": 70.0,
+      "cost_month": 1310.40,
+      "cost_today": 42.10,
+      "conversions_month": 12,
+      "clicks_month": 520
+    },
+    {
+      "name": "Pesquisa | Marca",
+      "status": "ENABLED",
+      "resource_name": "customers/1234567890/campaigns/112",
+      "budget_resource": "customers/1234567890/campaignBudgets/212",
+      "daily_budget": 30.0,
+      "cost_month": 402.75,
+      "cost_today": 63.20,
+      "conversions_month": 20,
+      "clicks_month": 380
+    }
+  ]
+}

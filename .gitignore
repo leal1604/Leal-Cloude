@@ -3,3 +3,8 @@ __pycache__/
 .idea/
 .vscode/
 
+
+# google-ads-manager: credenciais e estado local nunca vão para o git
+google-ads.yaml
+guard-state.json
+guard-state.json.tmp

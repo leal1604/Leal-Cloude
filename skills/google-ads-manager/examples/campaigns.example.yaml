@@ -1,0 +1,82 @@
+# Arquivo de campanhas do gads.py — copie para campaigns.yaml e ajuste.
+# Valores monetários na moeda da conta (aqui, reais).
+
+account:
+  customer_id: "123-456-7890"      # ID da conta no canto superior do Google Ads
+  # login_customer_id: "111-222-3333"  # só se acessar via conta de administrador (MCC)
+  currency: BRL
+  timezone: America/Sao_Paulo
+
+budget:
+  monthly_limit: 3000.00          # o MÁXIMO que você aceita gastar no mês
+  safety_margin: 0.10             # 10% de reserva (atraso dos dados + excesso diário do Google)
+  pause_at: 0.98                  # pausa TUDO ao atingir 98% do valor utilizável
+  overspend_factor: 2.0           # o Google pode gastar até 2x o orçamento diário num dia
+  min_daily: 5.00                 # abaixo disso a campanha é pausada em vez de rodar "picada"
+  rebalance_threshold: 0.05       # só mexe no orçamento diário se mudar mais de 5%
+  auto_resume_next_month: true    # no dia 1º, reativa o que foi pausado por limite
+  scope: account                  # account = conta inteira conta para o limite; managed = só este arquivo
+  pause_unmanaged: false          # true = no limite, pausa também campanhas fora deste arquivo
+
+campaigns:
+  - name: "Pesquisa | Serviço Principal"
+    weight: 70                    # 70% do orçamento diário disponível
+    max_monthly: 2000.00          # teto próprio desta campanha (opcional)
+    start_date: 2026-10-01
+    # end_date: 2026-12-31
+    bidding:
+      strategy: MAXIMIZE_CLICKS   # MANUAL_CPC | MAXIMIZE_CLICKS | MAXIMIZE_CONVERSIONS
+      max_cpc: 4.00               # lance máximo por clique (opcional)
+    locations: [2076]             # 2076 = Brasil (IDs em developers.google.com/google-ads/api/data/geotargets)
+    languages: [1014]             # 1014 = Português
+    negative_keywords:
+      - grátis
+      - curso
+      - emprego
+    stop_rules:
+      max_cpa: 80.00              # pausa se o custo por conversão passar de R$ 80...
+      min_spend_for_cpa: 200.00   # ...depois de gastar pelo menos R$ 200 no mês
+      pause_if_no_conversions_after: 400.00   # pausa se gastar R$ 400 sem converter
+      max_daily_spend: 150.00     # pausa até amanhã se gastar R$ 150 num só dia
+    ad_groups:
+      - name: "Serviço - termos exatos"
+        keywords:
+          - "[consultoria de marketing digital]"   # [ ] = correspondência exata
+          - '"agência de marketing digital"'       # " " = correspondência de frase
+          - text: consultoria marketing pequenas empresas
+            match: PHRASE
+        ads:
+          - final_url: https://www.exemplo.com.br/servico
+            path1: marketing
+            path2: consultoria
+            headlines:                 # 3 a 15, até 30 caracteres cada
+              - Consultoria de Marketing
+              - Mais Clientes em 90 Dias
+              - Diagnóstico Gratuito
+              - Especialistas em Google Ads
+              - Atendimento em Todo Brasil
+            descriptions:              # 2 a 4, até 90 caracteres cada
+              - Estratégia sob medida para atrair clientes qualificados. Fale com um especialista.
+              - Planejamento, anúncios e relatórios claros. Agende seu diagnóstico sem compromisso.
+
+  - name: "Pesquisa | Marca"
+    weight: 30
+    bidding:
+      strategy: MANUAL_CPC
+    stop_rules:
+      max_daily_spend: 60.00
+    ad_groups:
+      - name: Marca
+        default_cpc: 1.50            # obrigatório com MANUAL_CPC
+        keywords:
+          - "[exemplo marketing]"
+          - '"exemplo consultoria"'
+        ads:
+          - final_url: https://www.exemplo.com.br
+            headlines:
+              - Exemplo Marketing Oficial
+              - Site Oficial Exemplo
+              - Fale com Nosso Time
+            descriptions:
+              - Conheça nossos serviços de marketing digital e resultados de clientes reais.
+              - Solicite uma proposta personalizada hoje mesmo.

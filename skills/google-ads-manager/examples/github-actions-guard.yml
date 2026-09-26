@@ -1,0 +1,49 @@
+# Copie para .github/workflows/google-ads-guard.yml no SEU repositório privado
+# (junto com o seu campaigns.yaml) e cadastre os secrets em
+# Settings > Secrets and variables > Actions.
+name: Google Ads - guardião do orçamento
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # a cada hora (UTC). O GitHub pode atrasar alguns minutos.
+  workflow_dispatch:
+
+concurrency: google-ads-guard   # nunca duas execuções ao mesmo tempo
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -r skills/google-ads-manager/requirements.txt
+
+      # O estado lembra o que o guardião pausou para reativar depois.
+      - name: Restaurar estado
+        uses: actions/cache/restore@v4
+        with:
+          path: guard-state.json
+          key: gads-guard-state-${{ github.run_id }}
+          restore-keys: gads-guard-state-
+
+      - name: Rodar guardião
+        env:
+          GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_CLIENT_ID: ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+          GOOGLE_ADS_CLIENT_SECRET: ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+          GOOGLE_ADS_REFRESH_TOKEN: ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+          GOOGLE_ADS_USE_PROTO_PLUS: "True"
+          # GOOGLE_ADS_LOGIN_CUSTOMER_ID: ${{ secrets.GOOGLE_ADS_LOGIN_CUSTOMER_ID }}
+          GADS_WEBHOOK_URL: ${{ secrets.GADS_WEBHOOK_URL }}   # opcional (Slack/Discord)
+        run: python skills/google-ads-manager/scripts/gads.py -c campaigns.yaml guard --state guard-state.json
+
+      - name: Salvar estado
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: guard-state.json
+          key: gads-guard-state-${{ github.run_id }}
