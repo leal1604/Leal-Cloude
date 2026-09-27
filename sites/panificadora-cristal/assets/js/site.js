@@ -2,7 +2,7 @@
   'use strict';
 
   var VIDEO_URL = 'assets/hero-scrub.mp4';
-  var VIDEO_BYTES = 6000000;            // ajustar para o tamanho real do arquivo encodado
+  var VIDEO_BYTES = 6928333;            // tamanho real de assets/hero-scrub.mp4
   var POSTER_URL = 'assets/hero-poster.jpg';
   var FINAL_URL = 'assets/hero-ending.jpg';
 
@@ -14,7 +14,7 @@
   var topo = document.getElementById('topo');
 
   // O quadro final serve o hero estático (celular e movimento reduzido)
-  stage.style.setProperty('--quadro-final', "url('" + FINAL_URL + "')");
+  stage.style.setProperty('--quadro-final', "url('" + new URL(FINAL_URL, location.href).href + "')");
 
   var clamp = function (v, lo, hi) { return Math.min(hi, Math.max(lo, v)); };
   var smoothstep = function (p, e0, e1) {
@@ -115,6 +115,7 @@
     else rafId = requestAnimationFrame(tick);
     requestSeek(shown * video.duration);
     updateCaptions(shown);
+    posterFinal(shown);
   }
   function onScroll() {
     target = heroProgress();
@@ -152,6 +153,7 @@
     return fetch(VIDEO_URL, { priority: 'low', signal: ctrl.signal }).then(function (res) {
       if (!res.ok || !res.body) throw new Error('http ' + res.status);
       var total = Number(res.headers.get('Content-Length')) || VIDEO_BYTES;
+      var tipo = res.headers.get('Content-Type') || 'video/mp4';
       var reader = res.body.getReader();
       var chunks = [], got = 0, lastRing = 0;
       function pump() {
@@ -169,7 +171,7 @@
       return pump().then(function () {
         clearTimeout(watchdog);
         ring.style.setProperty('--ld', 0);
-        video.src = URL.createObjectURL(new Blob(chunks, { type: 'video/mp4' }));
+        video.src = URL.createObjectURL(new Blob(chunks, { type: tipo }));
         video.load();
         video.addEventListener('canplay', function () {
           requestSeek(heroProgress() * video.duration);
@@ -177,6 +179,14 @@
         }, { once: true });
       });
     });
+  }
+
+  // Sem vídeo, o pôster troca para o quadro final na metade de baixo da jornada
+  var posterAtual = '';
+  function posterFinal(p) {
+    if (!stage.classList.contains('video-failed')) return;
+    var url = p > 0.6 ? FINAL_URL : POSTER_URL;
+    if (url !== posterAtual) { posterAtual = url; posterLayer.style.backgroundImage = "url('" + url + "')"; }
   }
 
   function failVideo() {
@@ -188,8 +198,7 @@
       s.innerHTML = '<use href="#i-seta"/>';
       ring.replaceWith(s);
     }
-    // o pôster assume: o quadro final entra na metade de baixo da jornada
-    posterLayer.style.transition = 'background-image .6s';
+    posterFinal(heroProgress());
   }
 
   /* ---------- Os cinco portões do hero estático ---------- */
