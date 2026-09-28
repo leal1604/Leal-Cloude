@@ -41,6 +41,52 @@
     itens.forEach(function (el) { el.classList.add('in'); });
   }
 
+  /* Animações: cascata, estrelas, contagem e foto do topo */
+  var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.cascata').forEach(function (c) {
+    [].forEach.call(c.children, function (el, i) { el.style.setProperty('--i', i); });
+  });
+  function formata(v, casas) { return casas ? v.toFixed(casas).replace('.', ',') : Math.round(v).toLocaleString('pt-BR'); }
+  function contar(el) {
+    var alvo = parseFloat(el.dataset.conta), casas = parseInt(el.dataset.casas || '0', 10), t0 = null, dur = 1400;
+    (function passo(t) {
+      if (t0 === null) t0 = t;
+      var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = formata(alvo * e, casas);
+      if (k < 1) requestAnimationFrame(passo);
+    })(performance.now());
+  }
+  var anima = document.querySelectorAll('.cascata, .estrelas.acende, [data-conta]');
+  if (!calmo && 'IntersectionObserver' in window) {
+    document.querySelectorAll('[data-conta]').forEach(function (el) { el.textContent = formata(0, parseInt(el.dataset.casas || '0', 10)); });
+    var ioA = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        if (el.dataset.conta) contar(el); else el.classList.add('in');
+        if (el.classList.contains('cascata')) setTimeout(function () { el.classList.add('feito'); }, 90 * el.children.length + 800);
+        ioA.unobserve(el);
+      });
+    }, { threshold: 0.2 });
+    anima.forEach(function (el) { ioA.observe(el); });
+  } else {
+    anima.forEach(function (el) { el.classList.add('in', 'feito'); });
+  }
+  // A foto do topo desce mais devagar que a página (profundidade), só enquanto o topo aparece
+  var fotoTopo = document.querySelector('.hero .foto');
+  if (fotoTopo && !calmo) {
+    var ultimoY = -1, pedido = false;
+    var mover = function () {
+      pedido = false;
+      var y = Math.min(window.scrollY, 700);
+      if (y === ultimoY) return;
+      ultimoY = y;
+      fotoTopo.style.translate = '0 ' + (y * 0.25).toFixed(1) + 'px';
+    };
+    addEventListener('scroll', function () { if (!pedido) { pedido = true; requestAnimationFrame(mover); } }, { passive: true });
+  }
+  document.addEventListener('visibilitychange', function () { document.body.classList.toggle('pausado', document.hidden); });
+
   /* Cardápio: destaca a categoria visível */
   var chips = document.querySelectorAll('.chips a');
   if (chips.length && 'IntersectionObserver' in window) {

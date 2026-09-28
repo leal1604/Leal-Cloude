@@ -57,12 +57,12 @@
   </header>
   <main id="main">
     <section class="hero">
-      <div class="foto" role="img" aria-label="Pães franceses dourados numa cesta com toalha xadrez vermelha"><div class="selo" aria-hidden="true"><div><span>Tradição<br>desde 1998</span><svg><use href="#i-trigo"/></svg></div></div></div>
+      <div class="foto" role="img" aria-label="Pães franceses dourados numa cesta com toalha xadrez vermelha"><svg class="vapor" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true"><path d="M30 44c-3-5 3-8 0-13s3-8 0-13"/><path d="M49 42c-3-5 3-8 0-13s3-8 0-13"/><path d="M71 46c-3-5 3-8 0-13s3-8 0-13"/></svg><div class="selo" aria-hidden="true"><div><span>Tradição<br>desde 1998</span><svg><use href="#i-trigo"/></svg></div></div></div>
       <div class="wrap">
-        <p class="marca">Panificadora Cristal</p>
-        <h1>O sabor que faz parte da história de Natal.</h1>
-        <p>Pães fresquinhos, bolos, salgados e muito mais. Tudo feito com carinho, qualidade e tradição para você e sua família.</p>
-        <div class="acoes">
+        <p class="marca entra" style="--d:.15s">Panificadora Cristal</p>
+        <h1 class="entra" style="--d:.3s">O sabor que faz parte da história de Natal.</h1>
+        <p class="entra" style="--d:.5s">Pães fresquinhos, bolos, salgados e muito mais. Tudo feito com carinho, qualidade e tradição para você e sua família.</p>
+        <div class="acoes entra" style="--d:.65s">
           <a class="btn btn-vinho" href="cardapio.html"><svg class="ico" aria-hidden="true"><use href="#i-talheres"/></svg>Ver Cardápio</a>
           <a class="btn btn-contorno-claro" href="encomendas.html#pedido"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>Fazer Pedido</a>
         </div>
@@ -71,7 +71,7 @@
 
     <section class="categorias" aria-label="Categorias">
       <div class="wrap">
-        <ul>
+        <ul class="cascata">
           <li><a href="cardapio.html#paes"><div class="cat-foto"><img src="assets/img/prod-pao.jpg" alt="" width="348" height="272" loading="lazy"><span class="selinho"><svg class="ico" aria-hidden="true"><use href="#i-pao"/></svg></span></div><h3>Pães</h3><p>Frescor todos os dias</p></a></li>
           <li><a href="cardapio.html#bolos"><div class="cat-foto"><img src="assets/img/prod-bolo.jpg" alt="" width="348" height="272" loading="lazy"><span class="selinho"><svg class="ico" aria-hidden="true"><use href="#i-bolo"/></svg></span></div><h3>Bolos e Tortas</h3><p>Para todas as ocasiões</p></a></li>
           <li><a href="cardapio.html#salgados"><div class="cat-foto"><img src="assets/img/prod-salgados.jpg" alt="" width="348" height="272" loading="lazy"><span class="selinho"><svg class="ico" aria-hidden="true"><use href="#i-salgado"/></svg></span></div><h3>Salgados e Lanches</h3><p>Sabor em cada mordida</p></a></li>
@@ -87,7 +87,7 @@
           <div><p class="rotulo">Produtos em destaque</p><h2>O que nossos clientes mais amam</h2></div>
           <a class="btn btn-pilula" href="cardapio.html">Ver todo o cardápio <svg class="ico" aria-hidden="true"><use href="#i-seta"/></svg></a>
         </div>
-        <div class="produtos">
+        <div class="produtos cascata">
           <a class="produto revela" href="cardapio.html"><img src="assets/img/prod-pao.jpg" alt="Pães franceses dourados" width="348" height="272" loading="lazy"><div class="txt"><svg class="ico" aria-hidden="true"><use href="#i-pao"/></svg><div><h3>Pão Francês</h3><p>Sempre quentinho</p></div></div></a>
           <a class="produto revela" href="cardapio.html"><img src="assets/img/prod-bolo.jpg" alt="Bolo de chocolate com morangos" width="348" height="272" loading="lazy"><div class="txt"><svg class="ico" aria-hidden="true"><use href="#i-bolo"/></svg><div><h3>Bolos e Tortas</h3><p>Feitos com ingredientes selecionados</p></div></div></a>
           <a class="produto revela" href="cardapio.html"><img src="assets/img/prod-salgados.jpg" alt="Salgados assados" width="348" height="272" loading="lazy"><div class="txt"><svg class="ico" aria-hidden="true"><use href="#i-salgado"/></svg><div><h3>Salgados</h3><p>Crocantes e saborosos</p></div></div></a>
@@ -106,7 +106,7 @@
           <p>Faça sua encomenda e torne seus momentos especiais ainda mais doces e saborosos.</p>
           <a class="btn btn-vinho" href="encomendas.html"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg>Solicitar Encomenda</a>
         </div>
-        <ul class="lista-servicos revela">
+        <ul class="lista-servicos cascata">
             <li><svg class="ico" aria-hidden="true"><use href="#i-bolo"/></svg>Bolos personalizados</li>
             <li><svg class="ico" aria-hidden="true"><use href="#i-salgado"/></svg>Salgados para eventos</li>
             <li><svg class="ico" aria-hidden="true"><use href="#i-bolo"/></svg>Tortas e doces finos</li>
@@ -129,7 +129,7 @@
         <div class="col revela">
           <p class="rotulo">O que dizem nossos clientes</p>
           <h2>Avaliações reais, de quem já provou o nosso sabor!</h2>
-          <div class="nota"><span class="marca-g">Google</span><b>4,5</b><span class="estrelas" aria-label="4,5 de 5 estrelas">★★★★★</span><small>858 avaliações</small></div>
+          <div class="nota"><span class="marca-g">Google</span><b data-conta="4.5" data-casas="1">4,5</b><span class="estrelas acende" role="img" aria-label="4,5 de 5 estrelas"><i>★</i><i>★</i><i>★</i><i>★</i><i class="meia">★</i></span><small><span data-conta="858">858</span> avaliações</small></div>
           <p class="depo">“Crocante e macio.”</p>
           <p class="depo-fonte"><span class="estrelas" aria-hidden="true">★★★★★</span>Cliente, sobre o pão francês</p>
         </div>
