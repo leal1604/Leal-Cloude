@@ -486,20 +486,10 @@ body.pausado *,body.pausado *::before,body.pausado *::after{animation-play-state
   .vapor{display:none}
 }
 
-/* Navegação entre as 5 páginas só com CSS: a página ativa é a do endereço (#cardapio, #bolos...) */
-.pagina{display:none;scroll-margin-top:100px}
-.pagina:target,.pagina:has(:target){display:block}
-main:not(:has(:target)) #inicio{display:block}
-.nav a::after{transform:scaleX(0)}
-.nav a:hover::after{transform:scaleX(1)}
-body:not(:has(main :target)) .nav a[href="#inicio"]::after,
-body:has(#inicio:target,#inicio :target) .nav a[href="#inicio"]::after,
-body:has(#cardapio:target,#cardapio :target) .nav a[href="#cardapio"]::after,
-body:has(#encomendas:target,#encomendas :target) .nav a[href="#encomendas"]::after,
-body:has(#historia:target,#historia :target) .nav a[href="#historia"]::after,
-body:has(#contato:target,#contato :target) .nav a[href="#contato"]::after{transform:scaleX(1)}
-@media (max-width:860px){.nav:focus-within{display:flex}}
-.sem-has .pagina{display:none}.sem-has .pagina.ativa{display:block}
+/* Arquivo de visualização: as 5 páginas uma embaixo da outra; o menu rola até cada uma */
+.pagina{display:block;scroll-margin-top:100px}
+.pagina+.pagina{border-top:6px solid var(--ouro)}
+.nav a[aria-current="page"]::after{transform:scaleX(1)}
 
 </style>
   <script>document.documentElement.classList.add('js')</script>
@@ -637,21 +627,6 @@ body:has(#contato:target,#contato :target) .nav a[href="#contato"]::after{transf
       </div>
     </section>
   
-  <footer class="rodape">
-    <div class="wrap">
-      <div><a class="logo" href="#inicio" aria-label="Panificadora Cristal, página inicial"><span class="l1">Panificadora</span><span class="l2">Cristal</span><svg style="color:var(--ouro)" aria-hidden="true"><use href="#i-trigo"/></svg></a></div>
-      <div class="centro">
-        <div class="redes">
-          <a href="https://www.instagram.com/panificadoracristalnatal/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ico" aria-hidden="true"><use href="#i-insta"/></svg></a>
-          <a href="https://wa.me/558432133695" target="_blank" rel="noopener" data-whats aria-label="WhatsApp da Panificadora Cristal"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg></a>
-          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Rua+Dr.+Manoel+Miranda,+719,+Alecrim,+Natal+-+RN,+59037-250" target="_blank" rel="noopener" aria-label="Como chegar"><svg class="ico" aria-hidden="true"><use href="#i-pino"/></svg></a>
-        </div>
-        <span>Panificadora Cristal · Natal/RN &nbsp;|&nbsp; Desde 1998</span>
-      </div>
-      <a class="topo-link" href="#inicio"><span class="c"><svg class="ico" aria-hidden="true"><use href="#i-seta-cima"/></svg></span>Voltar ao topo</a>
-      <p class="aviso">Imagens ilustrativas. Rua Dr. Manoel Miranda, 719, Alecrim, Natal/RN · (84) 3213-3695</p>
-    </div>
-  </footer>
   </section>
   <section class="pagina" id="cardapio" data-pg="cardapio">
     <section class="banner">
@@ -762,21 +737,6 @@ body:has(#contato:target,#contato :target) .nav a[href="#contato"]::after{transf
       </div>
     </section>
   
-  <footer class="rodape">
-    <div class="wrap">
-      <div><a class="logo" href="#inicio" aria-label="Panificadora Cristal, página inicial"><span class="l1">Panificadora</span><span class="l2">Cristal</span><svg style="color:var(--ouro)" aria-hidden="true"><use href="#i-trigo"/></svg></a></div>
-      <div class="centro">
-        <div class="redes">
-          <a href="https://www.instagram.com/panificadoracristalnatal/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ico" aria-hidden="true"><use href="#i-insta"/></svg></a>
-          <a href="https://wa.me/558432133695" target="_blank" rel="noopener" data-whats aria-label="WhatsApp da Panificadora Cristal"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg></a>
-          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Rua+Dr.+Manoel+Miranda,+719,+Alecrim,+Natal+-+RN,+59037-250" target="_blank" rel="noopener" aria-label="Como chegar"><svg class="ico" aria-hidden="true"><use href="#i-pino"/></svg></a>
-        </div>
-        <span>Panificadora Cristal · Natal/RN &nbsp;|&nbsp; Desde 1998</span>
-      </div>
-      <a class="topo-link" href="#cardapio"><span class="c"><svg class="ico" aria-hidden="true"><use href="#i-seta-cima"/></svg></span>Voltar ao topo</a>
-      <p class="aviso">Imagens ilustrativas. Rua Dr. Manoel Miranda, 719, Alecrim, Natal/RN · (84) 3213-3695</p>
-    </div>
-  </footer>
   </section>
   <section class="pagina" id="encomendas" data-pg="encomendas">
     <section class="banner">
@@ -847,21 +807,6 @@ body:has(#contato:target,#contato :target) .nav a[href="#contato"]::after{transf
       </div>
     </section>
   
-  <footer class="rodape">
-    <div class="wrap">
-      <div><a class="logo" href="#inicio" aria-label="Panificadora Cristal, página inicial"><span class="l1">Panificadora</span><span class="l2">Cristal</span><svg style="color:var(--ouro)" aria-hidden="true"><use href="#i-trigo"/></svg></a></div>
-      <div class="centro">
-        <div class="redes">
-          <a href="https://www.instagram.com/panificadoracristalnatal/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ico" aria-hidden="true"><use href="#i-insta"/></svg></a>
-          <a href="https://wa.me/558432133695" target="_blank" rel="noopener" data-whats aria-label="WhatsApp da Panificadora Cristal"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg></a>
-          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Rua+Dr.+Manoel+Miranda,+719,+Alecrim,+Natal+-+RN,+59037-250" target="_blank" rel="noopener" aria-label="Como chegar"><svg class="ico" aria-hidden="true"><use href="#i-pino"/></svg></a>
-        </div>
-        <span>Panificadora Cristal · Natal/RN &nbsp;|&nbsp; Desde 1998</span>
-      </div>
-      <a class="topo-link" href="#encomendas"><span class="c"><svg class="ico" aria-hidden="true"><use href="#i-seta-cima"/></svg></span>Voltar ao topo</a>
-      <p class="aviso">Imagens ilustrativas. Rua Dr. Manoel Miranda, 719, Alecrim, Natal/RN · (84) 3213-3695</p>
-    </div>
-  </footer>
   </section>
   <section class="pagina" id="historia" data-pg="historia">
     <section class="banner">
@@ -932,21 +877,6 @@ body:has(#contato:target,#contato :target) .nav a[href="#contato"]::after{transf
       </div>
     </section>
   
-  <footer class="rodape">
-    <div class="wrap">
-      <div><a class="logo" href="#inicio" aria-label="Panificadora Cristal, página inicial"><span class="l1">Panificadora</span><span class="l2">Cristal</span><svg style="color:var(--ouro)" aria-hidden="true"><use href="#i-trigo"/></svg></a></div>
-      <div class="centro">
-        <div class="redes">
-          <a href="https://www.instagram.com/panificadoracristalnatal/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="ico" aria-hidden="true"><use href="#i-insta"/></svg></a>
-          <a href="https://wa.me/558432133695" target="_blank" rel="noopener" data-whats aria-label="WhatsApp da Panificadora Cristal"><svg class="ico" aria-hidden="true"><use href="#i-whats"/></svg></a>
-          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=Rua+Dr.+Manoel+Miranda,+719,+Alecrim,+Natal+-+RN,+59037-250" target="_blank" rel="noopener" aria-label="Como chegar"><svg class="ico" aria-hidden="true"><use href="#i-pino"/></svg></a>
-        </div>
-        <span>Panificadora Cristal · Natal/RN &nbsp;|&nbsp; Desde 1998</span>
-      </div>
-      <a class="topo-link" href="#historia"><span class="c"><svg class="ico" aria-hidden="true"><use href="#i-seta-cima"/></svg></span>Voltar ao topo</a>
-      <p class="aviso">Imagens ilustrativas. Rua Dr. Manoel Miranda, 719, Alecrim, Natal/RN · (84) 3213-3695</p>
-    </div>
-  </footer>
   </section>
   <section class="pagina" id="contato" data-pg="contato">
     <section class="banner">
@@ -975,6 +905,8 @@ body:has(#contato:target,#contato :target) .nav a[href="#contato"]::after{transf
       </div>
     </section>
   
+  </section>
+  </main>
   <footer class="rodape">
     <div class="wrap">
       <div><a class="logo" href="#inicio" aria-label="Panificadora Cristal, página inicial"><span class="l1">Panificadora</span><span class="l2">Cristal</span><svg style="color:var(--ouro)" aria-hidden="true"><use href="#i-trigo"/></svg></a></div>
@@ -986,12 +918,10 @@ body:has(#contato:target,#contato :target) .nav a[href="#contato"]::after{transf
         </div>
         <span>Panificadora Cristal · Natal/RN &nbsp;|&nbsp; Desde 1998</span>
       </div>
-      <a class="topo-link" href="#contato"><span class="c"><svg class="ico" aria-hidden="true"><use href="#i-seta-cima"/></svg></span>Voltar ao topo</a>
+      <a class="topo-link" href="#inicio"><span class="c"><svg class="ico" aria-hidden="true"><use href="#i-seta-cima"/></svg></span>Voltar ao topo</a>
       <p class="aviso">Imagens ilustrativas. Rua Dr. Manoel Miranda, 719, Alecrim, Natal/RN · (84) 3213-3695</p>
     </div>
   </footer>
-  </section>
-  </main>
   <script>
 (function () {
   'use strict';
@@ -1145,16 +1075,17 @@ body:has(#contato:target,#contato :target) .nav a[href="#contato"]::after{transf
 })();
 
 (function(){
-  if (window.CSS && CSS.supports && CSS.supports('selector(:has(*))')) return;
-  document.documentElement.classList.add('sem-has');
-  var paginas=[].slice.call(document.querySelectorAll('.pagina'));
-  function ir(){
-    var id=(location.hash||'#inicio').slice(1), el=document.getElementById(id);
-    var pg=el&&(el.classList.contains('pagina')?el:el.closest('.pagina'))||paginas[0];
-    paginas.forEach(function(p){p.classList.toggle('ativa',p===pg)});
-    if(el) el.scrollIntoView();
-  }
-  addEventListener('hashchange',ir); ir();
+  var links=[].slice.call(document.querySelectorAll('.nav a'));
+  var nav=document.getElementById('nav');
+  links.forEach(function(a){ a.addEventListener('click', function(){ if(nav) nav.classList.remove('aberto'); }); });
+  if(!('IntersectionObserver' in window)) return;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      links.forEach(function(a){ if(a.getAttribute('href')==='#'+e.target.id) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    });
+  },{rootMargin:'-45% 0px -50% 0px'});
+  document.querySelectorAll('.pagina').forEach(function(p){io.observe(p)});
 })();
 </script>
 </body>
