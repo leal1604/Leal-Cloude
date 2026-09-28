@@ -10,4 +10,6 @@ Site estático de 5 páginas (HTML, CSS e JavaScript puros, sem build), com a p�
 
 Para ver: abra `index.html` no navegador, ou rode `python3 -m http.server` nesta pasta e acesse `http://localhost:8000`.
 
-**WhatsApp:** preencha `var WHATSAPP = '';` em `assets/js/site.js` (ex.: `'5584999999999'`). Enquanto estiver vazio, os botões de WhatsApp ligam para (84) 3213-3695 e o formulário monta e copia o pedido.
+**WhatsApp:** todos os botões abrem `https://wa.me/558432133695`, o fixo (84) 3213-3695 cadastrado no WhatsApp Business. Para trocar de número, substitua `558432133695` nos arquivos `.html` e em `var WHATSAPP` de `assets/js/site.js`.
+
+**Arquivo único:** `../panificadora-cristal-completo.html` traz as 5 páginas num arquivo só, com imagens e fontes embutidas. A troca de páginas funciona só com CSS, então abre mesmo em visualizadores que bloqueiam scripts.

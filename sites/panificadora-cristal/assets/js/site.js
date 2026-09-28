@@ -3,7 +3,7 @@
 
   // WhatsApp da Cristal: preencha com DDI + DDD + número, só dígitos (ex.: '5584999999999').
   // Vazio: os botões de WhatsApp viram "Ligar agora" para (84) 3213-3695.
-  var WHATSAPP = '';
+  var WHATSAPP = '558432133695';
   var TELEFONE = 'tel:+558432133695';
 
   /* Menu no celular */
@@ -17,18 +17,10 @@
     });
   }
 
-  /* WhatsApp: com número, os links abrem a conversa; sem número, ligam */
-  document.querySelectorAll('[data-whats]').forEach(function (a) {
-    if (WHATSAPP) {
-      a.href = 'https://wa.me/' + WHATSAPP;
-      a.target = '_blank';
-      a.rel = 'noopener';
-      if (a.dataset.rotulo) a.textContent = a.dataset.rotulo;
-      if (a.hasAttribute('aria-label')) a.setAttribute('aria-label', 'WhatsApp da Panificadora Cristal');
-    } else {
-      a.href = TELEFONE;
-    }
-  });
+  /* WhatsApp: os links já vêm prontos no HTML. Sem número configurado, viram ligação. */
+  if (!WHATSAPP) {
+    document.querySelectorAll('[data-whats]').forEach(function (a) { a.href = TELEFONE; a.removeAttribute('target'); });
+  }
 
   /* Entradas suaves ao rolar */
   var itens = document.querySelectorAll('.revela');
@@ -138,9 +130,11 @@
       (f.tel.value.trim() ? '\n• Telefone: ' + f.tel.value.trim() : '') +
       '\n• Pedido: ' + f.tipo.value +
       '\n• Para: ' + d[2] + '/' + d[1] + '/' + d[0] +
-      (f.detalhes.value.trim() ? '\n• Detalhes: ' + f.detalhes.value.trim() : '');
+      (f['text'].value.trim() ? '\n• Detalhes: ' + f['text'].value.trim() : '');
     if (WHATSAPP) {
-      window.open('https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+      var url = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(msg);
+      var janela = window.open(url, '_blank');   // com 'noopener' o retorno é sempre null
+      if (janela) janela.opener = null; else location.href = url;
       retorno.textContent = 'Pedido aberto no WhatsApp da Cristal. Falta só tocar em enviar.';
       return;
     }
