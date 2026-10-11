@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import { AppShell } from "@/components/AppShell";
+import { ServiceWorker } from "@/components/ServiceWorker";
 import "./globals.css";
 
 const heading = Fraunces({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="pt-PT" className={`${heading.variable} ${body.variable} h-full antialiased`}>
       <body className="min-h-full font-sans">
         <AppShell>{children}</AppShell>
+        <ServiceWorker />
       </body>
     </html>
   );

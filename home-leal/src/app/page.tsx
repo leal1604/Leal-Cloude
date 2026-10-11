@@ -72,6 +72,12 @@ export default function HomePage() {
           })}
         </ul>
       </section>
+
+      <p className="text-center">
+        <Link href="/privacidade" className="text-xs text-sage-500 underline underline-offset-2">
+          Política de privacidade
+        </Link>
+      </p>
     </div>
   );
 }
