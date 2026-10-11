@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Versão de página única gerada (código minificado).
+    "standalone/dist/**",
   ]),
 ]);
 
