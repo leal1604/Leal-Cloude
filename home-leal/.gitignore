@@ -49,3 +49,6 @@ next-env.d.ts
 *.keystore
 *.jks
 signing-key-info.txt
+
+# versão de página única
+/standalone/dist
