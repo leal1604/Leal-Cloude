@@ -14,6 +14,7 @@ export default defineConfig({
     alias: [
       { find: /^next\/link$/, replacement: r("./shims/next-link.tsx") },
       { find: /^next\/navigation$/, replacement: r("./shims/next-navigation.ts") },
+      { find: /^@\/lib\/store$/, replacement: r("./shims/store-db.ts") },
       { find: /^@\//, replacement: r("../src/") + "/" },
     ],
   },
