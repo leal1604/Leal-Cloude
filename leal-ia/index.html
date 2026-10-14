@@ -1,0 +1,1055 @@
+<title>Leal IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: landing de rolagem (hero com roteador ao vivo → recursos → planos → perguntas) + app de ecrã inteiro (barra lateral + conversa) */
+:root{
+  --bg:#F3F6F4; --surface:#FFFFFF; --surface-2:#E8EEEB; --fg:#0C1A16; --muted:#55675F; --line:#D3DDD8;
+  --accent:#0B7A68; --accent-strong:#075E50; --accent-ink:#FFFFFF; --accent-soft:#D4EEE7;
+  --pro:#9A5A00; --pro-bg:#F5B33A; --pro-ink:#2A1A00; --pro-soft:#FBEACB;
+  --danger:#B42318; --danger-soft:#FDE6E3;
+  --shadow:0 1px 2px rgba(12,26,22,.06),0 10px 30px rgba(12,26,22,.08);
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#09110F; --surface:#101A17; --surface-2:#172521; --fg:#E4EEEA; --muted:#8FA59D; --line:#22332E;
+  --accent:#38CBB0; --accent-strong:#62E0C9; --accent-ink:#03211B; --accent-soft:#0E302A;
+  --pro:#F5B942; --pro-bg:#F5B942; --pro-ink:#2A1A00; --pro-soft:#33260B;
+  --danger:#FF8A7A; --danger-soft:#3A1612;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#09110F; --surface:#101A17; --surface-2:#172521; --fg:#E4EEEA; --muted:#8FA59D; --line:#22332E;
+  --accent:#38CBB0; --accent-strong:#62E0C9; --accent-ink:#03211B; --accent-soft:#0E302A;
+  --pro:#F5B942; --pro-bg:#F5B942; --pro-ink:#2A1A00; --pro-soft:#33260B;
+  --danger:#FF8A7A; --danger-soft:#3A1612;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55}
+html.em-app,html.em-app body{height:100%;overflow:hidden}
+h1,h2,h3{font-family:var(--f-display);line-height:1.05;text-wrap:balance;margin:0}
+p{margin:0}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:999px;padding:9px 18px;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;background:none;transition:background .15s,border-color .15s,transform .15s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-pri{background:var(--accent);color:var(--accent-ink)}
+.btn-pri:hover{background:var(--accent-strong)}
+.btn-ghost{border-color:var(--line);color:var(--fg)}
+.btn-ghost:hover{background:var(--surface-2)}
+.btn-pro{background:var(--pro-bg);color:var(--pro-ink)}
+.btn-pro:hover{filter:brightness(1.05)}
+.btn-lg{padding:13px 24px;font-size:16px}
+.btn-sm{padding:6px 12px;font-size:14px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+/* ───────── Landing ───────── */
+.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topo-in{display:flex;align-items:center;gap:24px;height:64px}
+.marca{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--fg);text-decoration:none;letter-spacing:-.01em}
+.marca svg{flex:none}
+.topo nav{display:flex;gap:22px;margin-left:auto}
+.topo nav a{color:var(--muted);text-decoration:none;font-weight:500;font-size:15px}
+.topo nav a:hover{color:var(--fg)}
+@media (max-width:720px){.topo nav{display:none}.topo-in .btn{margin-left:auto}}
+
+.hero{position:relative;padding-block:72px 88px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:48px 48px;opacity:.45;
+  -webkit-mask-image:radial-gradient(ellipse 70% 70% at 70% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 70% 70% at 70% 40%,#000 20%,transparent 75%)}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero-txt{display:flex;flex-direction:column;gap:22px;min-width:0}
+.eyebrow{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero h1{font-size:clamp(44px,6.4vw,82px);font-weight:800;letter-spacing:-.035em}
+.hero h1 span{color:var(--accent)}
+.lead{font-size:19px;color:var(--muted);max-width:34em}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.fatos{display:flex;gap:28px;flex-wrap:wrap;list-style:none;margin:6px 0 0;padding:0;color:var(--muted);font-size:15px}
+.fatos b{display:block;font-family:var(--f-display);font-size:28px;color:var(--fg);font-weight:700;letter-spacing:-.02em}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:40px}.hero{padding-block:44px 64px}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.demo{padding:22px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.demo-head{display:flex;align-items:center;gap:10px;font-weight:600}
+.demo-head .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.demo-tag{margin-left:auto;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:999px}
+.demo textarea{width:100%;resize:none;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px 14px;font-size:15.5px;line-height:1.45}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13.5px;cursor:pointer;color:var(--muted);text-align:left}
+.chip:hover{border-color:var(--accent);color:var(--fg)}
+.lanes{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:14px}
+.lane{display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:12px;font-size:14px;color:var(--muted);transition:color .25s}
+.lane-nome{font-weight:600}
+.lane-track{position:relative;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.lane-track i{position:absolute;inset:0 auto 0 0;width:0;border-radius:inherit;background:var(--accent);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.lane-uso{font-size:12.5px;font-family:var(--f-mono)}
+.lane.ativa{color:var(--fg)}
+.lane.ativa .lane-track i{width:100%}
+.lane[data-tier="complex"].ativa .lane-track i{background:var(--pro-bg)}
+.demo-foot{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;border-top:1px dashed var(--line);padding-top:14px}
+.demo-foot .k{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.demo-foot b{font-size:17px}
+.demo-foot .btn{margin-left:auto}
+@media (max-width:460px){.lane{grid-template-columns:90px 1fr}.lane-uso{display:none}.demo-foot .btn{margin-left:0;width:100%}}
+
+.secao{padding-block:88px;border-top:1px solid var(--line)}
+.secao-head{display:flex;flex-direction:column;gap:12px;max-width:44em;margin-bottom:44px}
+.secao h2{font-size:clamp(32px,4.2vw,50px);font-weight:700;letter-spacing:-.03em}
+.secao-head p{color:var(--muted);font-size:18px}
+
+.recursos{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.recurso{background:var(--surface);padding:28px 24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.recurso svg{color:var(--accent)}
+.recurso h3{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.recurso p{color:var(--muted);font-size:15.5px}
+.recurso .exemplo{margin-top:auto;font-family:var(--f-mono);font-size:12.5px;color:var(--fg);background:var(--surface-2);border-radius:8px;padding:8px 10px}
+@media (max-width:980px){.recursos{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.recursos{grid-template-columns:1fr}}
+
+.planos{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px}
+.plano{padding:30px;display:flex;flex-direction:column;gap:20px;position:relative}
+.plano.destaque{border:2px solid var(--pro-bg)}
+.plano .selo{position:absolute;top:-13px;left:28px;background:var(--pro-bg);color:var(--pro-ink);font-family:var(--f-mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px}
+.plano h3{font-size:26px}
+.preco{display:flex;align-items:baseline;gap:6px}
+.preco b{font-family:var(--f-display);font-size:52px;font-weight:800;letter-spacing:-.03em}
+.preco span{color:var(--muted)}
+.plano .sub{color:var(--muted);font-size:15px;margin-top:-12px}
+.lista{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:15.5px}
+.lista li{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start}
+.lista svg{margin-top:3px;color:var(--accent)}
+.lista .lim svg{color:var(--muted)}
+.plano .btn{margin-top:auto}
+.nota-plano{margin-top:20px;color:var(--muted);font-size:14px;max-width:60em}
+@media (max-width:720px){.planos{grid-template-columns:1fr}}
+
+.faq{display:flex;flex-direction:column;max-width:820px;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:20px 40px 20px 0;font-weight:600;font-size:18px;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:16px;font-family:var(--f-mono);font-size:22px;color:var(--accent);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 20px;color:var(--muted);max-width:62ch}
+
+.final{padding-block:80px;text-align:left}
+.final .card{padding:44px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between;background:var(--accent);border:none;color:var(--accent-ink)}
+.final h2{font-size:clamp(28px,3.6vw,42px);letter-spacing:-.02em;max-width:18em}
+.final .btn{background:var(--accent-ink);color:var(--accent)}
+.rodape{padding-block:28px 40px;color:var(--muted);font-size:14px;border-top:1px solid var(--line)}
+.rodape .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between}
+
+/* ───────── App ───────── */
+#app{height:100%;display:grid;grid-template-columns:280px 1fr;background:var(--bg)}
+.lateral{display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--line);background:var(--surface)}
+.lateral-top{display:flex;flex-direction:column;gap:14px;padding:16px max(16px,env(safe-area-inset-left,0px)) 12px 16px}
+.lateral .marca{font-size:18px}
+.conv-lista{flex:1;overflow:auto;padding:4px 10px 12px;display:flex;flex-direction:column;gap:2px}
+.conv-lista .rotulo{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:10px 8px 6px}
+.conv{display:grid;grid-template-columns:1fr auto;align-items:center;gap:6px;border-radius:10px;padding:8px 8px 8px 10px;cursor:pointer;border:1px solid transparent}
+.conv:hover{background:var(--surface-2)}
+.conv.atual{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 30%,transparent)}
+.conv-t{min-width:0}
+.conv-t b{display:block;font-weight:500;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv-t small{color:var(--muted);font-size:12px}
+.conv-x{border:none;background:none;color:var(--muted);cursor:pointer;border-radius:6px;padding:4px 6px;font-size:12px;opacity:0}
+.conv:hover .conv-x,.conv-x:focus-visible,.conv-x.confirmar{opacity:1}
+.conv-x.confirmar{color:var(--danger);background:var(--danger-soft)}
+.lateral-pe{border-top:1px solid var(--line);padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px;font-size:13px;color:var(--muted)}
+.medidor{display:flex;flex-direction:column;gap:6px}
+.medidor-linha{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.medidor-linha b{color:var(--fg)}
+.barra{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.barra i{display:block;height:100%;background:var(--accent);border-radius:inherit;transition:width .4s}
+.barra.baixa i{background:var(--danger)}
+
+.principal{display:flex;flex-direction:column;min-width:0;min-height:0}
+.barra-app{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px 16px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+.so-movel{display:none}
+.modos{display:flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px}
+.modos button{border:none;background:none;border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px;color:var(--muted);cursor:pointer}
+.modos button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.barra-app .esp{flex:1}
+.sel{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:14px;font-weight:500}
+.plano-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;border:1px solid var(--line);background:var(--surface);font-family:var(--f-mono)}
+.plano-pill.pro{background:var(--pro-bg);color:var(--pro-ink);border-color:transparent}
+
+.aviso{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 16px 0;padding:12px 14px;border-radius:12px;background:var(--pro-soft);color:var(--fg);font-size:14.5px}
+.aviso.erro{background:var(--danger-soft)}
+.aviso p{flex:1;min-width:200px}
+
+.mensagens{flex:1;overflow:auto;padding:24px 16px 12px}
+.mensagens-in{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.msg{display:flex;flex-direction:column;gap:6px;min-width:0}
+.msg.user{align-items:flex-end}
+.msg.user .corpo{background:var(--accent);color:var(--accent-ink);border-radius:18px 18px 4px 18px;padding:10px 16px;max-width:85%;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.ia .corpo{min-width:0;overflow-wrap:anywhere}
+.msg.ia .quem{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-family:var(--f-mono)}
+.msg.ia .quem .tier{padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--fg)}
+.msg.ia .quem .tier.complex{background:var(--pro-soft)}
+.msg.ia .quem button{border:none;background:none;color:var(--muted);cursor:pointer;font:inherit;padding:2px 6px;border-radius:6px}
+.msg.ia .quem button:hover{background:var(--surface-2);color:var(--fg)}
+.pensando{color:var(--muted);display:inline-flex;gap:8px;align-items:center}
+.pensando::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulso 1s infinite ease-in-out}
+@keyframes pulso{50%{opacity:.25;transform:scale(.7)}}
+.corpo p{margin:0 0 .8em}
+.corpo p:last-child{margin-bottom:0}
+.corpo h3,.corpo h4,.corpo h5{font-family:var(--f-display);margin:1.1em 0 .5em;font-size:1.15em}
+.corpo ul,.corpo ol{margin:0 0 .8em;padding-left:1.4em}
+.corpo li{margin:.2em 0}
+.corpo code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);padding:.1em .35em;border-radius:5px}
+.corpo pre{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;margin:0 0 .8em}
+.corpo pre code{background:none;padding:0}
+.corpo blockquote{margin:0 0 .8em;padding-left:12px;border-left:3px solid var(--accent);color:var(--muted)}
+.corpo .tabela{overflow-x:auto;margin:0 0 .8em}
+.corpo table{border-collapse:collapse;font-size:.94em}
+.corpo th,.corpo td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+.corpo th{background:var(--surface-2)}
+.corpo hr{border:none;border-top:1px solid var(--line);margin:1em 0}
+.corpo .corte{color:var(--muted);font-size:13px;font-style:italic}
+
+.vazio{display:flex;flex-direction:column;gap:18px;padding-top:6vh}
+.vazio h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.025em}
+.vazio p{color:var(--muted);max-width:38em}
+.sugestoes{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.sugestao{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:14px;text-align:left;cursor:pointer;font-size:14.5px;line-height:1.4}
+.sugestao:hover{border-color:var(--accent)}
+.sugestao small{display:block;margin-top:8px;font-family:var(--f-mono);color:var(--muted);font-size:11.5px}
+
+.compositor{padding:8px 16px calc(14px + env(safe-area-inset-bottom,0px))}
+.compositor-in{max-width:780px;margin:0 auto;border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:10px 10px 8px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.compositor textarea{width:100%;border:none;background:none;resize:none;outline:none;font-size:16px;line-height:1.45;max-height:200px;min-height:26px}
+.compositor-pe{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rota-info{font-size:12.5px;color:var(--muted);font-family:var(--f-mono);flex:1;min-width:0}
+.rota-info b{color:var(--fg);font-weight:700}
+.btn-icone{width:38px;height:38px;padding:0;border-radius:50%}
+
+.veu{position:fixed;inset:0;z-index:50;background:color-mix(in srgb,var(--fg) 40%,transparent);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:calc(40px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}
+.painel{width:100%;max-width:860px;padding:28px;display:flex;flex-direction:column;gap:22px}
+.painel-top{display:flex;align-items:flex-start;gap:16px}
+.painel-top h2{font-size:30px;letter-spacing:-.02em}
+.painel-top p{color:var(--muted);margin-top:6px}
+.painel-top .btn{margin-left:auto}
+.uso{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.uso div{background:var(--surface-2);border-radius:12px;padding:14px}
+.uso small{display:block;color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em}
+.uso b{font-size:20px}
+.painel .planos{max-width:none}
+.painel .plano{box-shadow:none;padding:22px}
+.painel .preco b{font-size:40px}
+@media (max-width:640px){.uso{grid-template-columns:1fr}}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+
+@media (max-width:820px){
+  #app{grid-template-columns:1fr}
+  .lateral{position:fixed;inset:0 auto 0 0;width:min(300px,86vw);z-index:40;transform:translateX(-102%);transition:transform .25s;box-shadow:var(--shadow);padding-top:env(safe-area-inset-top,0px)}
+  #app.menu-aberto .lateral{transform:none}
+  #app.menu-aberto::after{content:"";position:fixed;inset:0;z-index:30;background:color-mix(in srgb,var(--fg) 30%,transparent)}
+  .so-movel{display:inline-flex}
+  .barra-app{gap:8px}
+  .modos button{padding:6px 10px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+
+<!-- ═════════════ LANDING ═════════════ -->
+<div id="landing">
+  <header class="topo">
+    <div class="wrap topo-in">
+      <a class="marca" href="#inicio" aria-label="Leal IA, início">
+        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M9 8v16h7" stroke="var(--accent-ink)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="12" r="3" fill="var(--pro-bg)"/><path d="M22 18v6" stroke="var(--accent-ink)" stroke-width="3" stroke-linecap="round"/></svg>
+        Leal IA
+      </a>
+      <nav aria-label="Secções">
+        <a href="#recursos">Recursos</a>
+        <a href="#planos">Planos</a>
+        <a href="#faq">Perguntas</a>
+      </nav>
+      <a class="btn btn-pri" href="#app">Abrir o assistente</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-txt">
+          <p class="eyebrow">Assistente de IA · Planos Básico e Pro</p>
+          <h1>Um assistente.<br><span>Todos os modelos.</span></h1>
+          <p class="lead">O Leal IA escolhe o modelo certo para cada pergunta, executa tarefas em etapas e escreve documentos longos. Você vê a rota e o custo em créditos antes de enviar.</p>
+          <div class="cta-row">
+            <a class="btn btn-pri btn-lg" href="#app">Começar agora</a>
+            <a class="btn btn-ghost btn-lg" href="#planos">Comparar planos</a>
+          </div>
+          <ul class="fatos">
+            <li><b>3</b>modelos num só lugar</li>
+            <li><b>3</b>modos de trabalho</li>
+            <li><b class="mono">30.000</b>créditos/mês no Pro</li>
+          </ul>
+        </div>
+
+        <div class="demo card" aria-label="Demonstração do roteador automático">
+          <div class="demo-head"><span class="dot"></span>Roteador automático<span class="demo-tag">ao vivo</span></div>
+          <label for="demo-in" class="sr">Escreva uma pergunta para ver a rota</label>
+          <textarea id="demo-in" rows="2" placeholder="Escreva uma pergunta e veja para onde ela vai…">Escreva um e-mail educado cobrando um cliente com a fatura em atraso</textarea>
+          <div class="chips" id="demo-chips">
+            <button class="chip" type="button">Traduza “bom dia” para inglês</button>
+            <button class="chip" type="button">Escreva um e-mail educado cobrando um cliente com a fatura em atraso</button>
+            <button class="chip" type="button">Compare três estratégias de preço para um SaaS e recomende uma, com riscos</button>
+          </div>
+          <div class="lanes" id="lanes">
+            <div class="lane" data-tier="quick"><span class="lane-nome">Rápido</span><span class="lane-track"><i></i></span><span class="lane-uso">×1 crédito</span></div>
+            <div class="lane" data-tier="default"><span class="lane-nome">Equilibrado</span><span class="lane-track"><i></i></span><span class="lane-uso">×3 créditos</span></div>
+            <div class="lane" data-tier="complex"><span class="lane-nome">Avançado</span><span class="lane-track"><i></i></span><span class="lane-uso">×8 créditos</span></div>
+          </div>
+          <div class="demo-foot">
+            <div><span class="k">Rota</span><b id="demo-rota">Equilibrado</b></div>
+            <div><span class="k">Custo estimado</span><b id="demo-custo" class="mono">≈ 19 créditos</b></div>
+            <button class="btn btn-pri" type="button" id="demo-ir">Perguntar ao assistente</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="recursos" class="secao">
+      <div class="wrap">
+        <div class="secao-head">
+          <p class="eyebrow">Recursos</p>
+          <h2>Tudo o que você pediria a uma equipe de assistentes</h2>
+          <p>Conversa rápida, tarefas em várias etapas e um estúdio para textos longos. Tudo medido em créditos, com o saldo sempre à vista.</p>
+        </div>
+        <div class="recursos">
+          <article class="recurso">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h6l4 6-4 6H4"/><path d="M14 12h6"/><circle cx="20" cy="12" r="1.5" fill="currentColor"/></svg>
+            <h3>Roteamento automático</h3>
+            <p>Perguntas simples vão para o modelo Rápido; análises pesadas, para o Avançado. Você também pode escolher o modelo à mão.</p>
+            <span class="exemplo">“Traduza…” → Rápido · ≈ 2 créditos</span>
+          </article>
+          <article class="recurso">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/></svg>
+            <h3>Agente</h3>
+            <p>Entregue um objetivo. O agente monta o plano, executa cada etapa e fecha com um resultado pronto para usar.</p>
+            <span class="exemplo">Plano → Etapas → Resultado</span>
+          </article>
+          <article class="recurso">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>
+            <h3>Studio</h3>
+            <p>Relatórios, propostas, roteiros e artigos com estrutura, títulos e revisão. Peça ajustes na mesma conversa.</p>
+            <span class="exemplo">Proposta comercial · 1.200 palavras</span>
+          </article>
+          <article class="recurso">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.2 1.1-2 2.5-2s2.5.8 2.5 2-1.1 1.7-2.5 2-2.5.8-2.5 2 1.1 2 2.5 2 2.5-.8 2.5-2"/></svg>
+            <h3>Créditos às claras</h3>
+            <p>Cada resposta mostra quantos créditos usou. O medidor indica quanto resta no ciclo de 30 dias.</p>
+            <span class="exemplo">18.420 de 20.000 restantes</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="planos" class="secao">
+      <div class="wrap">
+        <div class="secao-head">
+          <p class="eyebrow">Planos</p>
+          <h2>Comece no Básico. Passe para o Pro quando precisar de mais.</h2>
+          <p>O Pro custa mais US$ 10 por mês sobre o Básico e tira os limites do Agente e do Studio.</p>
+        </div>
+        <div class="planos">
+          <article class="plano card">
+            <h3>Básico</h3>
+            <div class="preco"><b>US$ 10</b><span>/mês</span></div>
+            <p class="sub">Para o dia a dia.</p>
+            <ul class="lista">
+              <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span><b class="mono">20.000</b> créditos por mês</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span>Chat com os 3 modelos e roteamento automático</span></li>
+              <li class="lim"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Agente: 3 tarefas por ciclo</span></li>
+              <li class="lim"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Studio: 3 conversas, até 2.500 créditos cada</span></li>
+            </ul>
+            <a class="btn btn-ghost btn-lg" href="#app">Começar no Básico</a>
+          </article>
+          <article class="plano card destaque">
+            <span class="selo">Mais completo</span>
+            <h3>Pro</h3>
+            <div class="preco"><b>US$ 20</b><span>/mês</span></div>
+            <p class="sub">Básico + US$ 10 por mês.</p>
+            <ul class="lista">
+              <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span><b class="mono">30.000</b> créditos por mês (10.000 a mais)</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span>Tudo o que o Básico inclui</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span>Agente sem limite de tarefas</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><span>Studio sem limite de conversas nem de créditos por conversa</span></li>
+            </ul>
+            <a class="btn btn-pro btn-lg" href="#app" data-abrir-planos>Ativar o Pro</a>
+          </article>
+        </div>
+        <p class="nota-plano">Versão de lançamento: a cobrança ainda não está ligada, por isso a mudança de plano é imediata e sem custo. As respostas usam a sua própria conta Claude.</p>
+      </div>
+    </section>
+
+    <section id="faq" class="secao">
+      <div class="wrap">
+        <div class="secao-head">
+          <p class="eyebrow">Perguntas frequentes</p>
+          <h2>Cobrança e planos</h2>
+        </div>
+        <div class="faq">
+          <details open><summary>O que é o plano Pro e que vantagens ele dá?</summary>
+            <p>O Pro é um complemento do Básico: custa mais US$ 10 por mês (US$ 20 no total). Ele soma 10.000 créditos aos 20.000 do Básico, ficando com 30.000 por mês, e libera o Agente e o Studio sem limites.</p></details>
+          <details><summary>O que o plano Básico inclui?</summary>
+            <p>US$ 10 por mês com 20.000 créditos, chat com os três modelos e roteamento automático. O Agente fica limitado a 3 tarefas por ciclo e o Studio a 3 conversas, cada uma com até 2.500 créditos.</p></details>
+          <details><summary>O que são créditos? São o mesmo que tokens?</summary>
+            <p>Não. Créditos são a unidade de uso do Leal IA. O custo de cada resposta depende do modelo (Rápido ×1, Equilibrado ×3, Avançado ×8) e do tamanho do texto. O valor aparece ao lado de cada resposta.</p></details>
+          <details><summary>Os créditos que sobram passam para o mês seguinte?</summary>
+            <p>Não. Os créditos do plano renovam a cada ciclo de 30 dias e o saldo volta ao total do plano.</p></details>
+          <details><summary>Posso mudar de plano quando quiser?</summary>
+            <p>Sim. No assistente, toque no selo do plano no canto superior. Nesta versão a mudança é imediata e não há cobrança.</p></details>
+          <details><summary>Onde ficam as minhas conversas?</summary>
+            <p>Quando você abre o Leal IA com sessão iniciada no Claude, as conversas e o saldo ficam guardados de forma privada na sua conta: só você os vê. Sem sessão, ficam apenas neste navegador.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="wrap">
+        <div class="card">
+          <h2>Faça a primeira pergunta. O roteador cuida do resto.</h2>
+          <a class="btn btn-lg" href="#app">Abrir o assistente</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="rodape"><div class="wrap"><span>Leal IA · Assistente com planos Básico e Pro</span><span>Respostas geradas pelo Claude</span></div></footer>
+</div>
+
+<!-- ═════════════ APP ═════════════ -->
+<div id="app" hidden>
+  <aside class="lateral" aria-label="Conversas">
+    <div class="lateral-top">
+      <a class="marca" href="#inicio">
+        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--accent)"/><path d="M9 8v16h7" stroke="var(--accent-ink)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="12" r="3" fill="var(--pro-bg)"/><path d="M22 18v6" stroke="var(--accent-ink)" stroke-width="3" stroke-linecap="round"/></svg>
+        Leal IA
+      </a>
+      <button class="btn btn-pri" type="button" id="nova">+ Nova conversa</button>
+    </div>
+    <div class="conv-lista" id="conv-lista"></div>
+    <div class="lateral-pe">
+      <div class="medidor">
+        <div class="medidor-linha"><span>Créditos restantes</span><b class="mono" id="cred-txt">–</b></div>
+        <div class="barra" id="cred-barra"><i style="width:100%"></i></div>
+        <div class="medidor-linha"><span id="ciclo-txt">Ciclo de 30 dias</span></div>
+      </div>
+      <span id="armazenamento">A carregar…</span>
+    </div>
+  </aside>
+
+  <div class="principal">
+    <div class="barra-app">
+      <button class="btn btn-ghost btn-icone so-movel" type="button" id="menu" aria-label="Abrir lista de conversas">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <div class="modos" role="group" aria-label="Modo">
+        <button type="button" data-modo="chat" aria-pressed="true">Chat</button>
+        <button type="button" data-modo="agente" aria-pressed="false">Agente</button>
+        <button type="button" data-modo="studio" aria-pressed="false">Studio</button>
+      </div>
+      <span class="esp"></span>
+      <label for="modelo" class="sr">Modelo</label>
+      <select id="modelo" class="sel">
+        <option value="auto">Auto</option>
+        <option value="quick">Rápido</option>
+        <option value="default">Equilibrado</option>
+        <option value="complex">Avançado</option>
+      </select>
+      <button type="button" class="plano-pill" id="plano-pill">Básico</button>
+    </div>
+
+    <div id="aviso-area"></div>
+
+    <div class="mensagens" id="mensagens"><div class="mensagens-in" id="mensagens-in"></div></div>
+
+    <div class="compositor">
+      <form class="compositor-in" id="form">
+        <label for="entrada" class="sr">Mensagem</label>
+        <textarea id="entrada" rows="1" placeholder="Pergunte qualquer coisa…"></textarea>
+        <div class="compositor-pe">
+          <span class="rota-info" id="rota-info">Rota: <b>Auto</b></span>
+          <button type="button" class="btn btn-ghost btn-sm" id="parar" hidden>Parar</button>
+          <button type="submit" class="btn btn-pri btn-icone" id="enviar" aria-label="Enviar" disabled>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="veu" id="veu" hidden>
+  <div class="painel card" role="dialog" aria-modal="true" aria-labelledby="painel-titulo">
+    <div class="painel-top">
+      <div><h2 id="painel-titulo">O seu plano</h2><p id="painel-sub"></p></div>
+      <button class="btn btn-ghost btn-sm" type="button" id="fechar-painel">Fechar</button>
+    </div>
+    <div class="uso" id="uso"></div>
+    <div class="planos" id="painel-planos"></div>
+    <p class="nota-plano">Versão de lançamento: a cobrança ainda não está ligada. Mudar de plano é imediato e não tem custo. O ciclo de créditos continua o mesmo.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const fmt = n => Math.round(n).toLocaleString("pt-BR");
+const use = n => (window.claude && window.claude.use) ? window.claude.use(n).catch(() => null) : Promise.resolve(null);
+
+/* ── Regras do produto ── */
+const PLANOS = {
+  basico: { nome: "Básico", preco: 10, creditos: 20000, tarefasAgente: 3, conversasStudio: 3, creditosPorStudio: 2500 },
+  pro:    { nome: "Pro",    preco: 20, creditos: 30000, tarefasAgente: Infinity, conversasStudio: Infinity, creditosPorStudio: Infinity },
+};
+const TIERS = {
+  quick:   { nome: "Rápido",      mult: 1, saida: 150 },
+  default: { nome: "Equilibrado", mult: 3, saida: 600 },
+  complex: { nome: "Avançado",    mult: 8, saida: 1200 },
+};
+const CICLO_MS = 30 * 864e5;
+const MODOS = {
+  chat: {
+    nome: "Chat",
+    titulo: "Em que posso ajudar hoje?",
+    texto: "Pergunte qualquer coisa. O roteador escolhe o modelo e mostra o custo antes de enviar.",
+    sugestoes: ["Explique juros compostos com um exemplo em reais", "Traduza para inglês: “Obrigado pela reunião de hoje”", "Dê 5 ideias de jantar rápido com frango e legumes"],
+    instr: "Você é o Leal IA, um assistente prestativo e direto. Responda sempre em português do Brasil, salvo se o usuário pedir outro idioma. Use Markdown simples (títulos curtos, listas, negrito, tabelas quando ajudarem). Seja preciso e conciso; vá direto ao ponto.",
+  },
+  agente: {
+    nome: "Agente",
+    titulo: "Dê um objetivo ao agente",
+    texto: "O agente divide a tarefa em etapas, executa cada uma e entrega o resultado final.",
+    sugestoes: ["Monte um plano de estudos de 4 semanas para aprender Excel do zero", "Planeje uma festa de aniversário para 30 pessoas com orçamento de R$ 1.500", "Crie um calendário de conteúdo de 2 semanas para o Instagram de uma padaria"],
+    instr: "Você é o Leal IA no modo Agente. Trate a mensagem do usuário como um objetivo a cumprir. Responda em português do Brasil, em Markdown, com esta estrutura exata:\n### Plano\nLista numerada de 3 a 6 etapas.\n### Execução\nPara cada etapa, um subtítulo \"Etapa N — nome\" e o trabalho realizado de fato (conteúdo, cálculos, listas, textos), não apenas descrições.\n### Resultado\nA entrega final pronta para usar, seguida de 1 a 3 próximos passos.\nSe faltar informação essencial, assuma algo razoável e diga o que assumiu.",
+  },
+  studio: {
+    nome: "Studio",
+    titulo: "Escreva algo longo no Studio",
+    texto: "Relatórios, propostas, artigos e roteiros. Peça ajustes na mesma conversa e o Studio reescreve.",
+    sugestoes: ["Proposta comercial de serviço de limpeza para condomínios", "Artigo de blog: 7 erros comuns ao organizar as finanças da família", "Roteiro de vídeo de 2 minutos apresentando uma loja de bicicletas"],
+    instr: "Você é o Leal IA no modo Studio, um redator profissional. Produza documentos completos e bem estruturados em português do Brasil, em Markdown: um título (###), introdução, seções com subtítulos, listas quando ajudarem e uma conclusão. Use tom adequado ao público. Quando o usuário pedir alterações, devolva o documento inteiro revisado.",
+  },
+};
+
+/* ── Roteador e custo ── */
+function rota(texto, modo, modelo) {
+  if (modelo && modelo !== "auto") return modelo;
+  const t = texto.toLowerCase().trim();
+  const n = t.length;
+  const pesado = /(compar|analis|análise|estrat[ée]g|demonstr|prove|arquitet|depur|debug|algoritm|passo a passo|otimiz|calcul|planilha|investig|avalie|prós e contras|riscos)/.test(t);
+  if (modo === "agente") return "complex";
+  if (pesado || n > 700) return "complex";
+  if (modo === "studio") return "default";
+  if (n < 120 && /^(oi|olá|ola|bom dia|boa tarde|boa noite|traduz|translate|qual|quem|quando|onde|o que é|defina|sinônimo|corrija|quanto é)/.test(t)) return "quick";
+  if (n < 40) return "quick";
+  return "default";
+}
+function custo(entradaChars, saidaChars, tier, modo) {
+  let c = ((entradaChars / 4) * 0.2 + saidaChars / 4) / 100 * TIERS[tier].mult;
+  if (modo === "agente") c *= 1.5;
+  return Math.max(1, Math.ceil(c));
+}
+const estimar = (entradaChars, tier, modo) => custo(entradaChars, TIERS[tier].saida * 4, tier, modo);
+
+/* ── Markdown seguro ── */
+const esc = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function inline(s) {
+  return esc(s).split(/(`[^`\n]+`)/).map((p, i) => {
+    if (i % 2) return "<code>" + p.slice(1, -1) + "</code>";
+    return p
+      .replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*\w])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>")
+      .replace(/\[([^\]\n]+)\]\((https:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }).join("");
+}
+function md(src) {
+  const L = src.replace(/\r/g, "").split("\n"), out = [];
+  const bloco = l => /^(```|#{1,6}\s|\s*[-*•]\s+|\s*\d+[.)]\s+|>\s?|\|)/.test(l) || /^-{3,}\s*$/.test(l);
+  let i = 0;
+  while (i < L.length) {
+    const l = L[i];
+    if (/^```/.test(l)) {
+      const b = []; i++;
+      while (i < L.length && !/^```/.test(L[i])) b.push(L[i++]);
+      i++; out.push("<pre><code>" + esc(b.join("\n")) + "</code></pre>"); continue;
+    }
+    if (/^\s*$/.test(l)) { i++; continue; }
+    if (/^-{3,}\s*$/.test(l)) { out.push("<hr>"); i++; continue; }
+    const h = l.match(/^(#{1,6})\s+(.*)$/);
+    if (h) { const n = h[1].length <= 2 ? 3 : 4; out.push(`<h${n}>${inline(h[2])}</h${n}>`); i++; continue; }
+    if (/^\s*[-*•]\s+/.test(l)) {
+      const it = [];
+      while (i < L.length && /^\s*[-*•]\s+/.test(L[i])) it.push("<li>" + inline(L[i++].replace(/^\s*[-*•]\s+/, "")) + "</li>");
+      out.push("<ul>" + it.join("") + "</ul>"); continue;
+    }
+    if (/^\s*\d+[.)]\s+/.test(l)) {
+      const it = []; const ini = parseInt(l, 10) || 1;
+      while (i < L.length && /^\s*\d+[.)]\s+/.test(L[i])) it.push("<li>" + inline(L[i++].replace(/^\s*\d+[.)]\s+/, "")) + "</li>");
+      out.push(`<ol${ini > 1 ? ` start="${ini}"` : ""}>` + it.join("") + "</ol>"); continue;
+    }
+    if (/^>\s?/.test(l)) {
+      const b = [];
+      while (i < L.length && /^>\s?/.test(L[i])) b.push(inline(L[i++].replace(/^>\s?/, "")));
+      out.push("<blockquote>" + b.join("<br>") + "</blockquote>"); continue;
+    }
+    if (/^\|/.test(l)) {
+      const rows = [];
+      while (i < L.length && /^\|/.test(L[i])) rows.push(L[i++]);
+      const cel = r => r.replace(/^\||\|\s*$/g, "").split("|").map(c => c.trim());
+      const corpo = rows.filter(r => !/^\|[\s:|-]+\|?\s*$/.test(r));
+      if (!corpo.length) continue;
+      const [cab, ...resto] = corpo;
+      out.push('<div class="tabela"><table><thead><tr>' + cel(cab).map(c => "<th>" + inline(c) + "</th>").join("") + "</tr></thead><tbody>" +
+        resto.map(r => "<tr>" + cel(r).map(c => "<td>" + inline(c) + "</td>").join("") + "</tr>").join("") + "</tbody></table></div>");
+      continue;
+    }
+    const p = [];
+    while (i < L.length && !/^\s*$/.test(L[i]) && !(p.length && bloco(L[i]))) p.push(inline(L[i++]));
+    out.push("<p>" + p.join("<br>") + "</p>");
+  }
+  return out.join("");
+}
+
+/* ── Estado ── */
+const contaNova = () => ({ plano: "basico", cicloInicio: new Date().toISOString(), creditosUsados: 0, tarefasAgente: 0, conversasStudio: 0 });
+const S = {
+  pronto: false, store: "local", conta: contaNova(), conversas: new Map(),
+  atual: null, modo: "chat", modelo: "auto", busy: false, ctl: null, sample: null, sampleOk: true,
+};
+const DB = { db: null, base: "", filas: {} };
+const LS_KEY = "lealia:v1";
+
+function lerLocal() {
+  try {
+    const d = JSON.parse(localStorage.getItem(LS_KEY) || "null");
+    if (d && d.conta) { S.conta = { ...contaNova(), ...d.conta }; for (const c of d.conversas || []) S.conversas.set(c.id, c); }
+  } catch {}
+}
+function gravarLocal() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify({ conta: S.conta, conversas: [...S.conversas.values()] })); } catch {}
+}
+function enfileirar(id, fn) {
+  const p = (DB.filas[id] || Promise.resolve()).catch(() => {}).then(fn);
+  DB.filas[id] = p; return p;
+}
+const FATAIS = ["not_granted", "revoked", "capability_disabled", "capability_removed"];
+async function persistir(id, dados) {
+  if (S.store === "db") {
+    try {
+      await enfileirar(id, () => dados === null ? DB.db.doc(DB.base + "/" + id).delete() : DB.db.doc(DB.base + "/" + id).set(dados));
+      return;
+    } catch (e) {
+      if (e && e.code === "unavailable") {
+        try { await new Promise(r => setTimeout(r, 400 + Math.random() * 600)); await (dados === null ? DB.db.doc(DB.base + "/" + id).delete() : DB.db.doc(DB.base + "/" + id).set(dados)); return; } catch {}
+      }
+      if (e && e.code === "quota_exceeded") { toast("O espaço de armazenamento está cheio. Apague conversas antigas."); return; }
+      S.store = "local"; notaArmazenamento();
+      if (!(e && FATAIS.includes(e.code))) toast("Não foi possível guardar na sua conta. A partir de agora, os dados ficam neste navegador.");
+    }
+  }
+  gravarLocal();
+}
+const salvarConta = () => persistir("conta", { ...S.conta });
+function compactar(conv) {
+  const c = { ...conv, turns: conv.turns.slice(-80) };
+  while (JSON.stringify(c).length > 200000 && c.turns.length > 2) c.turns = c.turns.slice(2);
+  return c;
+}
+const salvarConversa = conv => persistir("c_" + conv.id, compactar(conv));
+const apagarConversa = id => { S.conversas.delete(id); return persistir("c_" + id, null); };
+
+async function iniciarStore() {
+  const [db, user, sample] = await Promise.all([use("db"), use("user"), use("sample")]);
+  S.sample = sample;
+  let ok = false;
+  if (db && user) {
+    try {
+      const uid = await user.id();
+      if (uid) {
+        DB.db = db; DB.base = "data/users/" + uid;
+        const snap = await db.collection(DB.base).get();
+        let temConta = false;
+        for (const d of snap.docs) {
+          const v = d.data(); if (!v) continue;
+          if (d.id === "conta") { S.conta = { ...contaNova(), ...v }; temConta = true; }
+          else if (d.id.startsWith("c_") && Array.isArray(v.turns)) S.conversas.set(v.id, v);
+        }
+        S.store = "db"; ok = true;
+        if (!temConta) salvarConta();
+      }
+    } catch { ok = false; }
+  }
+  if (!ok) { S.store = "local"; lerLocal(); }
+  S.pronto = true;
+  verificarCiclo();
+  renderTudo();
+}
+
+/* ── Plano e limites ── */
+const plano = () => PLANOS[S.conta.plano] || PLANOS.basico;
+const restantes = () => Math.max(0, plano().creditos - S.conta.creditosUsados);
+function verificarCiclo() {
+  if (Date.now() - new Date(S.conta.cicloInicio).getTime() > CICLO_MS) {
+    Object.assign(S.conta, { cicloInicio: new Date().toISOString(), creditosUsados: 0, tarefasAgente: 0, conversasStudio: 0 });
+    salvarConta();
+  }
+}
+function bloqueio(modo, conv) {
+  const p = plano();
+  if (restantes() <= 0) return { msg: `Os seus ${fmt(p.creditos)} créditos deste ciclo acabaram.` + (S.conta.plano === "basico" ? " O Pro dá 10.000 créditos a mais por mês." : " Eles renovam no início do próximo ciclo."), pro: S.conta.plano === "basico" };
+  if (modo === "agente" && S.conta.tarefasAgente >= p.tarefasAgente) return { msg: `O plano Básico inclui ${p.tarefasAgente} tarefas de agente por ciclo e você já usou todas. No Pro o Agente não tem limite.`, pro: true };
+  if (modo === "studio") {
+    const nova = !conv || conv.turns.length === 0;
+    if (nova && S.conta.conversasStudio >= p.conversasStudio) return { msg: `O plano Básico inclui ${p.conversasStudio} conversas no Studio por ciclo. No Pro o Studio não tem limite.`, pro: true };
+    if (!nova && conv.creditos >= p.creditosPorStudio) return { msg: `Esta conversa do Studio chegou a ${fmt(p.creditosPorStudio)} créditos, o máximo do plano Básico. No Pro não há esse teto.`, pro: true };
+  }
+  return null;
+}
+function cicloTexto() {
+  const fim = new Date(new Date(S.conta.cicloInicio).getTime() + CICLO_MS);
+  const dias = Math.max(0, Math.ceil((fim - Date.now()) / 864e5));
+  return `Renova em ${dias} ${dias === 1 ? "dia" : "dias"} (${fim.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })})`;
+}
+
+/* ── UI util ── */
+let toastT;
+function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => el.hidden = true, 4200); }
+const novoId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const convAtual = () => S.atual ? S.conversas.get(S.atual) : null;
+
+/* ── Landing: roteador ao vivo ── */
+const demoIn = $("#demo-in");
+function atualizarDemo() {
+  const t = demoIn.value.trim() || "…";
+  const tier = rota(t, "chat", "auto");
+  $$(".lane").forEach(l => l.classList.toggle("ativa", l.dataset.tier === tier));
+  $("#demo-rota").textContent = TIERS[tier].nome;
+  $("#demo-custo").textContent = "≈ " + fmt(estimar(t.length + MODOS.chat.instr.length, tier, "chat")) + " créditos";
+}
+demoIn.addEventListener("input", atualizarDemo);
+$("#demo-chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  demoIn.value = b.textContent; atualizarDemo();
+});
+$("#demo-ir").addEventListener("click", () => {
+  S.prefill = demoIn.value.trim(); S.modo = "chat"; S.atual = null; location.hash = "app";
+});
+$$("[data-abrir-planos]").forEach(a => a.addEventListener("click", () => { S.abrirPlanos = true; }));
+
+/* ── Navegação entre landing e app ── */
+function navegar() {
+  const app = location.hash === "#app";
+  $("#landing").hidden = app; $("#app").hidden = !app;
+  document.documentElement.classList.toggle("em-app", app);
+  if (app) {
+    renderTudo();
+    if (S.prefill) { $("#entrada").value = S.prefill; S.prefill = ""; ajustarAltura(); atualizarRota(); }
+    if (S.abrirPlanos) { S.abrirPlanos = false; abrirPainel(); }
+    setTimeout(() => $("#entrada").focus(), 50);
+  } else {
+    fecharPainel();
+    const alvo = location.hash && document.getElementById(location.hash.slice(1));
+    if (alvo) requestAnimationFrame(() => alvo.scrollIntoView());
+  }
+}
+window.addEventListener("hashchange", navegar);
+
+/* ── Render do app ── */
+function renderTudo() { renderLateral(); renderBarra(); renderMensagens(); renderAvisos(); atualizarRota(); }
+
+function renderLateral() {
+  const lista = $("#conv-lista"); lista.textContent = "";
+  if (!S.pronto) { lista.innerHTML = '<div class="rotulo">A carregar conversas…</div>'; return; }
+  const convs = [...S.conversas.values()].sort((a, b) => (b.atualizado || "").localeCompare(a.atualizado || ""));
+  const r = document.createElement("div"); r.className = "rotulo";
+  r.textContent = convs.length ? "Conversas" : "Sem conversas ainda";
+  lista.append(r);
+  for (const c of convs) {
+    const el = document.createElement("div");
+    el.className = "conv" + (c.id === S.atual ? " atual" : "");
+    el.tabIndex = 0; el.setAttribute("role", "button");
+    const t = document.createElement("div"); t.className = "conv-t";
+    const b = document.createElement("b"); b.textContent = c.titulo || "Nova conversa";
+    const s = document.createElement("small"); s.textContent = `${MODOS[c.modo]?.nome || "Chat"} · ${fmt(c.creditos || 0)} créditos`;
+    t.append(b, s);
+    const x = document.createElement("button"); x.type = "button"; x.className = "conv-x"; x.textContent = "Apagar";
+    x.setAttribute("aria-label", "Apagar conversa " + (c.titulo || ""));
+    x.addEventListener("click", ev => {
+      ev.stopPropagation();
+      if (!x.classList.contains("confirmar")) { x.classList.add("confirmar"); x.textContent = "Confirmar"; setTimeout(() => { x.classList.remove("confirmar"); x.textContent = "Apagar"; }, 3000); return; }
+      if (S.busy && S.atual === c.id) return;
+      apagarConversa(c.id); if (S.atual === c.id) S.atual = null; renderTudo(); toast("Conversa apagada.");
+    });
+    el.append(t, x);
+    const abrir = () => { if (S.busy) return; S.atual = c.id; S.modo = c.modo || "chat"; $("#app").classList.remove("menu-aberto"); renderTudo(); };
+    el.addEventListener("click", abrir);
+    el.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); abrir(); } });
+    lista.append(el);
+  }
+  const p = plano(), rest = restantes();
+  $("#cred-txt").textContent = `${fmt(rest)} / ${fmt(p.creditos)}`;
+  const bar = $("#cred-barra"); bar.firstElementChild.style.width = (rest / p.creditos * 100).toFixed(1) + "%";
+  bar.classList.toggle("baixa", rest / p.creditos < 0.1);
+  $("#ciclo-txt").textContent = cicloTexto();
+  notaArmazenamento();
+}
+function notaArmazenamento() {
+  $("#armazenamento").textContent = !S.pronto ? "A carregar…" : S.store === "db" ? "Guardado na sua conta, visível só para você." : "Guardado apenas neste navegador.";
+}
+function renderBarra() {
+  $$(".modos button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.modo === S.modo)));
+  $("#modelo").value = S.modelo;
+  const pill = $("#plano-pill"); pill.textContent = plano().nome; pill.classList.toggle("pro", S.conta.plano === "pro");
+  pill.setAttribute("aria-label", "Plano atual: " + plano().nome + ". Ver planos");
+  $("#entrada").placeholder = S.modo === "agente" ? "Descreva o objetivo da tarefa…" : S.modo === "studio" ? "O que vamos escrever?" : "Pergunte qualquer coisa…";
+  $("#enviar").disabled = !S.pronto || S.busy || !S.sample || !S.sampleOk;
+  $("#parar").hidden = !S.busy;
+}
+function renderAvisos() {
+  const area = $("#aviso-area"); area.textContent = "";
+  if (!S.pronto) return;
+  if (!S.sample || !S.sampleOk) {
+    area.append(aviso(S.sample ? "O acesso ao Claude não foi autorizado nesta visita. Recarregue a página e permita para conversar." : "O assistente responde quando esta página está aberta no Claude com sessão iniciada. Aqui você pode explorar a interface e os planos.", false, true));
+    return;
+  }
+  const b = bloqueio(S.modo, convAtual());
+  if (b) area.append(aviso(b.msg, b.pro));
+}
+function aviso(msg, comPro, erro) {
+  const d = document.createElement("div"); d.className = "aviso" + (erro ? " erro" : "");
+  const p = document.createElement("p"); p.textContent = msg; d.append(p);
+  if (comPro && S.conta.plano !== "pro") {
+    const b = document.createElement("button"); b.type = "button"; b.className = "btn btn-pro btn-sm"; b.textContent = "Ativar o Pro";
+    b.addEventListener("click", abrirPainel); d.append(b);
+  }
+  return d;
+}
+
+function renderMensagens() {
+  const box = $("#mensagens-in"); box.textContent = "";
+  const conv = convAtual();
+  if (!conv || !conv.turns.length) {
+    const m = MODOS[S.modo];
+    const v = document.createElement("div"); v.className = "vazio";
+    const h = document.createElement("h2"); h.textContent = m.titulo;
+    const p = document.createElement("p"); p.textContent = m.texto;
+    const g = document.createElement("div"); g.className = "sugestoes";
+    for (const s of m.sugestoes) {
+      const b = document.createElement("button"); b.type = "button"; b.className = "sugestao";
+      const tier = rota(s, S.modo, S.modelo);
+      b.textContent = s;
+      const sm = document.createElement("small"); sm.textContent = `${TIERS[tier].nome} · ≈ ${fmt(estimar(s.length + m.instr.length, tier, S.modo))} créditos`;
+      b.append(sm);
+      b.addEventListener("click", () => { $("#entrada").value = s; ajustarAltura(); atualizarRota(); $("#entrada").focus(); });
+      g.append(b);
+    }
+    v.append(h, p, g); box.append(v); return;
+  }
+  for (const t of conv.turns) box.append(t.role === "user" ? bolhaUser(t.content) : bolhaIA(t));
+  rolar();
+}
+function bolhaUser(texto) {
+  const d = document.createElement("div"); d.className = "msg user";
+  const c = document.createElement("div"); c.className = "corpo"; c.textContent = texto; d.append(c); return d;
+}
+function bolhaIA(t) {
+  const d = document.createElement("div"); d.className = "msg ia";
+  const q = document.createElement("div"); q.className = "quem";
+  const tier = document.createElement("span"); tier.className = "tier " + (t.tier || ""); tier.textContent = TIERS[t.tier]?.nome || "Leal IA";
+  const cr = document.createElement("span"); cr.className = "cred";
+  q.append(tier, cr);
+  const c = document.createElement("div"); c.className = "corpo";
+  d.append(q, c);
+  d._set = (texto, meta) => {
+    c.innerHTML = md(texto);
+    if (meta?.nota) { const n = document.createElement("p"); n.className = "corte"; n.textContent = meta.nota; c.append(n); }
+    if (meta?.creditos != null) {
+      cr.textContent = fmt(meta.creditos) + " créditos";
+      if (!q.querySelector("button")) {
+        const cp = document.createElement("button"); cp.type = "button"; cp.textContent = "Copiar";
+        cp.addEventListener("click", async () => {
+          try { await navigator.clipboard.writeText(texto); cp.textContent = "Copiado"; }
+          catch { const r = document.createRange(); r.selectNodeContents(c); const s = getSelection(); s.removeAllRanges(); s.addRange(r); cp.textContent = "Selecionado"; }
+          setTimeout(() => cp.textContent = "Copiar", 1600);
+        });
+        q.append(cp);
+      }
+    }
+  };
+  d._tier = tier;
+  if (t.content != null) d._set(t.content, { creditos: t.creditos, nota: t.interrompido ? "Resposta interrompida." : t.truncado ? "A resposta foi cortada por ser longa. Peça a continuação." : "" });
+  return d;
+}
+function rolar() { const m = $("#mensagens"); m.scrollTop = m.scrollHeight; }
+const pertoDoFim = () => { const m = $("#mensagens"); return m.scrollHeight - m.scrollTop - m.clientHeight < 120; };
+
+/* ── Compositor ── */
+const entrada = $("#entrada");
+function ajustarAltura() { entrada.style.height = "auto"; entrada.style.height = Math.min(entrada.scrollHeight, 200) + "px"; }
+function atualizarRota() {
+  const t = entrada.value.trim();
+  const info = $("#rota-info");
+  if (!t) { info.innerHTML = `Rota: <b>${S.modelo === "auto" ? "Auto" : TIERS[S.modelo].nome}</b> · ${MODOS[S.modo].nome}`; return; }
+  const tier = rota(t, S.modo, S.modelo);
+  const conv = convAtual();
+  const hist = conv && conv.modo === S.modo ? conv.turns.reduce((n, x) => n + x.content.length, 0) : 0;
+  info.innerHTML = `${S.modelo === "auto" ? "Auto → " : ""}<b>${TIERS[tier].nome}</b> · ≈ ${fmt(estimar(t.length + hist + MODOS[S.modo].instr.length, tier, S.modo))} créditos`;
+}
+entrada.addEventListener("input", () => { ajustarAltura(); atualizarRota(); });
+entrada.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); enviar(); } });
+$("#form").addEventListener("submit", e => { e.preventDefault(); enviar(); });
+$("#parar").addEventListener("click", () => S.ctl?.abort());
+$("#nova").addEventListener("click", () => { if (S.busy) return; S.atual = null; $("#app").classList.remove("menu-aberto"); renderTudo(); entrada.focus(); });
+$("#menu").addEventListener("click", () => $("#app").classList.toggle("menu-aberto"));
+$("#app").addEventListener("click", e => { if (e.target.id === "app") $("#app").classList.remove("menu-aberto"); });
+$$(".modos button").forEach(b => b.addEventListener("click", () => {
+  if (S.busy) return;
+  S.modo = b.dataset.modo;
+  const c = convAtual(); if (c && c.modo !== S.modo) S.atual = null;
+  renderTudo();
+}));
+$("#modelo").addEventListener("change", e => { S.modelo = e.target.value; atualizarRota(); renderMensagens(); });
+
+function montarEntrada(conv) {
+  const turns = conv.turns.map(t => ({ role: t.role, content: t.content }));
+  let total = 0, ini = turns.length;
+  while (ini > 0 && total + turns[ini - 1].content.length < 60000) { total += turns[ini - 1].content.length; ini--; }
+  let rec = turns.slice(Math.min(ini, turns.length - 1));
+  while (rec.length && rec[0].role !== "user") rec.shift();
+  return [{ role: "user", content: MODOS[conv.modo].instr + "\n\n(Instruções do sistema. A conversa começa a seguir.)" }, ...rec];
+}
+
+const ERROS = {
+  rate_limited: "Muitos pedidos ou limite de uso da sua conta Claude atingido. Espere um pouco e tente de novo.",
+  session_expired: "A sua sessão expirou. Inicie sessão no Claude novamente.",
+  refused: "O Claude não respondeu a este pedido. Reformule a mensagem.",
+  empty_completion: "Não veio resposta. Simplifique o pedido e tente de novo.",
+  prompt_too_large: "A conversa ficou longa demais. Comece uma conversa nova.",
+  upstream_error: "Falha de ligação. Tente enviar outra vez.",
+};
+
+async function enviar() {
+  const texto = entrada.value.trim();
+  if (!texto || S.busy || !S.pronto) return;
+  if (!S.sample || !S.sampleOk) { renderAvisos(); return; }
+  verificarCiclo();
+  let conv = convAtual();
+  if (!conv || conv.modo !== S.modo) conv = { id: novoId(), titulo: "", modo: S.modo, turns: [], creditos: 0, criado: new Date().toISOString(), atualizado: "" };
+  const b = bloqueio(S.modo, conv);
+  if (b) { renderAvisos(); toast(b.msg); return; }
+
+  const tier = rota(texto, conv.modo, S.modelo);
+  const novaStudio = conv.modo === "studio" && conv.turns.length === 0;
+  conv.turns.push({ role: "user", content: texto });
+  if (!conv.titulo) conv.titulo = texto.replace(/\s+/g, " ").slice(0, 60);
+  conv.atualizado = new Date().toISOString();
+  S.conversas.set(conv.id, conv); S.atual = conv.id;
+  entrada.value = ""; ajustarAltura();
+  S.busy = true; renderTudo();
+
+  const box = $("#mensagens-in");
+  const bolha = bolhaIA({ tier, content: null });
+  bolha.querySelector(".corpo").innerHTML = '<span class="pensando">' + (conv.modo === "agente" ? "A planear a tarefa…" : "A pensar…") + "</span>";
+  box.append(bolha); rolar();
+
+  const input = montarEntrada(conv);
+  const entradaChars = input.reduce((n, t) => n + t.content.length, 0);
+  const ctl = new AbortController(); S.ctl = ctl;
+  let resposta = null;
+  try {
+    const r = await S.sample(input, {
+      cache: false, signal: ctl.signal, modelTier: tier,
+      onText: ({ text }) => { const fim = pertoDoFim(); bolha._set(text); if (fim) rolar(); },
+    });
+    const tAplicado = r.modelTierApplied || tier;
+    resposta = { role: "assistant", content: r.text, tier: tAplicado, creditos: custo(entradaChars, r.text.length, tAplicado, conv.modo), truncado: !!r.truncated };
+  } catch (e) {
+    const code = e && e.code;
+    if (code === "not_granted" || code === "sampling_disabled" || code === "not_declared" || code === "capability_disabled" || code === "capability_removed") {
+      S.sampleOk = false;
+    } else if (code !== "cancelled") {
+      toast(ERROS[code] || ERROS.upstream_error);
+    }
+    if (e && e.text && code !== "refused") {
+      resposta = { role: "assistant", content: e.text, tier, creditos: custo(entradaChars, e.text.length, tier, conv.modo), interrompido: true };
+    }
+  }
+  if (resposta) {
+    conv.turns.push(resposta);
+    conv.creditos = (conv.creditos || 0) + resposta.creditos;
+    S.conta.creditosUsados += resposta.creditos;
+    if (conv.modo === "agente") S.conta.tarefasAgente += 1;
+    if (novaStudio) S.conta.conversasStudio += 1;
+    salvarConta();
+  } else {
+    bolha.remove();
+  }
+  conv.atualizado = new Date().toISOString();
+  salvarConversa(conv);
+  S.busy = false; S.ctl = null;
+  renderTudo();
+}
+
+/* ── Painel de planos ── */
+const ICON_OK = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+const ICON_LIM = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+function abrirPainel() {
+  const p = plano(), c = S.conta;
+  $("#painel-sub").textContent = `Plano ${p.nome} · US$ ${p.preco}/mês · ${cicloTexto()}`;
+  const lim = v => v === Infinity ? "sem limite" : v;
+  $("#uso").innerHTML =
+    `<div><small>Créditos usados</small><b class="mono">${fmt(c.creditosUsados)} / ${fmt(p.creditos)}</b></div>` +
+    `<div><small>Tarefas de agente</small><b class="mono">${c.tarefasAgente} / ${lim(p.tarefasAgente)}</b></div>` +
+    `<div><small>Conversas no Studio</small><b class="mono">${c.conversasStudio} / ${lim(p.conversasStudio)}</b></div>`;
+  const card = (id, itens) => {
+    const pl = PLANOS[id], atual = c.plano === id;
+    return `<article class="plano card${id === "pro" ? " destaque" : ""}">${id === "pro" ? '<span class="selo">+ US$ 10/mês</span>' : ""}
+      <h3>${pl.nome}</h3><div class="preco"><b>US$ ${pl.preco}</b><span>/mês</span></div>
+      <ul class="lista">${itens.map(([ok, t]) => `<li${ok ? "" : ' class="lim"'}>${ok ? ICON_OK : ICON_LIM}<span>${t}</span></li>`).join("")}</ul>
+      <button type="button" class="btn ${id === "pro" ? "btn-pro" : "btn-ghost"}" data-plano="${id}" ${atual ? "disabled" : ""}>${atual ? "Plano atual" : id === "pro" ? "Mudar para o Pro" : "Voltar ao Básico"}</button></article>`;
+  };
+  $("#painel-planos").innerHTML =
+    card("basico", [[1, "20.000 créditos por mês"], [1, "Chat com os 3 modelos"], [0, "Agente: 3 tarefas por ciclo"], [0, "Studio: 3 conversas, até 2.500 créditos cada"]]) +
+    card("pro", [[1, "30.000 créditos por mês"], [1, "Tudo o que o Básico inclui"], [1, "Agente sem limite"], [1, "Studio sem limite"]]);
+  $$("#painel-planos [data-plano]").forEach(b => b.addEventListener("click", () => {
+    S.conta.plano = b.dataset.plano; salvarConta();
+    toast(S.conta.plano === "pro" ? "Plano Pro ativado. Agente e Studio sem limites." : "Você voltou ao plano Básico.");
+    renderTudo(); abrirPainel();
+  }));
+  $("#veu").hidden = false;
+  $("#fechar-painel").focus();
+}
+function fecharPainel() { $("#veu").hidden = true; }
+$("#plano-pill").addEventListener("click", abrirPainel);
+$("#fechar-painel").addEventListener("click", fecharPainel);
+$("#veu").addEventListener("click", e => { if (e.target.id === "veu") fecharPainel(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { fecharPainel(); $("#app").classList.remove("menu-aberto"); } });
+
+/* ── Arranque ── */
+atualizarDemo();
+navegar();
+iniciarStore();
+})();
+</script>
