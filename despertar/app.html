@@ -1,0 +1,1204 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Despertar</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Despertador com alarmes por dia da semana, toque gradual, adiamentos com limite e histórico das suas manhãs.">
+<meta name="theme-color" content="#0A111C">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=Big+Shoulders:wght@600;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: um ecrã de telemóvel — relógio em cima, vista ativa a rolar, separadores em baixo. */
+:root {
+  --bg: #EEF2F7;
+  --surface: #FFFFFF;
+  --surface-2: #E4EAF2;
+  --fg: #132033;
+  --muted: #56657A;
+  --line: #D3DCE7;
+  --accent: #C9461C;
+  --accent-soft: #FBE3D8;
+  --accent-ink: #FFFFFF;
+  --ok: #23774A;
+  --warn: #9A6410;
+  --bad: #B23A33;
+  --dawn-top: #1B2A4A;
+  --dawn-mid: #7C4D74;
+  --dawn-low: #F29A63;
+  --dawn-sun: #FFC26B;
+  --dawn-ink: #FFF6EC;
+  --font-display: "Big Shoulders", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 14px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A111C; --surface: #121B29; --surface-2: #1A2537; --fg: #E7EDF5; --muted: #93A0B4;
+    --line: #243249; --accent: #FF7D52; --accent-soft: #3A2219; --accent-ink: #1C0B04;
+    --ok: #62C98F; --warn: #E6B653; --bad: #F2776D; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A111C; --surface: #121B29; --surface-2: #1A2537; --fg: #E7EDF5; --muted: #93A0B4;
+  --line: #243249; --accent: #FF7D52; --accent-soft: #3A2219; --accent-ink: #1C0B04;
+  --ok: #62C98F; --warn: #E6B653; --bad: #F2776D; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.5 var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+
+.app {
+  height: 100%; max-width: 520px; margin: 0 auto;
+  display: grid; grid-template-rows: auto auto 1fr auto;
+}
+.pad { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* Topo */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: calc(env(safe-area-inset-top, 0px) + 12px) 4px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: .01em; }
+.brand svg { width: 26px; height: 26px; }
+.icon-btn {
+  display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 6px 12px; font-size: 14px; color: var(--fg);
+}
+.icon-btn svg { width: 16px; height: 16px; }
+
+.clock { padding-block: 4px 14px; }
+.greet { margin: 0; color: var(--muted); font-size: 15px; }
+.now {
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(76px, 24vw, 112px);
+  line-height: .92; letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin: 2px 0 2px;
+}
+.now small { font-size: .32em; font-weight: 600; color: var(--muted); margin-left: 6px; letter-spacing: .02em; }
+.date { margin: 0; color: var(--muted); font-size: 15px; text-transform: lowercase; }
+.next {
+  margin-top: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; font-size: 15px;
+}
+.next .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
+.next.on .dot { background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+.next b { font-family: var(--font-mono); font-weight: 500; }
+.next .link { margin-left: auto; border: 0; background: none; color: var(--accent); font-weight: 700; padding: 2px 0; }
+
+.banner {
+  display: flex; align-items: center; gap: 10px; margin-top: 10px; width: 100%;
+  border: 1px dashed var(--accent); background: var(--accent-soft); color: var(--fg);
+  border-radius: var(--radius); padding: 10px 12px; text-align: left; font-size: 14px;
+}
+.banner svg { width: 18px; height: 18px; flex: none; color: var(--accent); }
+
+main { overflow-y: auto; overscroll-behavior: contain; padding-block: 4px 24px; }
+.view { display: grid; gap: 14px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 4px; }
+h2 { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: .01em; text-transform: uppercase; }
+.hint { margin: 0; color: var(--muted); font-size: 14px; }
+
+/* Cartão de nome */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: grid; gap: 10px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.row > input { flex: 1 1 160px; min-width: 0; }
+.field { display: grid; gap: 6px; }
+.field > span, .label { font-size: 13px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+input[type="text"], input[type="time"], select, textarea {
+  width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 10px 12px;
+}
+textarea { min-height: 96px; font-family: var(--font-mono); font-size: 13px; resize: vertical; }
+
+.btn {
+  border: 1px solid transparent; border-radius: 12px; padding: 11px 16px; font-weight: 700;
+  background: var(--surface-2); color: var(--fg); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn svg { width: 18px; height: 18px; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.ghost { background: transparent; border-color: var(--line); }
+.btn.danger { background: transparent; border-color: var(--bad); color: var(--bad); }
+.btn.solid-danger { background: var(--bad); color: #fff; }
+.btn.full { width: 100%; }
+
+/* Lista de alarmes */
+.alarms { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.alarm {
+  display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 10px 14px 10px 4px;
+}
+.alarm-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 14px; border: 0; background: none; text-align: left; padding: 4px 10px; }
+.alarm-time { font-family: var(--font-display); font-weight: 800; font-size: 46px; line-height: 1; font-variant-numeric: tabular-nums; }
+.alarm.off .alarm-time, .alarm.off .alarm-label { color: var(--muted); }
+.alarm-meta { display: grid; gap: 4px; min-width: 0; }
+.alarm-label { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.days { display: flex; gap: 3px; font-family: var(--font-mono); font-size: 12px; }
+.days span { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; color: var(--muted); }
+.days span.on { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+.alarm-extra { font-size: 13px; color: var(--muted); }
+
+.switch { position: relative; width: 52px; height: 30px; flex: none; }
+.switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.switch span { position: absolute; inset: 0; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); transition: background .2s; pointer-events: none; }
+.switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--muted); transition: transform .2s, background .2s; }
+.switch input:checked + span { background: var(--accent); border-color: var(--accent); }
+.switch input:checked + span::after { transform: translateX(22px); background: var(--accent-ink); }
+.switch input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.quick { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 12px; font-size: 14px; }
+.chip b { font-family: var(--font-mono); font-weight: 500; }
+
+/* Histórico */
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; display: grid; gap: 2px; align-content: start; }
+.stat .v { font-family: var(--font-display); font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat .k { font-size: 12px; color: var(--muted); line-height: 1.3; }
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { fill: var(--muted); font-family: var(--font-mono); font-size: 10px; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .bar { fill: var(--accent); }
+.chart .bar.zero { fill: var(--ok); }
+.chart .bar.miss { fill: var(--bad); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 6px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+.day-group { display: grid; gap: 6px; }
+.day-group h3 { margin: 6px 0 0; font-size: 13px; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; font-weight: 700; }
+.entries { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.entry { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.entry .t { font-family: var(--font-mono); font-size: 14px; white-space: nowrap; }
+.entry .d { flex: 1; min-width: 0; font-size: 14px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pill { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 9px; white-space: nowrap; border: 1px solid currentColor; }
+.pill.ok { color: var(--ok); } .pill.warn { color: var(--warn); } .pill.bad { color: var(--bad); }
+.empty { text-align: center; padding: 26px 16px; border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); display: grid; gap: 6px; justify-items: center; }
+.empty svg { width: 36px; height: 36px; color: var(--accent); }
+.empty strong { color: var(--fg); }
+
+/* Ajustes */
+.setting { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.setting > div { min-width: 0; }
+.setting p { margin: 0; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+.confirm { border: 1px solid var(--bad); border-radius: 12px; padding: 12px; display: grid; gap: 10px; }
+.confirm p { margin: 0; }
+.mono { font-family: var(--font-mono); font-size: 13px; }
+
+/* Separadores */
+.tabs {
+  display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); background: var(--surface);
+  padding-block: 6px calc(env(safe-area-inset-bottom, 0px) + 6px);
+}
+.tab { border: 0; background: none; display: grid; justify-items: center; gap: 2px; padding: 6px 0; font-size: 13px; color: var(--muted); border-radius: 10px; }
+.tab svg { width: 22px; height: 22px; }
+.tab[aria-selected="true"] { color: var(--accent); font-weight: 700; }
+
+.fab {
+  position: fixed; right: max(18px, calc((100vw - 520px) / 2 + 18px), env(safe-area-inset-right, 0px));
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
+  width: 58px; height: 58px; border-radius: 18px; border: 0; background: var(--accent); color: var(--accent-ink);
+  display: grid; place-items: center; box-shadow: 0 8px 22px rgba(201, 70, 28, .35);
+}
+.fab svg { width: 26px; height: 26px; }
+
+/* Folha de edição */
+.sheet-wrap { position: fixed; inset: 0; z-index: 20; background: rgba(5, 10, 18, .55); display: flex; align-items: flex-end; justify-content: center; }
+.sheet {
+  width: 100%; max-width: 520px; max-height: 92%; overflow-y: auto; background: var(--surface); border-radius: 22px 22px 0 0;
+  padding-block: 10px calc(env(safe-area-inset-bottom, 0px) + 18px); display: grid; gap: 14px;
+  animation: up .22s ease-out;
+}
+@keyframes up { from { transform: translateY(24px); opacity: .6; } to { transform: none; opacity: 1; } }
+.grab { width: 44px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 2px; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sheet-head h2 { font-size: 24px; }
+.close { border: 0; background: var(--surface-2); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; }
+.close svg { width: 18px; height: 18px; }
+.time-input { font-family: var(--font-display); font-weight: 800; font-size: 64px; line-height: 1; text-align: center; padding: 8px; font-variant-numeric: tabular-nums; }
+.daypick { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.daypick button { aspect-ratio: 1; max-width: 100%; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); font-weight: 700; font-size: 15px; }
+.daypick button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.presets { display: flex; gap: 6px; flex-wrap: wrap; }
+.presets .chip { font-size: 13px; padding: 5px 10px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.check { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.actions .primary { grid-column: 1 / -1; }
+
+/* Ecrã a tocar */
+.ring {
+  position: fixed; inset: 0; z-index: 40; color: var(--dawn-ink); overflow: hidden;
+  background: linear-gradient(180deg, var(--dawn-top) 0%, var(--dawn-mid) 58%, var(--dawn-low) 100%);
+  display: grid; grid-template-rows: 1fr auto;
+}
+.ring-sun {
+  position: absolute; left: 50%; bottom: -120px; width: 260px; height: 260px; margin-left: -130px; border-radius: 50%;
+  background: radial-gradient(circle, var(--dawn-sun) 0 52%, rgba(255, 194, 107, .35) 53% 64%, rgba(255, 194, 107, 0) 70%);
+  transition: transform 45s linear;
+}
+.ring.rising .ring-sun { transform: translateY(-150px); }
+.ring-body {
+  position: relative; display: grid; gap: 10px; justify-items: center; text-align: center; align-content: center;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 24px) 12px;
+}
+.ring-greet { margin: 0; font-size: 20px; opacity: .92; }
+.ring-time { font-family: var(--font-display); font-weight: 800; font-size: clamp(110px, 36vw, 170px); line-height: .9; font-variant-numeric: tabular-nums; animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .78; } }
+.ring-label { margin: 0; font-size: 18px; font-weight: 700; }
+.ring-sub { margin: 0; font-size: 14px; opacity: .85; }
+.ring-challenge { display: grid; gap: 8px; justify-items: center; background: rgba(10, 17, 28, .35); border-radius: var(--radius); padding: 14px; width: min(100%, 340px); }
+.ring-challenge p { margin: 0; }
+.sum { font-family: var(--font-mono); font-size: 34px; }
+.ring-challenge input { text-align: center; font-size: 24px; background: rgba(255, 246, 236, .12); border: 1px solid rgba(255, 246, 236, .4); color: var(--dawn-ink); border-radius: 10px; padding: 8px; width: 160px; }
+.ring-err { min-height: 1.4em; font-size: 14px; }
+.ring-actions { position: relative; display: grid; gap: 10px; padding-block: 12px calc(env(safe-area-inset-bottom, 0px) + 22px); width: 100%; max-width: 520px; margin: 0 auto; }
+.ring-btn { border-radius: 18px; padding: 18px; font-weight: 700; font-size: 18px; border: 1px solid rgba(255, 246, 236, .55); background: rgba(10, 17, 28, .25); color: var(--dawn-ink); }
+.ring-btn:disabled { opacity: .45; cursor: not-allowed; }
+.hold { position: relative; overflow: hidden; background: var(--dawn-ink); color: #2A1608; border-color: var(--dawn-ink); touch-action: none; user-select: none; -webkit-user-select: none; }
+.hold-fill { position: absolute; inset: 0; background: var(--dawn-sun); transform-origin: left; transform: scaleX(0); }
+.hold span:last-child { position: relative; }
+
+/* Mesa de cabeceira */
+.bedside { position: fixed; inset: 0; z-index: 30; background: #000; color: #FF9C6E; display: grid; place-items: center; text-align: center; padding: 24px; border: 0; width: 100%; font: inherit; }
+.bedside .bt { font-family: var(--font-display); font-weight: 800; font-size: clamp(120px, 38vw, 260px); line-height: .9; font-variant-numeric: tabular-nums; opacity: .8; }
+.bedside p { margin: 8px 0 0; color: #9A6047; font-size: 16px; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 92px); transform: translate(-50%, 20px);
+  background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 14px; opacity: 0; pointer-events: none;
+  transition: opacity .2s, transform .2s; z-index: 60; max-width: calc(100% - 32px);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top pad">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#0F1A2B"/><circle cx="32" cy="40" r="13" fill="#FFB24C"/><rect x="0" y="40" width="64" height="24" fill="#0F1A2B"/><rect x="10" y="40" width="44" height="3" rx="1.5" fill="#FF7D52"/><g stroke="#FFB24C" stroke-width="3" stroke-linecap="round"><path d="M32 14v6M16 21l4 4M48 21l-4 4"/></g></svg>
+      Despertar
+    </div>
+    <button class="icon-btn" id="btn-bedside" type="button" aria-label="Ativar modo mesa de cabeceira">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      Cabeceira
+    </button>
+  </header>
+
+  <section class="clock pad" aria-live="off">
+    <p class="greet" id="greet">Bom dia</p>
+    <div class="now" id="now">--:--</div>
+    <p class="date" id="today"></p>
+    <div class="next" id="next"><span class="dot"></span><span id="next-text">Sem alarmes ligados</span></div>
+    <button class="banner" id="sound-banner" type="button" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+      <span>Toque aqui para ativar o som. O navegador só deixa tocar depois de um toque no ecrã.</span>
+    </button>
+  </section>
+
+  <main class="pad">
+    <section class="view" id="view-alarmes" aria-labelledby="tab-alarmes">
+      <div class="card" id="name-card" hidden>
+        <label class="field" for="name-input"><span>Como se chama?</span></label>
+        <p class="hint">Usamos o nome para o cumprimentar quando o alarme tocar.</p>
+        <form class="row" id="name-form">
+          <input type="text" id="name-input" autocomplete="given-name" placeholder="O seu nome" maxlength="40">
+          <button class="btn primary" type="submit">Guardar</button>
+        </form>
+      </div>
+      <div class="section-head">
+        <h2>Alarmes</h2>
+        <p class="hint" id="alarm-count"></p>
+      </div>
+      <ul class="alarms" id="alarm-list"></ul>
+      <div id="alarm-empty" class="empty" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/></svg>
+        <strong>Ainda não tem alarmes</strong>
+        <span>Escolha uma hora abaixo ou toque em + para criar o primeiro.</span>
+      </div>
+      <div class="field">
+        <span class="label">Criar rapidamente</span>
+        <div class="quick" id="quick">
+          <button class="chip" type="button" data-quick="06:30|1,2,3,4,5|Dias úteis"><b>06:30</b> dias úteis</button>
+          <button class="chip" type="button" data-quick="07:00|1,2,3,4,5|Trabalho"><b>07:00</b> dias úteis</button>
+          <button class="chip" type="button" data-quick="09:00|0,6|Fim de semana"><b>09:00</b> fim de semana</button>
+          <button class="chip" type="button" data-quick="+20||Sesta"><b>+20 min</b> sesta</button>
+        </div>
+      </div>
+      <p class="hint">Mantenha o Despertar aberto e o telemóvel a carregar durante a noite. O modo <strong>Cabeceira</strong> deixa o ecrã ligado e escuro.</p>
+    </section>
+
+    <section class="view" id="view-historico" aria-labelledby="tab-historico" hidden>
+      <div class="section-head">
+        <h2>As suas manhãs</h2>
+        <p class="hint">Últimos 14 dias</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><span class="v" id="s-streak">0</span><span class="k">dias seguidos a levantar</span></div>
+        <div class="stat"><span class="v" id="s-avg">--:--</span><span class="k">hora média a que se levanta</span></div>
+        <div class="stat"><span class="v" id="s-snooze">0</span><span class="k">adiamentos por manhã</span></div>
+      </div>
+      <div class="chart">
+        <span class="label">Minutos entre o alarme e levantar</span>
+        <div id="chart"></div>
+        <div class="legend"><span><i style="background:var(--ok)"></i>À primeira</span><span><i style="background:var(--accent)"></i>Com adiamentos</span><span><i style="background:var(--bad)"></i>Sem resposta</span></div>
+      </div>
+      <div id="history-list" class="view"></div>
+    </section>
+
+    <section class="view" id="view-ajustes" aria-labelledby="tab-ajustes" hidden>
+      <div class="section-head"><h2>Ajustes</h2></div>
+      <div class="card">
+        <label class="field" for="set-name"><span>Nome</span>
+          <input type="text" id="set-name" maxlength="40" placeholder="O seu nome" autocomplete="given-name">
+        </label>
+        <label class="field" for="set-volume"><span>Volume do toque</span>
+          <input type="range" id="set-volume" min="0.1" max="1" step="0.05">
+        </label>
+        <div class="row">
+          <button class="btn ghost" type="button" id="btn-test-sound">Ouvir toque</button>
+          <button class="btn ghost" type="button" id="btn-notify">Permitir notificações</button>
+        </div>
+        <p class="hint" id="notify-state"></p>
+      </div>
+
+      <div class="card">
+        <span class="label">Cópia de segurança</span>
+        <p class="hint">O ficheiro tem o seu nome, os alarmes e o histórico (o mesmo formato de <span class="mono">despertar-backup.json</span>). Guarde-o antes de trocar de telemóvel.</p>
+        <div class="row">
+          <button class="btn primary" type="button" id="btn-export">Descarregar backup</button>
+          <button class="btn ghost" type="button" id="btn-copy">Copiar texto</button>
+        </div>
+        <div class="row">
+          <label class="btn ghost" for="import-file" style="cursor:pointer">Importar ficheiro</label>
+          <input type="file" id="import-file" accept="application/json,.json" hidden>
+          <button class="btn ghost" type="button" id="btn-paste-toggle">Colar texto</button>
+        </div>
+        <div id="paste-box" class="field" hidden>
+          <label for="paste-area" class="label">Cole aqui o conteúdo do backup</label>
+          <textarea id="paste-area" spellcheck="false" placeholder='{ "name": "", "alarms": [], "history": [] }'></textarea>
+          <button class="btn ghost" type="button" id="btn-paste-import">Ler backup</button>
+        </div>
+        <div id="import-confirm" class="confirm" hidden>
+          <p id="import-summary"></p>
+          <div class="row">
+            <button class="btn primary" type="button" id="btn-import-yes">Substituir dados</button>
+            <button class="btn ghost" type="button" id="btn-import-no">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="label">Apagar tudo</span>
+        <p class="hint">Remove o nome, os alarmes e o histórico deste dispositivo.</p>
+        <button class="btn danger" type="button" id="btn-wipe">Apagar dados</button>
+        <div id="wipe-confirm" class="confirm" hidden>
+          <p>Tem a certeza? Não é possível desfazer.</p>
+          <div class="row">
+            <button class="btn solid-danger" type="button" id="btn-wipe-yes">Sim, apagar</button>
+            <button class="btn ghost" type="button" id="btn-wipe-no">Cancelar</button>
+          </div>
+        </div>
+      </div>
+      <p class="hint">Despertar · os dados ficam só neste dispositivo. <a href="index.html" style="color:var(--accent)">Sobre a app</a></p>
+    </section>
+  </main>
+
+  <nav class="tabs" role="tablist" aria-label="Secções">
+    <button class="tab" role="tab" id="tab-alarmes" data-view="alarmes" aria-selected="true" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/></svg>
+      Alarmes
+    </button>
+    <button class="tab" role="tab" id="tab-historico" data-view="historico" aria-selected="false" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v2M11 11v6M15 13v4M19 8v9"/></svg>
+      Histórico
+    </button>
+    <button class="tab" role="tab" id="tab-ajustes" data-view="ajustes" aria-selected="false" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
+      Ajustes
+    </button>
+  </nav>
+</div>
+
+<button class="fab" id="fab" type="button" aria-label="Novo alarme">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+</button>
+
+<!-- Folha de criar/editar alarme -->
+<div class="sheet-wrap" id="sheet" hidden>
+  <form class="sheet pad" id="alarm-form" role="dialog" aria-modal="true" aria-labelledby="sheet-title" novalidate>
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2 id="sheet-title">Novo alarme</h2>
+      <button class="close" type="button" id="sheet-close" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <label for="f-time" class="label">Hora</label>
+    <input type="time" id="f-time" class="time-input" required value="06:30">
+    <p class="hint" id="f-in"></p>
+    <label class="field" for="f-label"><span>Nome do alarme</span>
+      <input type="text" id="f-label" maxlength="40" placeholder="Por exemplo: Ginásio">
+    </label>
+    <div class="field">
+      <span>Repetir</span>
+      <div class="daypick" id="f-days"></div>
+      <div class="presets">
+        <button class="chip" type="button" data-preset="1,2,3,4,5">Dias úteis</button>
+        <button class="chip" type="button" data-preset="0,6">Fim de semana</button>
+        <button class="chip" type="button" data-preset="0,1,2,3,4,5,6">Todos</button>
+        <button class="chip" type="button" data-preset="">Só uma vez</button>
+      </div>
+    </div>
+    <div class="grid2">
+      <label class="field" for="f-sound"><span>Toque</span>
+        <select id="f-sound"></select>
+      </label>
+      <div class="field"><span>&nbsp;</span><button class="btn ghost" type="button" id="f-preview">Ouvir</button></div>
+      <label class="field" for="f-snooze"><span>Adiar por</span>
+        <select id="f-snooze"><option value="5">5 min</option><option value="9">9 min</option><option value="10">10 min</option><option value="15">15 min</option></select>
+      </label>
+      <label class="field" for="f-max"><span>Máximo de adiamentos</span>
+        <select id="f-max"><option value="0">Nenhum</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="5">5</option></select>
+      </label>
+    </div>
+    <label class="check" for="f-gradual">
+      <span><strong>Toque gradual</strong><br><span class="hint">Começa baixo e sobe durante 45 segundos.</span></span>
+      <span class="switch"><input type="checkbox" id="f-gradual"><span></span></span>
+    </label>
+    <label class="field" for="f-challenge"><span>Para desligar</span>
+      <select id="f-challenge">
+        <option value="nenhum">Manter o botão premido</option>
+        <option value="conta">Resolver uma conta</option>
+      </select>
+    </label>
+    <div class="actions">
+      <button class="btn primary" type="submit">Guardar alarme</button>
+      <button class="btn ghost" type="button" id="f-test">Testar agora</button>
+      <button class="btn danger" type="button" id="f-delete">Eliminar</button>
+    </div>
+    <div class="confirm" id="f-delete-confirm" hidden>
+      <p>Eliminar este alarme?</p>
+      <div class="row">
+        <button class="btn solid-danger" type="button" id="f-delete-yes">Eliminar</button>
+        <button class="btn ghost" type="button" id="f-delete-no">Manter</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Ecrã do alarme a tocar -->
+<div class="ring" id="ring" role="alertdialog" aria-modal="true" aria-labelledby="ring-greet" hidden>
+  <div class="ring-sun" aria-hidden="true"></div>
+  <div class="ring-body pad">
+    <p class="ring-greet" id="ring-greet">Bom dia</p>
+    <div class="ring-time" id="ring-time">06:30</div>
+    <p class="ring-label" id="ring-label"></p>
+    <p class="ring-sub" id="ring-sub"></p>
+    <div class="ring-challenge" id="ring-challenge" hidden>
+      <p>Para desligar, resolva</p>
+      <p class="sum" id="ring-sum"></p>
+      <input type="text" id="ring-answer" inputmode="numeric" autocomplete="off" aria-label="Resultado da conta">
+      <p class="ring-err" id="ring-err" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="ring-actions pad">
+    <button class="ring-btn" type="button" id="ring-snooze">Adiar</button>
+    <button class="ring-btn hold" type="button" id="ring-stop"><span class="hold-fill" id="hold-fill"></span><span id="ring-stop-text">Manter premido para desligar</span></button>
+  </div>
+</div>
+
+<!-- Modo mesa de cabeceira -->
+<button class="bedside" id="bedside" type="button" hidden aria-label="Sair do modo cabeceira">
+  <span>
+    <span class="bt" id="bedside-time">--:--</span>
+    <p id="bedside-next"></p>
+    <p>Toque para sair</p>
+  </span>
+</button>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------- Dados ----------
+  const KEY = "despertar:v1";
+  const DAY_SHORT = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const DAY_INITIAL = ["D", "S", "T", "Q", "Q", "S", "S"];
+  const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
+  const SOUNDS = { aurora: "Aurora", sino: "Sino", passaros: "Pássaros", classico: "Clássico" };
+  const RING_TIMEOUT = 10 * 60 * 1000;
+  const CATCH_UP = 5 * 60 * 1000;
+
+  const $ = (id) => document.getElementById(id);
+  const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const hhmm = (d) => pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+  const dateKey = (d) => d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+  const plural = (n, one, many) => n + " " + (n === 1 ? one : many);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+  function newAlarm(over = {}) {
+    return { id: uid(), time: "06:30", label: "", days: [1, 2, 3, 4, 5], enabled: true, sound: "aurora",
+      snoozeMinutes: 5, maxSnoozes: 3, gradual: true, challenge: "nenhum", createdAt: new Date().toISOString(), ...over };
+  }
+
+  function normalizeAlarm(a) {
+    if (!a || typeof a !== "object") return null;
+    const time = typeof a.time === "string" && /^\d{2}:\d{2}$/.test(a.time) ? a.time : null;
+    if (!time) return null;
+    const [h, m] = time.split(":").map(Number);
+    if (h > 23 || m > 59) return null;
+    const days = Array.isArray(a.days) ? [...new Set(a.days.map(Number).filter((d) => d >= 0 && d <= 6))].sort() : [];
+    return {
+      id: typeof a.id === "string" && a.id ? a.id : uid(),
+      time, days,
+      label: typeof a.label === "string" ? a.label.slice(0, 40) : "",
+      enabled: a.enabled !== false,
+      sound: SOUNDS[a.sound] ? a.sound : "aurora",
+      snoozeMinutes: [5, 9, 10, 15].includes(Number(a.snoozeMinutes)) ? Number(a.snoozeMinutes) : 5,
+      maxSnoozes: Math.max(0, Math.min(5, Number.isFinite(Number(a.maxSnoozes)) ? Number(a.maxSnoozes) : 3)),
+      gradual: a.gradual !== false,
+      challenge: a.challenge === "conta" ? "conta" : "nenhum",
+      createdAt: typeof a.createdAt === "string" ? a.createdAt : new Date().toISOString(),
+    };
+  }
+
+  function normalizeEntry(e) {
+    if (!e || typeof e !== "object") return null;
+    const sched = new Date(e.scheduledFor);
+    if (isNaN(sched)) return null;
+    const dismissed = e.dismissedAt ? new Date(e.dismissedAt) : null;
+    return {
+      id: typeof e.id === "string" ? e.id : uid(),
+      alarmId: typeof e.alarmId === "string" ? e.alarmId : "",
+      label: typeof e.label === "string" ? e.label.slice(0, 40) : "",
+      scheduledFor: sched.toISOString(),
+      dismissedAt: dismissed && !isNaN(dismissed) ? dismissed.toISOString() : null,
+      snoozes: Math.max(0, Number(e.snoozes) || 0),
+      status: e.status === "sem resposta" ? "sem resposta" : "acordou",
+    };
+  }
+
+  function fresh() {
+    return {
+      name: "",
+      alarms: [
+        newAlarm({ time: "06:30", label: "Dias úteis", days: [1, 2, 3, 4, 5], enabled: false }),
+        newAlarm({ time: "09:00", label: "Fim de semana", days: [0, 6], enabled: false, sound: "passaros", maxSnoozes: 2 }),
+      ],
+      history: [],
+      settings: { volume: 0.8 },
+      runtime: { fired: {}, snooze: null },
+    };
+  }
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return fresh();
+      const d = JSON.parse(raw);
+      return {
+        name: typeof d.name === "string" ? d.name : "",
+        alarms: (Array.isArray(d.alarms) ? d.alarms : []).map(normalizeAlarm).filter(Boolean),
+        history: (Array.isArray(d.history) ? d.history : []).map(normalizeEntry).filter(Boolean),
+        settings: { volume: Number(d.settings && d.settings.volume) || 0.8 },
+        runtime: { fired: (d.runtime && d.runtime.fired) || {}, snooze: (d.runtime && d.runtime.snooze) || null },
+      };
+    } catch (e) { return fresh(); }
+  }
+
+  let state = load();
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* sem armazenamento */ } }
+
+  // ---------- Utilidades de tempo ----------
+  function nextOccurrence(a, from) {
+    const [h, m] = a.time.split(":").map(Number);
+    for (let i = 0; i <= 7; i++) {
+      const d = new Date(from); d.setDate(d.getDate() + i); d.setHours(h, m, 0, 0);
+      if (d <= from) continue;
+      if (a.days.length === 0 || a.days.includes(d.getDay())) return d;
+    }
+    return null;
+  }
+  function untilText(ms) {
+    const mins = Math.max(1, Math.round(ms / 60000));
+    const h = Math.floor(mins / 60), m = mins % 60;
+    if (h === 0) return m + " min";
+    if (h >= 24) { const dd = Math.floor(h / 24); return dd + (dd === 1 ? " dia" : " dias") + (h % 24 ? " " + (h % 24) + " h" : ""); }
+    return h + " h" + (m ? " " + m + " min" : "");
+  }
+  function daysSummary(days) {
+    const s = days.join(",");
+    if (!days.length) return "Só uma vez";
+    if (s === "1,2,3,4,5") return "Dias úteis";
+    if (s === "0,6") return "Fim de semana";
+    if (days.length === 7) return "Todos os dias";
+    return WEEK_ORDER.filter((d) => days.includes(d)).map((d) => DAY_SHORT[d]).join(", ");
+  }
+  function greeting(d) {
+    const h = d.getHours();
+    const g = h >= 5 && h < 12 ? "Bom dia" : h >= 12 && h < 20 ? "Boa tarde" : "Boa noite";
+    return state.name ? g + ", " + state.name : g;
+  }
+  const fmtDate = new Intl.DateTimeFormat("pt-PT", { weekday: "long", day: "numeric", month: "long" });
+  const fmtShort = new Intl.DateTimeFormat("pt-PT", { weekday: "short", day: "numeric", month: "short" });
+
+  // ---------- Som ----------
+  let ctx = null, master = null, loopTimer = null, previewTimer = null;
+  function audio() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!ctx) { try { ctx = new AC(); } catch (e) { return null; } }
+    if (ctx.state === "suspended") ctx.resume().then(updateSoundBanner, () => {});
+    return ctx;
+  }
+  function tone(freq, t, dur, type, peak, dest, sweepTo) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    if (sweepTo) o.frequency.exponentialRampToValueAtTime(sweepTo, t + dur * 0.8);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + Math.min(0.02, dur / 4));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(dest); o.start(t); o.stop(t + dur + 0.05);
+  }
+  const PATTERNS = {
+    aurora: { len: 2.6, play(t, d) { [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, t + i * 0.3, 1.3, "sine", 0.22, d)); } },
+    sino: { len: 2.4, play(t, d) {
+      [[880, 0.26], [1760, 0.07], [2637, 0.035]].forEach(([f, a]) => tone(f, t, 2.1, "sine", a, d));
+      [[659.25, 0.2], [1318.5, 0.05]].forEach(([f, a]) => tone(f, t + 1.1, 1.2, "sine", a, d));
+    } },
+    passaros: { len: 2.0, play(t, d) {
+      [0, 0.16, 0.32, 0.9, 1.04].forEach((o, i) => tone(2300 + (i % 2) * 400, t + o, 0.11, "sine", 0.16, d, 3600 + (i % 3) * 300));
+    } },
+    classico: { len: 1.3, play(t, d) { [0, 0.17, 0.34, 0.51].forEach((o) => tone(988, t + o, 0.1, "square", 0.08, d)); } },
+  };
+  function startSound(name, gradual, previewMs) {
+    stopSound();
+    const c = audio(); if (!c) return;
+    master = c.createGain(); master.connect(c.destination);
+    const vol = state.settings.volume, t0 = c.currentTime;
+    if (gradual) { master.gain.setValueAtTime(vol * 0.08, t0); master.gain.linearRampToValueAtTime(vol, t0 + 45); }
+    else master.gain.setValueAtTime(vol, t0);
+    const p = PATTERNS[name] || PATTERNS.aurora, out = master;
+    let next = t0 + 0.05;
+    const schedule = () => { while (next < c.currentTime + 2.5) { p.play(next, out); next += p.len; } };
+    schedule(); loopTimer = setInterval(schedule, 400);
+    if (previewMs) previewTimer = setTimeout(stopSound, previewMs);
+  }
+  function stopSound() {
+    clearInterval(loopTimer); loopTimer = null; clearTimeout(previewTimer);
+    if (master && ctx) {
+      const m = master;
+      try { m.gain.cancelScheduledValues(ctx.currentTime); m.gain.setTargetAtTime(0, ctx.currentTime, 0.04); } catch (e) {}
+      setTimeout(() => { try { m.disconnect(); } catch (e) {} }, 300);
+    }
+    master = null;
+    try { navigator.vibrate && navigator.vibrate(0); } catch (e) {}
+  }
+  function updateSoundBanner() {
+    const hasOn = state.alarms.some((a) => a.enabled) || state.runtime.snooze;
+    $("sound-banner").hidden = !(hasOn && (!ctx || ctx.state !== "running"));
+  }
+  document.addEventListener("pointerdown", () => { audio(); setTimeout(updateSoundBanner, 50); }, { capture: true });
+  $("sound-banner").addEventListener("click", () => { const c = audio(); if (c) startSound("aurora", false, 900); setTimeout(updateSoundBanner, 100); });
+
+  // ---------- Toast ----------
+  let toastTimer = null;
+  function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600); }
+
+  // ---------- Relógio e próximo alarme ----------
+  function nextAlarmInfo(now) {
+    if (state.runtime.snooze) return { kind: "snooze", at: new Date(state.runtime.snooze.until), label: state.runtime.snooze.label };
+    let best = null;
+    for (const a of state.alarms) {
+      if (!a.enabled) continue;
+      const d = nextOccurrence(a, now);
+      if (d && (!best || d < best.at)) best = { kind: "alarm", at: d, label: a.label, alarm: a };
+    }
+    return best;
+  }
+  function renderClock(now) {
+    $("now").textContent = hhmm(now);
+    $("greet").textContent = greeting(now);
+    $("today").textContent = fmtDate.format(now);
+    const n = nextAlarmInfo(now), box = $("next");
+    box.classList.toggle("on", !!n);
+    if (!n) { box.innerHTML = '<span class="dot"></span><span>Sem alarmes ligados</span>'; }
+    else if (n.kind === "snooze") {
+      box.innerHTML = '<span class="dot"></span><span>Adiado até <b>' + hhmm(n.at) + "</b></span>" +
+        '<button class="link" type="button" id="cancel-snooze">Já estou de pé</button>';
+    } else {
+      const sameDay = dateKey(n.at) === dateKey(now);
+      const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
+      const when = sameDay ? "hoje" : dateKey(n.at) === dateKey(tomorrow) ? "amanhã" : DAY_SHORT[n.at.getDay()].toLowerCase();
+      box.innerHTML = '<span class="dot"></span><span>Toca daqui a <b>' + untilText(n.at - now) + "</b> · " + when + " às " + hhmm(n.at) + "</span>";
+    }
+    if (!$("bedside").hidden) {
+      $("bedside-time").textContent = hhmm(now);
+      $("bedside-next").textContent = n ? (n.kind === "snooze" ? "Adiado até " + hhmm(n.at) : "Próximo alarme às " + hhmm(n.at)) : "Sem alarmes ligados";
+    }
+  }
+  $("next").addEventListener("click", (e) => {
+    if (e.target.id !== "cancel-snooze") return;
+    const s = state.runtime.snooze; if (!s) return;
+    logEntry({ alarmId: s.alarmId, label: s.label, scheduledFor: s.scheduledFor, snoozes: s.count, status: "acordou" });
+    state.runtime.snooze = null; save(); renderAll(); toast("Bom dia! Ficou registado no histórico.");
+  });
+
+  // ---------- Lista de alarmes ----------
+  function renderAlarms() {
+    const list = $("alarm-list");
+    const sorted = [...state.alarms].sort((a, b) => a.time.localeCompare(b.time));
+    list.innerHTML = sorted.map((a) => {
+      const dayDots = WEEK_ORDER.map((d) => '<span class="' + (a.days.includes(d) ? "on" : "") + '">' + DAY_INITIAL[d] + "</span>").join("");
+      const label = a.label || daysSummary(a.days);
+      const extra = SOUNDS[a.sound] + (a.maxSnoozes ? " · adiar " + a.snoozeMinutes + " min" : " · sem adiar") + (a.challenge === "conta" ? " · conta" : "");
+      return '<li class="alarm' + (a.enabled ? "" : " off") + '">' +
+        '<button class="alarm-main" type="button" data-edit="' + a.id + '" aria-label="Editar alarme das ' + a.time + '">' +
+          '<span class="alarm-time">' + a.time + "</span>" +
+          '<span class="alarm-meta"><span class="alarm-label">' + esc(label) + "</span>" +
+          (a.days.length ? '<span class="days" aria-label="' + daysSummary(a.days) + '">' + dayDots + "</span>" : '<span class="alarm-extra">Só uma vez</span>') +
+          '<span class="alarm-extra">' + extra + "</span></span>" +
+        "</button>" +
+        '<span class="switch"><input type="checkbox" data-toggle="' + a.id + '"' + (a.enabled ? " checked" : "") + ' aria-label="Ligar alarme das ' + a.time + '"><span></span></span>' +
+      "</li>";
+    }).join("");
+    $("alarm-empty").hidden = sorted.length > 0;
+    const on = state.alarms.filter((a) => a.enabled).length;
+    $("alarm-count").textContent = state.alarms.length ? on + " de " + state.alarms.length + " ligados" : "";
+    $("name-card").hidden = !!state.name;
+  }
+  $("alarm-list").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-edit]"); if (b) openSheet(b.dataset.edit);
+  });
+  $("alarm-list").addEventListener("change", (e) => {
+    const id = e.target.dataset.toggle; if (!id) return;
+    const a = state.alarms.find((x) => x.id === id); if (!a) return;
+    a.enabled = e.target.checked; save(); renderAll();
+    if (a.enabled) { const d = nextOccurrence(a, new Date()); if (d) toast("Toca daqui a " + untilText(d - new Date()) + "."); }
+  });
+  $("quick").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-quick]"); if (!b) return;
+    let [time, days, label] = b.dataset.quick.split("|");
+    if (time.startsWith("+")) { const d = new Date(Date.now() + Number(time.slice(1)) * 60000); time = hhmm(d); }
+    const a = newAlarm({ time, label, days: days ? days.split(",").map(Number) : [] });
+    state.alarms.push(a); save(); renderAll();
+    const d = nextOccurrence(a, new Date());
+    toast("Alarme das " + time + " criado. Toca daqui a " + untilText(d - new Date()) + ".");
+  });
+  $("name-form").addEventListener("submit", (e) => {
+    e.preventDefault(); const v = $("name-input").value.trim(); if (!v) return;
+    state.name = v; save(); renderAll(); toast("Olá, " + v + "!");
+  });
+
+  // ---------- Folha de edição ----------
+  let editing = null, formDays = [];
+  $("f-sound").innerHTML = Object.entries(SOUNDS).map(([k, v]) => '<option value="' + k + '">' + v + "</option>").join("");
+  function renderDayPick() {
+    $("f-days").innerHTML = WEEK_ORDER.map((d) => '<button type="button" data-day="' + d + '" aria-pressed="' + formDays.includes(d) + '" aria-label="' + DAY_SHORT[d] + '">' + DAY_INITIAL[d] + "</button>").join("");
+    updateIn();
+  }
+  function updateIn() {
+    const t = $("f-time").value; if (!/^\d{2}:\d{2}$/.test(t)) { $("f-in").textContent = ""; return; }
+    const d = nextOccurrence({ time: t, days: formDays }, new Date());
+    $("f-in").textContent = d ? "Vai tocar daqui a " + untilText(d - new Date()) + " (" + fmtShort.format(d) + ")." : "";
+  }
+  function openSheet(id) {
+    const a = id ? state.alarms.find((x) => x.id === id) : newAlarm({ time: hhmm(new Date(Date.now() + 8 * 3600e3)).slice(0, 3) + "00" });
+    if (!a) return;
+    editing = id || null;
+    $("sheet-title").textContent = id ? "Editar alarme" : "Novo alarme";
+    $("f-time").value = a.time; $("f-label").value = a.label; $("f-sound").value = a.sound;
+    $("f-snooze").value = String(a.snoozeMinutes); $("f-max").value = String(a.maxSnoozes);
+    $("f-gradual").checked = a.gradual; $("f-challenge").value = a.challenge;
+    formDays = [...a.days]; renderDayPick();
+    $("f-delete").hidden = !id; $("f-delete-confirm").hidden = true;
+    $("sheet").hidden = false; $("fab").hidden = true;
+    setTimeout(() => $("f-time").focus(), 50);
+  }
+  function closeSheet() { stopSound(); $("sheet").hidden = true; $("fab").hidden = currentView !== "alarmes"; }
+  function readForm() {
+    return normalizeAlarm({
+      id: editing || uid(), time: $("f-time").value, label: $("f-label").value.trim(), days: formDays,
+      enabled: true, sound: $("f-sound").value, snoozeMinutes: $("f-snooze").value, maxSnoozes: $("f-max").value,
+      gradual: $("f-gradual").checked, challenge: $("f-challenge").value,
+      createdAt: editing ? (state.alarms.find((x) => x.id === editing) || {}).createdAt : undefined,
+    });
+  }
+  $("f-days").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-day]"); if (!b) return;
+    const d = Number(b.dataset.day);
+    formDays = formDays.includes(d) ? formDays.filter((x) => x !== d) : [...formDays, d].sort();
+    renderDayPick();
+  });
+  document.querySelector(".presets").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-preset]"); if (!b) return;
+    formDays = b.dataset.preset ? b.dataset.preset.split(",").map(Number) : []; renderDayPick();
+  });
+  $("f-time").addEventListener("input", updateIn);
+  $("f-preview").addEventListener("click", () => startSound($("f-sound").value, false, 4000));
+  $("f-test").addEventListener("click", () => {
+    const a = readForm(); if (!a) { toast("Escolha uma hora válida."); return; }
+    closeSheet(); startRing(a, { scheduledFor: new Date().toISOString(), snoozes: 0, test: true });
+  });
+  $("alarm-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const a = readForm(); if (!a) { toast("Escolha uma hora válida."); return; }
+    const i = state.alarms.findIndex((x) => x.id === a.id);
+    if (i >= 0) state.alarms[i] = a; else state.alarms.push(a);
+    save(); closeSheet(); renderAll();
+    const d = nextOccurrence(a, new Date());
+    toast("Guardado. Toca daqui a " + untilText(d - new Date()) + ".");
+  });
+  $("f-delete").addEventListener("click", () => { $("f-delete-confirm").hidden = false; });
+  $("f-delete-no").addEventListener("click", () => { $("f-delete-confirm").hidden = true; });
+  $("f-delete-yes").addEventListener("click", () => {
+    state.alarms = state.alarms.filter((x) => x.id !== editing); save(); closeSheet(); renderAll(); toast("Alarme eliminado.");
+  });
+  $("sheet-close").addEventListener("click", closeSheet);
+  $("sheet").addEventListener("click", (e) => { if (e.target.id === "sheet") closeSheet(); });
+  $("fab").addEventListener("click", () => openSheet(null));
+
+  // ---------- Tocar ----------
+  let ring = null, holdRaf = null, holdStart = 0;
+  function startRing(alarm, opts) {
+    if (ring) return;
+    ring = { alarm, scheduledFor: opts.scheduledFor, snoozes: opts.snoozes || 0, startedAt: Date.now(), test: !!opts.test, answer: null };
+    const now = new Date();
+    $("ring-greet").textContent = greeting(now);
+    $("ring-time").textContent = hhmm(now);
+    $("ring-label").textContent = alarm.label || daysSummary(alarm.days);
+    $("ring-sub").textContent = ring.test ? "Isto é um teste. Não fica no histórico." : ring.snoozes ? "Já adiou " + ring.snoozes + (ring.snoozes === 1 ? " vez" : " vezes") + "." : "";
+    const left = alarm.maxSnoozes - ring.snoozes;
+    const sz = $("ring-snooze");
+    sz.disabled = left <= 0;
+    sz.textContent = left > 0 ? "Adiar " + alarm.snoozeMinutes + " min (" + left + (left === 1 ? " restante)" : " restantes)") : "Sem adiamentos disponíveis";
+    if (alarm.challenge === "conta") {
+      const a = 12 + Math.floor(Math.random() * 78), b = 12 + Math.floor(Math.random() * 78);
+      ring.answer = a + b;
+      $("ring-sum").textContent = a + " + " + b;
+      $("ring-answer").value = ""; $("ring-err").textContent = "";
+      $("ring-challenge").hidden = false;
+      $("ring-stop").disabled = true; $("ring-stop-text").textContent = "Resolva a conta para desligar";
+    } else {
+      $("ring-challenge").hidden = true; $("ring-stop").disabled = false;
+      $("ring-stop-text").textContent = "Manter premido para desligar";
+    }
+    $("hold-fill").style.transform = "scaleX(0)";
+    const el = $("ring"); el.hidden = false; el.classList.remove("rising");
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("rising")));
+    startSound(alarm.sound, alarm.gradual);
+    try { navigator.vibrate && navigator.vibrate([400, 300, 400, 300, 400]); } catch (e) {}
+    notify(greeting(now), (alarm.label || "Alarme") + " · " + alarm.time);
+    document.title = "⏰ " + alarm.time + " · Despertar";
+    if (alarm.challenge === "conta") setTimeout(() => $("ring-answer").focus(), 100); else $("ring-stop").focus();
+  }
+  function endRing() {
+    stopSound(); cancelHold();
+    $("ring").hidden = true; $("ring").classList.remove("rising");
+    ring = null; document.title = "Despertar";
+  }
+  function logEntry({ alarmId, label, scheduledFor, snoozes, status }) {
+    state.history.push({ id: uid(), alarmId, label, scheduledFor, dismissedAt: status === "acordou" ? new Date().toISOString() : null, snoozes, status });
+    if (state.history.length > 1000) state.history = state.history.slice(-1000);
+  }
+  function dismiss() {
+    if (!ring) return;
+    if (!ring.test) { logEntry({ alarmId: ring.alarm.id, label: ring.alarm.label, scheduledFor: ring.scheduledFor, snoozes: ring.snoozes, status: "acordou" }); save(); }
+    const wasTest = ring.test;
+    endRing(); renderAll();
+    toast(wasTest ? "Teste concluído." : "Bom dia! Ficou registado no histórico.");
+  }
+  function snooze() {
+    if (!ring) return;
+    const a = ring.alarm, left = a.maxSnoozes - ring.snoozes; if (left <= 0) return;
+    const until = Date.now() + a.snoozeMinutes * 60000;
+    state.runtime.snooze = { alarmId: a.id, alarm: a, label: a.label, until, count: ring.snoozes + 1, scheduledFor: ring.scheduledFor, test: ring.test };
+    save(); endRing(); renderAll();
+    toast("Adiado até às " + hhmm(new Date(until)) + ".");
+  }
+  $("ring-snooze").addEventListener("click", snooze);
+  $("ring-answer").addEventListener("input", (e) => {
+    if (!ring || ring.answer == null) return;
+    const v = e.target.value.trim();
+    if (Number(v) === ring.answer) { $("ring-err").textContent = "Certo!"; $("ring-stop").disabled = false; $("ring-stop-text").textContent = "Desligar"; }
+    else { $("ring-stop").disabled = true; $("ring-err").textContent = v.length >= String(ring.answer).length ? "Ainda não. Tente de novo." : ""; }
+  });
+  // Manter premido 1,2 s para desligar (a conta, quando existe, já basta)
+  function cancelHold() { cancelAnimationFrame(holdRaf); holdRaf = null; $("hold-fill").style.transform = "scaleX(0)"; }
+  $("ring-stop").addEventListener("pointerdown", (e) => {
+    if (!ring || $("ring-stop").disabled) return;
+    if (ring.answer != null) { dismiss(); return; }
+    e.preventDefault(); holdStart = performance.now();
+    const step = (t) => {
+      const p = Math.min(1, (t - holdStart) / 1200);
+      $("hold-fill").style.transform = "scaleX(" + p + ")";
+      if (p >= 1) { holdRaf = null; dismiss(); return; }
+      holdRaf = requestAnimationFrame(step);
+    };
+    holdRaf = requestAnimationFrame(step);
+  });
+  ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => $("ring-stop").addEventListener(ev, () => { if (holdRaf) cancelHold(); }));
+  $("ring-stop").addEventListener("click", (e) => { if (e.detail === 0 && ring && !$("ring-stop").disabled) dismiss(); }); // teclado
+  $("ring-stop").addEventListener("contextmenu", (e) => e.preventDefault());
+
+  // ---------- Notificações ----------
+  let swReg = null;
+  function notify(title, body) {
+    try {
+      if (!("Notification" in window) || Notification.permission !== "granted") return;
+      if (swReg && swReg.showNotification) swReg.showNotification(title, { body, icon: "icon-192.png", tag: "despertar", renotify: true, requireInteraction: true });
+      else new Notification(title, { body, icon: "icon-192.png", tag: "despertar" });
+    } catch (e) {}
+  }
+  function renderNotifyState() {
+    const s = $("notify-state"), b = $("btn-notify");
+    if (!("Notification" in window)) { s.textContent = "Este navegador não mostra notificações."; b.hidden = true; return; }
+    b.hidden = Notification.permission === "granted";
+    s.textContent = Notification.permission === "granted" ? "Notificações ligadas: o alarme também aparece na barra do telemóvel." :
+      Notification.permission === "denied" ? "As notificações estão bloqueadas nas definições do navegador." : "";
+  }
+  $("btn-notify").addEventListener("click", () => {
+    try {
+      const r = Notification.requestPermission(renderNotifyState);
+      if (r && r.then) r.then(renderNotifyState, renderNotifyState);
+    } catch (e) { renderNotifyState(); }
+  });
+
+  // ---------- Ciclo principal ----------
+  function pruneFired() {
+    const keep = {}; const lim = Date.now() - 2 * 86400e3;
+    for (const [k, v] of Object.entries(state.runtime.fired)) if (v > lim) keep[k] = v;
+    state.runtime.fired = keep;
+  }
+  function tick() {
+    const now = new Date();
+    renderClock(now);
+    if (ring) {
+      $("ring-time").textContent = hhmm(now);
+      if (Date.now() - ring.startedAt > RING_TIMEOUT) {
+        if (!ring.test) { logEntry({ alarmId: ring.alarm.id, label: ring.alarm.label, scheduledFor: ring.scheduledFor, snoozes: ring.snoozes, status: "sem resposta" }); save(); }
+        endRing(); renderAll();
+      }
+      return;
+    }
+    const sn = state.runtime.snooze;
+    if (sn && now.getTime() >= sn.until) {
+      state.runtime.snooze = null; save();
+      const a = state.alarms.find((x) => x.id === sn.alarmId) || normalizeAlarm(sn.alarm);
+      if (a && now.getTime() - sn.until < CATCH_UP) startRing(a, { scheduledFor: sn.scheduledFor, snoozes: sn.count, test: sn.test });
+      renderAll(); return;
+    }
+    for (const a of state.alarms) {
+      if (!a.enabled) continue;
+      const [h, m] = a.time.split(":").map(Number);
+      const occ = new Date(now); occ.setHours(h, m, 0, 0);
+      const diff = now - occ;
+      if (diff < 0 || diff > CATCH_UP) continue;
+      if (a.days.length && !a.days.includes(occ.getDay())) continue;
+      const k = a.id + "@" + dateKey(occ) + "T" + a.time;
+      if (state.runtime.fired[k]) continue;
+      state.runtime.fired[k] = Date.now(); pruneFired();
+      if (!a.days.length) a.enabled = false;
+      save(); renderAll();
+      startRing(a, { scheduledFor: occ.toISOString(), snoozes: 0 });
+      break;
+    }
+  }
+
+  // ---------- Histórico ----------
+  function minutesLate(e) { return e.dismissedAt ? Math.max(0, Math.round((new Date(e.dismissedAt) - new Date(e.scheduledFor)) / 60000)) : null; }
+  function renderHistory() {
+    const h = [...state.history].sort((a, b) => b.scheduledFor.localeCompare(a.scheduledFor));
+    const woke = h.filter((e) => e.status === "acordou");
+    // sequência: dias seguidos (até hoje ou ontem) com pelo menos um "acordou"
+    const days = new Set(woke.map((e) => dateKey(new Date(e.scheduledFor))));
+    let streak = 0; const d = new Date();
+    if (!days.has(dateKey(d))) d.setDate(d.getDate() - 1);
+    while (days.has(dateKey(d))) { streak++; d.setDate(d.getDate() - 1); }
+    $("s-streak").textContent = streak;
+    const recent = woke.filter((e) => Date.now() - new Date(e.scheduledFor) < 14 * 86400e3);
+    if (recent.length) {
+      const mins = recent.map((e) => { const t = new Date(e.dismissedAt); return t.getHours() * 60 + t.getMinutes(); });
+      const avg = Math.round(mins.reduce((s, x) => s + x, 0) / mins.length);
+      $("s-avg").textContent = pad2(Math.floor(avg / 60)) + ":" + pad2(avg % 60);
+      const sn = recent.reduce((s, e) => s + e.snoozes, 0) / recent.length;
+      $("s-snooze").textContent = sn.toLocaleString("pt-PT", { maximumFractionDigits: 1 });
+    } else { $("s-avg").textContent = "--:--"; $("s-snooze").textContent = "0"; }
+    renderChart(h);
+
+    const box = $("history-list");
+    if (!h.length) {
+      box.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="15" r="4"/><path d="M12 5v3M4.2 10.2l2 2M19.8 10.2l-2 2M2 19h20"/></svg>' +
+        "<strong>Ainda não há manhãs registadas</strong><span>Cada vez que desligar um alarme, aparece aqui a hora a que se levantou e quantas vezes adiou.</span></div>";
+      return;
+    }
+    const todayK = dateKey(new Date()), y = new Date(); y.setDate(y.getDate() - 1); const yK = dateKey(y);
+    const groups = new Map();
+    for (const e of h.slice(0, 60)) { const k = dateKey(new Date(e.scheduledFor)); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(e); }
+    box.innerHTML = [...groups.entries()].map(([k, es]) => {
+      const title = k === todayK ? "Hoje" : k === yK ? "Ontem" : fmtShort.format(new Date(es[0].scheduledFor));
+      return '<div class="day-group"><h3>' + esc(title) + '</h3><ul class="entries">' + es.map((e) => {
+        const s = new Date(e.scheduledFor);
+        const t = e.dismissedAt ? hhmm(s) + " → " + hhmm(new Date(e.dismissedAt)) : hhmm(s);
+        const pill = e.status !== "acordou" ? '<span class="pill bad">Sem resposta</span>' : e.snoozes ? '<span class="pill warn">' + e.snoozes + (e.snoozes === 1 ? " adiamento" : " adiamentos") + "</span>" : '<span class="pill ok">À primeira</span>';
+        return '<li class="entry"><span class="t">' + t + '</span><span class="d">' + esc(e.label || "Alarme") + "</span>" + pill + "</li>";
+      }).join("") + "</ul></div>";
+    }).join("");
+  }
+  function renderChart(h) {
+    const W = 340, H = 150, L = 26, R = 6, T = 10, B = 22, n = 14;
+    const cols = [];
+    for (let i = n - 1; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i); const k = dateKey(d);
+      const es = h.filter((e) => dateKey(new Date(e.scheduledFor)) === k);
+      const first = es.sort((a, b) => a.scheduledFor.localeCompare(b.scheduledFor))[0];
+      cols.push({ d, e: first || null });
+    }
+    const vals = cols.map((c) => (c.e ? (c.e.status === "acordou" ? minutesLate(c.e) : 10) : null));
+    const maxV = Math.max(10, ...vals.filter((v) => v != null));
+    const top = Math.ceil(maxV / 5) * 5;
+    const y = (v) => T + (H - T - B) * (1 - v / top);
+    const bw = (W - L - R) / n;
+    let s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Minutos entre o alarme e levantar nos últimos 14 dias">';
+    [0, top / 2, top].forEach((v) => { s += '<line class="grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (L - 4) + '" y="' + (y(v) + 3) + '" text-anchor="end">' + v + "</text>"; });
+    cols.forEach((c, i) => {
+      const x = L + i * bw, v = vals[i];
+      if (v != null) {
+        const cls = c.e.status !== "acordou" ? "bar miss" : c.e.snoozes ? "bar" : "bar zero";
+        const hgt = Math.max(3, y(0) - y(v));
+        s += '<rect class="' + cls + '" x="' + (x + bw * 0.18) + '" y="' + (y(0) - hgt) + '" width="' + bw * 0.64 + '" height="' + hgt + '" rx="2"><title>' + fmtShort.format(c.d) + ": " + (c.e.status === "acordou" ? v + " min" : "sem resposta") + "</title></rect>";
+      }
+      if (i % 2 === 1 || i === n - 1) s += '<text x="' + (x + bw / 2) + '" y="' + (H - 6) + '" text-anchor="middle">' + c.d.getDate() + "</text>";
+    });
+    $("chart").innerHTML = s + "</svg>";
+  }
+
+  // ---------- Ajustes, backup ----------
+  function renderSettings() {
+    if (document.activeElement !== $("set-name")) $("set-name").value = state.name;
+    $("set-volume").value = state.settings.volume;
+    renderNotifyState();
+  }
+  $("set-name").addEventListener("change", (e) => { state.name = e.target.value.trim().slice(0, 40); save(); renderAll(); toast("Nome guardado."); });
+  $("set-volume").addEventListener("input", (e) => { state.settings.volume = Number(e.target.value); save(); if (master && ctx) master.gain.setValueAtTime(state.settings.volume, ctx.currentTime); });
+  $("btn-test-sound").addEventListener("click", () => startSound("aurora", false, 4000));
+
+  function backupText() {
+    return JSON.stringify({ name: state.name, alarms: state.alarms, history: state.history, exportedAt: new Date().toISOString(), app: "Despertar" }, null, 2);
+  }
+  $("btn-export").addEventListener("click", () => {
+    try {
+      const blob = new Blob([backupText()], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = "despertar-backup.json";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      toast("Backup criado: despertar-backup.json. Se não descarregar, use Copiar texto.");
+    } catch (e) { toast("Não foi possível descarregar. Use Copiar texto."); }
+  });
+  $("btn-copy").addEventListener("click", () => {
+    const txt = backupText();
+    const fallback = () => { $("paste-box").hidden = false; $("paste-area").value = txt; $("paste-area").select(); toast("Texto selecionado. Copie-o manualmente."); };
+    try { navigator.clipboard.writeText(txt).then(() => toast("Backup copiado."), fallback); } catch (e) { fallback(); }
+  });
+  $("btn-paste-toggle").addEventListener("click", () => { $("paste-box").hidden = !$("paste-box").hidden; if (!$("paste-box").hidden) $("paste-area").focus(); });
+
+  let pendingImport = null;
+  function prepareImport(text) {
+    let d;
+    try { d = JSON.parse(text); } catch (e) { toast("O ficheiro não é um backup válido (JSON ilegível)."); return; }
+    if (!d || typeof d !== "object" || !("alarms" in d || "history" in d || "name" in d)) { toast("Este ficheiro não parece um backup do Despertar."); return; }
+    const alarms = (Array.isArray(d.alarms) ? d.alarms : []).map(normalizeAlarm).filter(Boolean);
+    const history = (Array.isArray(d.history) ? d.history : []).map(normalizeEntry).filter(Boolean);
+    pendingImport = { name: typeof d.name === "string" ? d.name.slice(0, 40) : "", alarms, history };
+    $("import-summary").textContent = "O backup tem " + (pendingImport.name ? "o nome «" + pendingImport.name + "», " : "nome vazio, ") +
+      plural(alarms.length, "alarme", "alarmes") + " e " + plural(history.length, "registo", "registos") +
+      ". Os dados atuais (" + plural(state.alarms.length, "alarme", "alarmes") + ", " + plural(state.history.length, "registo", "registos") + ") vão ser substituídos.";
+    $("import-confirm").hidden = false;
+  }
+  $("import-file").addEventListener("change", (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const r = new FileReader(); r.onload = () => prepareImport(String(r.result)); r.onerror = () => toast("Não foi possível ler o ficheiro."); r.readAsText(f);
+    e.target.value = "";
+  });
+  $("btn-paste-import").addEventListener("click", () => prepareImport($("paste-area").value));
+  $("btn-import-no").addEventListener("click", () => { pendingImport = null; $("import-confirm").hidden = true; });
+  $("btn-import-yes").addEventListener("click", () => {
+    if (!pendingImport) return;
+    state.name = pendingImport.name; state.alarms = pendingImport.alarms; state.history = pendingImport.history;
+    state.runtime = { fired: {}, snooze: null };
+    pendingImport = null; save(); $("import-confirm").hidden = true; $("paste-box").hidden = true; renderAll(); toast("Backup importado.");
+  });
+  $("btn-wipe").addEventListener("click", () => { $("wipe-confirm").hidden = false; });
+  $("btn-wipe-no").addEventListener("click", () => { $("wipe-confirm").hidden = true; });
+  $("btn-wipe-yes").addEventListener("click", () => {
+    state = { name: "", alarms: [], history: [], settings: { volume: 0.8 }, runtime: { fired: {}, snooze: null } };
+    save(); $("wipe-confirm").hidden = true; renderAll(); toast("Dados apagados.");
+  });
+
+  // ---------- Modo cabeceira ----------
+  let wakeLock = null;
+  async function lockScreen() { try { if ("wakeLock" in navigator) wakeLock = await navigator.wakeLock.request("screen"); } catch (e) { wakeLock = null; } }
+  $("btn-bedside").addEventListener("click", async () => {
+    $("bedside").hidden = false; renderClock(new Date()); await lockScreen();
+    try { document.documentElement.requestFullscreen && (await document.documentElement.requestFullscreen()); } catch (e) {}
+    if (!wakeLock) toast("O ecrã pode apagar-se sozinho neste navegador. Ajuste o tempo de ecrã do telemóvel.");
+  });
+  $("bedside").addEventListener("click", async () => {
+    $("bedside").hidden = true;
+    try { wakeLock && (await wakeLock.release()); } catch (e) {} wakeLock = null;
+    try { document.fullscreenElement && (await document.exitFullscreen()); } catch (e) {}
+  });
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { if (!$("bedside").hidden) lockScreen(); tick(); } });
+
+  // ---------- Separadores ----------
+  let currentView = "alarmes";
+  function show(view) {
+    currentView = view;
+    document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", String(t.dataset.view === view)));
+    ["alarmes", "historico", "ajustes"].forEach((v) => { $("view-" + v).hidden = v !== view; });
+    $("fab").hidden = view !== "alarmes";
+    document.querySelector("main").scrollTop = 0;
+    try { localStorage.setItem(KEY + ":view", view); } catch (e) {}
+  }
+  document.querySelector(".tabs").addEventListener("click", (e) => { const t = e.target.closest(".tab"); if (t) show(t.dataset.view); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!$("sheet").hidden) closeSheet(); else if (!$("bedside").hidden) $("bedside").click();
+  });
+
+  function renderAll() { renderClock(new Date()); renderAlarms(); renderHistory(); renderSettings(); updateSoundBanner(); }
+
+  // ---------- Arranque ----------
+  try { const v = localStorage.getItem(KEY + ":view"); if (v && $("view-" + v)) show(v); else show(location.hash.slice(1) && $("view-" + location.hash.slice(1)) ? location.hash.slice(1) : "alarmes"); } catch (e) { show("alarmes"); }
+  renderAll();
+  save();
+  setInterval(tick, 1000);
+  tick();
+
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    try { navigator.serviceWorker.register("sw.js").then((r) => { swReg = r; }, () => {}); } catch (e) {}
+  }
+})();
+</script>
+</body>
+</html>
