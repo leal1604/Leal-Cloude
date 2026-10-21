@@ -15,7 +15,7 @@ for (const { file, size, inset } of jobs) {
   const page = await browser.newPage({ viewport: { width: size, height: size } });
   const pad = Math.round(size * inset);
   const inner = svg.replace("<svg ", `<svg width="${size - pad * 2}" height="${size - pad * 2}" `).replace(' rx="16"', inset ? "" : ' rx="16"');
-  await page.setContent(`<body style="margin:0;background:${inset ? "#0F1A2B" : "transparent"};width:${size}px;height:${size}px;display:grid;place-items:center">${inner}</body>`);
+  await page.setContent(`<body style="margin:0;background:${inset ? "#5F7BFF" : "transparent"};width:${size}px;height:${size}px;display:grid;place-items:center">${inner}</body>`);
   await page.screenshot({ path: new URL("../" + file, import.meta.url).pathname, omitBackground: !inset });
   await page.close();
 }

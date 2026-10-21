@@ -1,23 +1,32 @@
-# Despertar
+# DESPERTAR
 
-Despertador para o telemóvel, feito como app web instalável (PWA). Sem dependências nem passo de build: são ficheiros estáticos.
+> Pare de procrastinar. Comece a agir.
 
-- `index.html`: landing page.
-- `app.html`: a app (alarmes, histórico, ajustes).
-- `manifest.webmanifest`, `sw.js`, ícones: instalação no ecrã principal e funcionamento sem rede.
+App web instalável (PWA) para transformar tarefas em ação: tarefas, sessões de foco, modo compromisso, metas, lembretes, sequência de dias, XP, níveis, conquistas e estatísticas. São ficheiros estáticos, sem dependências nem passo de build.
 
-## O que a app faz
+Disponível em três idiomas: **português do Brasil**, **português de Portugal** e **inglês**. Na primeira visita o idioma vem do aparelho; depois muda-se no seletor (landing: BR · PT · EN; app: Ajustes → Idioma). A escolha fica guardada e é partilhada entre a landing e o app.
 
-- Alarmes com hora, nome, dias da semana (ou só uma vez), toque, tempo e número máximo de adiamentos.
-- Quatro toques gerados no próprio navegador (Aurora, Sino, Pássaros, Clássico), com subida gradual de volume em 45 s.
-- Para desligar, mantém-se o botão premido 1,2 s ou resolve-se uma soma.
-- Histórico: hora prevista, hora a que se levantou, adiamentos, sequência de dias e gráfico dos últimos 14 dias. Um alarme que toca 10 minutos sem resposta fica registado como «sem resposta».
-- Modo cabeceira: relógio escuro com o ecrã sempre ligado (Wake Lock).
-- Backup em `despertar-backup.json` com o formato `{ "name", "alarms", "history" }`. Importa-se em Ajustes → Importar ficheiro (ou colando o texto).
+- `index.html`: landing page (conteúdo e secções da versão original, refeitos).
+- `app.html`: o app.
+- `manifest.webmanifest`, `sw.js`, ícones: instalação no ecrã inicial e funcionamento sem rede.
 
-## Limitação
+## Como funciona o app
 
-Uma app web só toca enquanto está aberta. Os navegadores não acordam um telemóvel com a app fechada. Por isso a app explica que deve ficar aberta no modo cabeceira, com o telemóvel a carregar.
+1. **Escolha**: crie uma tarefa e a duração da sessão (10 a 90 min ou personalizada), ligada ou não a uma meta.
+2. **Desperte**: comece a sessão. Com o **modo compromisso**: ecrã inteiro e sempre ligado, sem pausa, o botão CONCLUIR só fica disponível no fim, cada saída do app é registada e desistir exige segurar o botão 3 s.
+3. **Faça**: contagem regressiva, progresso e mensagens de foco.
+4. **Conclua**: ganha XP (10 + 1 por minuto de foco, +10 no modo compromisso sem saídas), sobe de nível e desbloqueia conquistas.
+
+Lembretes por hora e dia da semana podem abrir diretamente a sessão de uma tarefa.
+
+## Backup
+
+Ajustes → Backup gera `despertar-backup.json` com `name`, `alarms` (lembretes), `history`, `tasks`, `goals` e `settings`. A importação aceita também ficheiros só com `name`, `alarms` e `history`.
+
+## Limitações
+
+- O app corre no navegador: não consegue bloquear outros apps, e os lembretes só tocam com o app aberto.
+- Os dados ficam no aparelho (localStorage); para mudar de telemóvel use o backup.
 
 ## Executar localmente
 
@@ -26,12 +35,11 @@ cd despertar
 npx http-server -p 8080
 ```
 
-Abrir <http://localhost:8080>. O service worker só é registado em HTTPS (ou seja, depois de publicado).
+Abrir <http://localhost:8080>. O service worker só é registado em HTTPS.
 
 ## Publicar
 
 Qualquer alojamento estático serve (Vercel, Netlify, GitHub Pages). No Vercel: importar o repositório e escolher `despertar` como **Root Directory**, sem framework.
-No Android: abrir o endereço no Chrome → menu ⋮ → **Adicionar ao ecrã principal**.
 
 ## Ícones
 

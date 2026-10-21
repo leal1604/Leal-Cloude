@@ -1,5 +1,5 @@
-// Despertar — guarda a app em cache para abrir sem rede.
-const CACHE = "despertar-v1";
+// DESPERTAR — guarda o app em cache para abrir sem rede.
+const CACHE = "despertar-v2";
 const FILES = ["./", "index.html", "app.html", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (e) => {

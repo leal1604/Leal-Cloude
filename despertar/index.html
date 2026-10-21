@@ -1,508 +1,548 @@
 <!doctype html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- artifact:start -->
-<title>Despertar</title>
+<title>DESPERTAR</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Despertar: o despertador que toca baixinho, não o deixa adiar para sempre e regista a que horas se levantou.">
-<meta name="theme-color" content="#1B2A4A">
+<meta name="description" content="DESPERTAR é o aplicativo que ajuda você a transformar tarefas em ação, combater a procrastinação e construir disciplina todos os dias.">
+<meta name="theme-color" content="#0B0B14">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=Big+Shoulders:wght@600;800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700;800;900&family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: faixa de madrugada no topo (o sol nasce atrás do telemóvel), depois uma manhã contada em sequência, funcionalidades, backup e perguntas. */
+/* Layout: noite escura com a sessão de foco a correr no telemóvel do hero; depois o percurso intenção → conclusão, funcionalidades, progresso, preços e perguntas. */
 :root {
-  --bg: #EEF2F7;
-  --surface: #FFFFFF;
-  --surface-2: #E4EAF2;
-  --fg: #132033;
-  --muted: #56657A;
-  --line: #D3DCE7;
-  --accent: #C9461C;
-  --accent-soft: #FBE3D8;
-  --accent-ink: #FFFFFF;
-  --ok: #23774A;
-  --warn: #9A6410;
-  --dawn-top: #14213D;
-  --dawn-mid: #6E4A73;
-  --dawn-low: #F09A62;
-  --dawn-sun: #FFC26B;
-  --dawn-ink: #FFF6EC;
-  --dawn-muted: #E9D6CB;
+  --bg: #0B0B14;
+  --bg-2: #10101C;
+  --surface: #14141F;
+  --surface-2: #1C1C2C;
+  --fg: #F1F0F7;
+  --muted: #9C9AB2;
+  --line: #262638;
+  --primary: #4C8DFF;
+  --violet: #8B6CFF;
+  --fire: #FF7A2F;
+  --ok: #3DD68C;
+  --bad: #FF5D61;
   --font-display: "Big Shoulders", "Arial Narrow", "Roboto Condensed", sans-serif;
-  --font-body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --radius: 16px;
+  --radius: 18px;
   --max: 1120px;
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0A111C; --surface: #121B29; --surface-2: #1A2537; --fg: #E7EDF5; --muted: #93A0B4;
-    --line: #243249; --accent: #FF7D52; --accent-soft: #3A2219; --accent-ink: #1C0B04; --ok: #62C98F; --warn: #E6B653;
-    color-scheme: dark;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #F5F5FA; --bg-2: #ECECF5; --surface: #FFFFFF; --surface-2: #F0F0F7; --fg: #14131F; --muted: #5C5A70; --line: #DCDBE7;
+    --primary: #2F6FE4; --violet: #6A4FE0; --fire: #D9530F; --ok: #1C8A55; --bad: #CC2E33; color-scheme: light;
   }
 }
-:root[data-theme="dark"] {
-  --bg: #0A111C; --surface: #121B29; --surface-2: #1A2537; --fg: #E7EDF5; --muted: #93A0B4;
-  --line: #243249; --accent: #FF7D52; --accent-soft: #3A2219; --accent-ink: #1C0B04; --ok: #62C98F; --warn: #E6B653;
-  color-scheme: dark;
+:root[data-theme="light"] {
+  --bg: #F5F5FA; --bg-2: #ECECF5; --surface: #FFFFFF; --surface-2: #F0F0F7; --fg: #14131F; --muted: #5C5A70; --line: #DCDBE7;
+  --primary: #2F6FE4; --violet: #6A4FE0; --fire: #D9530F; --ok: #1C8A55; --bad: #CC2E33; color-scheme: light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 17px/1.6 var(--font-body); }
 a { color: inherit; }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
-.wrap {
-  max-width: var(--max); margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-}
-h1, h2, h3 { text-wrap: balance; margin: 0; }
-h2 { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(36px, 6vw, 58px); line-height: .95; letter-spacing: .005em; }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; border-radius: 8px; }
+.wrap { max-width: var(--max); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
 p { margin: 0; }
-.eyebrow { font-family: var(--font-mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-.lead { color: var(--muted); max-width: 60ch; font-size: 18px; }
-.btn {
-  display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700;
-  border-radius: 14px; padding: 14px 20px; border: 1px solid transparent; transition: transform .15s;
-}
+h2 { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(38px, 6.4vw, 66px); line-height: .92; letter-spacing: .005em; }
+h2 .soft { color: var(--muted); }
+.grad { background: linear-gradient(90deg, var(--primary), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.eyebrow { font-family: var(--font-mono); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--primary); }
+.lead { color: var(--muted); font-size: 19px; max-width: 58ch; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-weight: 700; border-radius: 14px; padding: 14px 22px; border: 1px solid transparent; transition: transform .15s, box-shadow .15s; }
 .btn:hover { transform: translateY(-1px); }
-.btn svg { width: 20px; height: 20px; }
-.btn.primary { background: var(--accent); color: var(--accent-ink); }
-.btn.line { border-color: var(--line); background: var(--surface); }
+.btn svg { width: 20px; height: 20px; fill: currentColor; }
+.btn.go { background: linear-gradient(135deg, var(--primary), var(--violet)); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 21px; letter-spacing: .08em; box-shadow: 0 10px 30px rgba(76, 141, 255, .3); }
+.btn.line { border-color: var(--line); background: var(--surface); color: var(--fg); }
+.btn.line svg { fill: none; stroke: currentColor; stroke-width: 2; }
+svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+section.block { padding-block: 104px 0; }
+.head { display: grid; gap: 16px; margin-bottom: 44px; }
+.head.center { justify-items: center; text-align: center; }
+.head.center .lead { text-align: center; }
 
-/* ---------- Madrugada (hero) ---------- */
-.dawn {
-  position: relative; overflow: hidden; color: var(--dawn-ink);
-  background: linear-gradient(180deg, var(--dawn-top) 0%, #2A2F57 34%, var(--dawn-mid) 68%, var(--dawn-low) 100%);
-}
-.stars { position: absolute; inset: 0 0 45% 0; pointer-events: none; opacity: .7;
-  background-image:
-    radial-gradient(1.5px 1.5px at 12% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 28% 40%, #fff 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 46% 12%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 64% 30%, #fff 50%, transparent 51%),
-    radial-gradient(1.5px 1.5px at 82% 16%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 92% 44%, #fff 50%, transparent 51%),
-    radial-gradient(1px 1px at 6% 52%, #fff 50%, transparent 51%), radial-gradient(1.2px 1.2px at 56% 54%, #fff 50%, transparent 51%);
-}
-.sun {
-  position: absolute; left: 70%; bottom: -170px; width: 420px; height: 420px; margin-left: -210px; border-radius: 50%;
-  background: radial-gradient(circle, var(--dawn-sun) 0 46%, rgba(255, 194, 107, .35) 47% 58%, rgba(255, 194, 107, 0) 70%);
-  animation: rise 2.6s cubic-bezier(.2, .7, .2, 1) both;
-}
-@keyframes rise { from { transform: translateY(70px); opacity: .75; } to { transform: none; opacity: 1; } }
-.horizon { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: linear-gradient(180deg, rgba(20, 33, 61, 0), rgba(20, 33, 61, .45)); }
+/* Navegação */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 21; background: var(--bg); }
+.nav .wrap { display: flex; align-items: center; gap: 18px; padding-block: 12px; }
+.logo { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 900; font-size: 24px; letter-spacing: .08em; text-decoration: none; margin-right: auto; }
+.logo-mark { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg, var(--primary), var(--violet)); color: #fff; }
+.logo-mark svg { width: 18px; height: 18px; fill: currentColor; }
+.links { display: flex; gap: 20px; font-size: 15px; }
+.links a { text-decoration: none; color: var(--muted); }
+.links a:hover { color: var(--fg); }
+.langs { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; background: var(--surface); }
+.langs button { border: 0; background: none; color: var(--muted); font: 600 12px/1 var(--font-mono); letter-spacing: .06em; padding: 7px 9px; border-radius: 999px; cursor: pointer; }
+.langs button[aria-pressed="true"] { background: var(--primary); color: #fff; }
+.nav .btn.go { font-size: 16px; padding: 9px 14px; border-radius: 11px; box-shadow: none; }
 
-.nav { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
-.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; text-decoration: none; }
-.logo svg { width: 32px; height: 32px; }
-.nav-links { display: flex; align-items: center; gap: 22px; font-size: 15px; }
-.nav-links a { text-decoration: none; color: var(--dawn-muted); }
-.nav-links a:hover { color: var(--dawn-ink); }
-.nav-links .open { color: var(--dawn-ink); border: 1px solid rgba(255, 246, 236, .5); border-radius: 999px; padding: 7px 14px; }
+/* Hero */
+.hero { position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: -20% -10% auto; height: 120%; background: radial-gradient(50% 50% at 75% 40%, rgba(139, 108, 255, .22), transparent 70%), radial-gradient(40% 40% at 20% 20%, rgba(76, 141, 255, .16), transparent 70%); pointer-events: none; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 48px; align-items: center; padding-block: 64px 40px; }
+.hero-copy { display: grid; gap: 24px; justify-items: start; }
+.hero h1 { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(50px, 7.4vw, 92px); line-height: .9; letter-spacing: -.003em; }
+.hero h1 .l2 { display: block; }
+.ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.trust { font-size: 14px; color: var(--muted); }
 
-.hero { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 40px; align-items: end; padding-block: 36px 0; }
-.hero-copy { display: grid; gap: 22px; padding-bottom: 72px; }
-.hero h1 { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(58px, 10.5vw, 128px); line-height: .86; letter-spacing: -.005em; }
-.hero h1 em { font-style: normal; color: var(--dawn-sun); }
-.hero .lead { color: var(--dawn-muted); font-size: 19px; }
-.hero .eyebrow { color: var(--dawn-sun); }
-.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-.hero .btn.primary { background: var(--dawn-ink); color: #2A1608; }
-.hero .btn.line { background: rgba(10, 17, 28, .25); color: var(--dawn-ink); border-color: rgba(255, 246, 236, .45); }
-.hero-note { font-size: 14px; color: var(--dawn-muted); }
+.phone { width: min(320px, 100%); aspect-ratio: 9 / 18; max-width: 100%; border-radius: 44px; padding: 12px; margin: 0 auto; background: #05050A; box-shadow: 0 0 0 2px #24243A, 0 30px 80px rgba(76, 141, 255, .22); }
+.screen { height: 100%; border-radius: 34px; overflow: hidden; position: relative; padding: 40px 18px 18px; display: grid; grid-template-rows: auto auto 1fr auto auto; gap: 10px; text-align: center; color: #F1F0F7;
+  background: radial-gradient(90% 60% at 50% 0%, rgba(76, 141, 255, .25), transparent 70%), radial-gradient(70% 50% at 50% 100%, rgba(139, 108, 255, .22), transparent 70%), #08080F; }
+.screen::before { content: ""; position: absolute; left: 50%; top: 11px; width: 84px; height: 22px; margin-left: -42px; border-radius: 999px; background: #05050A; }
+.pill { justify-self: center; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 4px 11px; font-size: 11px; letter-spacing: .12em; font-weight: 700; background: rgba(76, 141, 255, .16); color: #9BBEFF; }
+.pill i { width: 7px; height: 7px; border-radius: 50%; background: #4C8DFF; animation: blink 1.6s infinite; }
+@keyframes blink { 50% { opacity: .3; } }
+.ph-task small { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #9C9AB2; }
+.ph-task strong { font-size: 19px; }
+.ph-ring { position: relative; width: 78%; aspect-ratio: 1; max-width: 100%; justify-self: center; align-self: center; }
+.ph-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ph-ring .tr { stroke: rgba(255, 255, 255, .08); }
+.ph-ring .pr { stroke: url(#hgrad); transition: stroke-dashoffset 1s linear; }
+.ph-count { position: absolute; inset: 0; display: grid; place-content: center; font-family: var(--font-display); font-weight: 900; font-size: 64px; line-height: 1; font-variant-numeric: tabular-nums; }
+.ph-msg { font-size: 13px; color: #CFCDE0; }
+.ph-prog { display: grid; gap: 5px; font-size: 12px; color: #9C9AB2; }
+.ph-prog div { display: flex; justify-content: space-between; }
+.ph-bar { height: 7px; border-radius: 999px; background: rgba(255, 255, 255, .08); overflow: hidden; }
+.ph-bar span { display: block; height: 100%; width: 62%; background: linear-gradient(90deg, #4C8DFF, #8B6CFF); transition: width 1s linear; }
+.ph-btn { border-radius: 14px; padding: 12px; font-family: var(--font-display); font-weight: 900; letter-spacing: .08em; font-size: 17px; background: linear-gradient(135deg, #4C8DFF, #8B6CFF); }
+.ph-lock { font-size: 12px; color: #FFB085; display: flex; gap: 6px; align-items: center; justify-content: center; }
+.ph-lock svg { width: 13px; height: 13px; }
 
-/* Telemóvel com o ecrã do alarme */
-.phone-col { display: flex; justify-content: center; }
-.phone {
-  width: min(310px, 100%); aspect-ratio: 9 / 18.5; max-width: 100%; border-radius: 42px 42px 0 0; padding: 12px 12px 0;
-  background: #0B0F17; box-shadow: 0 -10px 60px rgba(255, 194, 107, .25), inset 0 0 0 2px #2B3446;
-  position: relative;
-}
-.screen {
-  height: 100%; border-radius: 32px 32px 0 0; overflow: hidden; position: relative;
-  background: linear-gradient(180deg, #1B2A4A 0%, #7C4D74 60%, #F29A63 100%);
-  display: grid; grid-template-rows: auto 1fr auto; color: var(--dawn-ink); text-align: center; padding: 34px 18px 22px;
-}
-.screen::before { content: ""; position: absolute; left: 50%; top: 10px; width: 80px; height: 20px; margin-left: -40px; border-radius: 999px; background: #0B0F17; }
-.s-sun { position: absolute; left: 50%; bottom: -70px; width: 190px; height: 190px; margin-left: -95px; border-radius: 50%; background: radial-gradient(circle, #FFC26B 0 52%, rgba(255, 194, 107, .3) 53% 64%, transparent 70%); }
-.s-greet { font-size: 15px; opacity: .92; }
-.s-time { font-family: var(--font-display); font-weight: 800; font-size: 96px; line-height: .9; font-variant-numeric: tabular-nums; margin-top: 6px; }
-.s-label { font-weight: 700; font-size: 15px; }
-.s-sub { font-size: 12px; opacity: .85; margin-top: 2px; }
-.s-actions { position: relative; display: grid; gap: 8px; }
-.s-btn { border-radius: 14px; padding: 12px; font-weight: 700; font-size: 14px; border: 1px solid rgba(255, 246, 236, .55); background: rgba(10, 17, 28, .25); }
-.s-btn.hold { background: var(--dawn-ink); color: #2A1608; position: relative; overflow: hidden; }
-.s-btn.hold i { position: absolute; inset: 0; background: #FFC26B; transform-origin: left; animation: hold 3.2s ease-in-out 1.4s infinite; }
-.s-btn.hold span { position: relative; }
-@keyframes hold { 0%, 15% { transform: scaleX(0); } 55%, 70% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+/* Problema */
+.problem { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.pcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 24px; display: grid; gap: 10px; align-content: start; }
+.pcard svg { color: var(--bad); }
+.pcard h3 { font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: .04em; text-transform: uppercase; }
+.pcard p { color: var(--muted); }
 
-/* Faixa de medidas */
-.specs { border-bottom: 1px solid var(--line); background: var(--surface); }
-.specs ul { list-style: none; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px 34px; padding-block: 18px; font-family: var(--font-mono); font-size: 14px; color: var(--muted); }
-.specs b { color: var(--fg); font-weight: 500; }
+/* Solução: percurso */
+.flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; position: relative; }
+.flow::before { content: ""; position: absolute; left: 12%; right: 12%; top: 34px; height: 2px; background: linear-gradient(90deg, var(--line), var(--primary), var(--violet), var(--ok)); }
+.flow li { position: relative; display: grid; justify-items: center; gap: 12px; text-align: center; }
+.flow .dot { width: 68px; height: 68px; border-radius: 22px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); color: var(--primary); }
+.flow li:last-child .dot { color: var(--ok); }
+.flow strong { font-family: var(--font-display); font-weight: 900; font-size: 22px; letter-spacing: .1em; }
 
-section.block { padding-block: 88px 0; }
-.block-head { display: grid; gap: 14px; margin-bottom: 40px; }
+/* Como funciona */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 22px; display: grid; gap: 10px; align-content: start; position: relative; overflow: hidden; }
+.step .n { font-family: var(--font-display); font-weight: 900; font-size: 64px; line-height: .8; color: var(--surface-2); position: absolute; right: 14px; top: 14px; }
+.step svg { color: var(--primary); }
+.step h3 { font-family: var(--font-display); font-weight: 900; font-size: 28px; letter-spacing: .06em; position: relative; }
+.step p { color: var(--muted); position: relative; }
+.step .ex { font-family: var(--font-mono); font-size: 13px; color: var(--fg); }
 
-/* Uma manhã (sequência real) */
-.morning { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; position: relative; }
-.morning::before { content: ""; position: absolute; left: 0; right: 0; top: 30px; height: 2px; background: linear-gradient(90deg, var(--line), var(--accent)); }
-.morning li { position: relative; display: grid; gap: 10px; padding-right: 22px; align-content: start; }
-.m-time { font-family: var(--font-display); font-weight: 800; font-size: 44px; line-height: 1; font-variant-numeric: tabular-nums; background: var(--bg); justify-self: start; padding-right: 10px; position: relative; }
-.m-time::after { content: ""; position: absolute; right: -2px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%; background: var(--accent); }
-.morning h3 { font-size: 19px; }
-.morning p { color: var(--muted); font-size: 16px; }
-.m-tag { justify-self: start; font-family: var(--font-mono); font-size: 12px; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; color: var(--muted); background: var(--surface); }
+/* Faixa intermédia */
+.mid { margin-top: 104px; background: linear-gradient(135deg, rgba(76, 141, 255, .14), rgba(139, 108, 255, .16)); border-block: 1px solid var(--line); }
+.mid .wrap { padding-block: 64px; display: grid; gap: 22px; justify-items: center; text-align: center; }
+.mid h2 { font-size: clamp(32px, 5vw, 54px); max-width: 22ch; }
 
 /* Funcionalidades */
-.features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-.feature { background: var(--surface); padding: 26px 24px; display: grid; gap: 10px; align-content: start; }
-.feature svg { width: 28px; height: 28px; color: var(--accent); }
-.feature h3 { font-size: 19px; }
-.feature p { color: var(--muted); font-size: 16px; }
-.feature .mono { font-family: var(--font-mono); font-size: 13px; color: var(--fg); }
+.feats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.feat { background: var(--surface); padding: 24px 22px; display: grid; gap: 8px; align-content: start; }
+.feat svg { color: var(--primary); }
+.feat:nth-child(4) svg, .feat:nth-child(5) svg { color: var(--fire); }
+.feat h3 { font-size: 19px; }
+.feat p { color: var(--muted); font-size: 16px; }
 
-/* Histórico (exemplo) */
+/* Progresso */
 .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
 .split .copy { display: grid; gap: 16px; }
 .sample { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: grid; gap: 14px; }
-.sample-tag { justify-self: start; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border: 1px dashed var(--line); border-radius: 999px; padding: 3px 10px; }
-.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.tile { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; }
-.tile b { font-family: var(--font-display); font-weight: 800; font-size: 36px; line-height: 1; font-variant-numeric: tabular-nums; }
+.tag-ex { justify-self: start; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px dashed var(--line); border-radius: 999px; padding: 3px 10px; }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tile { border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 4px; align-content: start; }
+.tile svg { width: 20px; height: 20px; color: var(--primary); }
+.tile.fire svg { color: var(--fire); }
+.tile b { font-family: var(--font-display); font-weight: 900; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
 .tile span { font-size: 12px; color: var(--muted); line-height: 1.3; }
-.bars svg { width: 100%; height: auto; display: block; }
-.bars text { fill: var(--muted); font-family: var(--font-mono); font-size: 10px; }
-.bars .g { stroke: var(--line); }
-.bars .b { fill: var(--accent); } .bars .z { fill: var(--ok); }
-.rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.rows li { display: flex; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; font-size: 14px; }
-.rows .t { font-family: var(--font-mono); white-space: nowrap; }
-.rows .d { flex: 1; min-width: 0; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.pill { font-size: 12px; font-weight: 700; border: 1px solid currentColor; border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
-.pill.ok { color: var(--ok); } .pill.warn { color: var(--warn); }
+.lv { display: grid; gap: 8px; }
+.lv-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.lv-top strong { font-family: var(--font-display); font-weight: 900; font-size: 24px; letter-spacing: .06em; }
+.lv-top span { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.bar { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.bar span { display: block; height: 100%; width: 80%; background: linear-gradient(90deg, var(--primary), var(--violet)); }
+.lv p { font-size: 14px; color: var(--muted); }
 
-/* Backup */
-.code { background: #0E1624; color: #D7E0EC; border-radius: var(--radius); padding: 20px 22px; font-family: var(--font-mono); font-size: 14px; line-height: 1.7; overflow-x: auto; border: 1px solid #243249; }
-.code .k { color: #FFB27F; } .code .s { color: #9FD8B3; } .code .c { color: #7F8DA3; }
-.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: s; }
-.steps li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
-.steps li::before { counter-increment: s; content: counter(s); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-family: var(--font-mono); font-weight: 500; }
-.steps strong { display: block; }
-.steps span { color: var(--muted); font-size: 16px; }
+/* Para quem é */
+.who { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.who article { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 18px; display: grid; gap: 8px; align-content: start; }
+.who svg { color: var(--violet); }
+.who h3 { font-family: var(--font-display); font-weight: 800; font-size: 21px; letter-spacing: .05em; text-transform: uppercase; line-height: 1.05; }
+.who p { color: var(--muted); font-size: 15px; }
 
-/* Antes da primeira noite */
-.night { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 40px; }
-.night .copy { display: grid; gap: 14px; align-content: start; }
-.warn-box { border-left: 4px solid var(--warn); padding: 4px 0 4px 14px; color: var(--muted); font-size: 16px; }
+/* Antes e depois */
+.ba { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.ba > div { border-radius: var(--radius); padding: 28px; display: grid; gap: 14px; align-content: start; border: 1px solid var(--line); }
+.ba .before { background: var(--bg-2); }
+.ba .after { background: linear-gradient(160deg, rgba(76, 141, 255, .12), rgba(139, 108, 255, .12)); border-color: color-mix(in srgb, var(--primary) 40%, var(--line)); }
+.ba h3 { font-family: var(--font-display); font-weight: 900; font-size: 30px; text-transform: uppercase; letter-spacing: .04em; }
+.ba ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; font-size: 20px; }
+.ba li { display: flex; gap: 12px; align-items: center; }
+.ba .before li { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--bad); }
+.ba .before svg { color: var(--bad); }
+.ba .after svg { color: var(--ok); }
+
+/* Depoimentos */
+.quotes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.quote { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; display: grid; gap: 18px; align-content: space-between; }
+.quote p { font-size: 18px; }
+.who-q { display: flex; gap: 12px; align-items: center; }
+.av { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: linear-gradient(135deg, var(--primary), var(--violet)); color: #fff; flex: none; }
+.who-q span { display: block; font-size: 14px; color: var(--muted); }
+.note-ex { font-size: 14px; color: var(--muted); margin-top: 14px; }
+
+/* Preços */
+.prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 880px; margin: 0 auto; }
+.plan { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 30px 26px; display: grid; gap: 18px; align-content: start; position: relative; }
+.plan.premium { border-color: color-mix(in srgb, var(--violet) 55%, var(--line)); background: linear-gradient(170deg, rgba(139, 108, 255, .12), var(--surface) 55%); }
+.plan h3 { font-family: var(--font-display); font-weight: 900; font-size: 34px; letter-spacing: .06em; }
+.plan .sub { color: var(--muted); }
+.plan ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.plan li { display: flex; gap: 10px; align-items: center; }
+.plan li svg { width: 20px; height: 20px; color: var(--ok); }
+.plan.premium li svg { color: var(--violet); }
+.badge { position: absolute; top: -13px; left: 26px; background: linear-gradient(135deg, var(--primary), var(--violet)); color: #fff; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; border-radius: 999px; padding: 4px 12px; }
+.soon { display: inline-flex; justify-content: center; border: 1px dashed var(--line); border-radius: 14px; padding: 14px; color: var(--muted); font-weight: 700; }
 
 /* Perguntas */
-.faq { display: grid; gap: 10px; max-width: 820px; }
+.faq { display: grid; gap: 10px; max-width: 840px; margin: 0 auto; }
 details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 0 20px; }
 summary { cursor: pointer; padding: 18px 0; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
 summary::-webkit-details-marker { display: none; }
-summary::after { content: "+"; font-family: var(--font-mono); color: var(--accent); font-size: 20px; line-height: 1; }
+summary::after { content: "+"; font-family: var(--font-mono); color: var(--primary); font-size: 22px; line-height: 1; }
 details[open] summary::after { content: "–"; }
-details p { padding-bottom: 18px; color: var(--muted); max-width: 66ch; }
+details p { padding-bottom: 18px; color: var(--muted); max-width: 68ch; }
 
 /* Final */
-.final { margin-top: 96px; background: linear-gradient(180deg, var(--dawn-low) 0%, var(--dawn-mid) 55%, var(--dawn-top) 100%); color: var(--dawn-ink); }
-.final .wrap { padding-block: 72px calc(env(safe-area-inset-bottom, 0px) + 40px); display: grid; gap: 22px; justify-items: start; }
-.final h2 { font-size: clamp(44px, 8vw, 96px); }
-.final .lead { color: var(--dawn-muted); }
-.final .btn.primary { background: var(--dawn-ink); color: #2A1608; }
-.foot { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; width: 100%; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255, 246, 236, .25); font-size: 14px; color: var(--dawn-muted); }
+.final { margin-top: 112px; position: relative; overflow: hidden; border-top: 1px solid var(--line); }
+.final::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 80% at 50% 100%, rgba(139, 108, 255, .25), transparent 70%), radial-gradient(40% 50% at 50% 0%, rgba(76, 141, 255, .14), transparent 70%); pointer-events: none; }
+.final .wrap { position: relative; padding-block: 96px 40px; display: grid; gap: 22px; justify-items: center; text-align: center; }
+.final h2 { font-size: clamp(46px, 8.6vw, 104px); }
+.final .lead { text-align: center; }
+footer { position: relative; }
+.foot { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: center; width: 100%; margin-top: 64px; padding-top: 22px; padding-bottom: env(safe-area-inset-bottom, 0px); border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.foot nav { display: flex; gap: 16px; flex-wrap: wrap; }
+.foot a { text-decoration: none; }
+.foot em { font-style: normal; color: var(--fg); }
 
-@media (max-width: 900px) {
-  .hero { grid-template-columns: 1fr; gap: 8px; }
-  .hero-copy { padding-bottom: 20px; }
-  .sun { left: 50%; bottom: -230px; }
-  .morning { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 36px; }
-  .morning::before { display: none; }
-  .features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .split, .night { grid-template-columns: 1fr; gap: 28px; }
-  .nav-links a:not(.open) { display: none; }
+@media (max-width: 1000px) {
+  .links { display: none; }
+  .feats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .who { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) {
+  .hero .wrap { grid-template-columns: 1fr; padding-block: 40px 24px; }
+  .split, .ba, .prices { grid-template-columns: 1fr; }
+  .problem, .quotes { grid-template-columns: 1fr; }
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+  .flow::before { display: none; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 560px) {
   body { font-size: 16px; }
-  section.block { padding-block: 64px 0; }
-  .morning { grid-template-columns: 1fr; }
-  .features { grid-template-columns: 1fr; }
-  .night { padding: 22px; }
-  .phone { width: min(270px, 100%); aspect-ratio: 9 / 15.5; }
-  .s-time { font-size: 80px; }
+  section.block { padding-block: 76px 0; }
+  .nav .btn.go { display: none; }
+  .steps, .feats, .who { grid-template-columns: 1fr; }
+  .phone { width: min(280px, 100%); }
+  .ph-count { font-size: 54px; }
+  .ba ul { font-size: 18px; }
 }
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
-}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 <!-- artifact:end-head -->
 </head>
 <body>
 <!-- artifact:body -->
-<header class="dawn">
-  <div class="stars" aria-hidden="true"></div>
-  <div class="sun" aria-hidden="true"></div>
-  <div class="horizon" aria-hidden="true"></div>
-  <div class="wrap">
-    <nav class="nav" aria-label="Principal">
-      <a class="logo" href="#topo" id="topo">
-        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#0F1A2B"/><circle cx="32" cy="40" r="13" fill="#FFB24C"/><rect x="0" y="40" width="64" height="24" fill="#0F1A2B"/><rect x="10" y="40" width="44" height="3" rx="1.5" fill="#FF7D52"/><g stroke="#FFB24C" stroke-width="3" stroke-linecap="round"><path d="M32 14v6M16 21l4 4M48 21l-4 4"/></g></svg>
-        Despertar
-      </a>
-      <div class="nav-links">
-        <a href="#manha">Como funciona</a>
-        <a href="#funcionalidades">Funcionalidades</a>
-        <a href="#backup">Backup</a>
-        <a href="#perguntas">Perguntas</a>
-        <a class="open" href="app.html">Abrir a app</a>
-      </div>
-    </nav>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><linearGradient id="hgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4C8DFF"/><stop offset="1" stop-color="#8B6CFF"/></linearGradient></defs>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14M5 2h14M17 22v-4.17a2 2 0 0 0-.59-1.42L12 12l-4.41 4.41A2 2 0 0 0 7 17.83V22M7 2v4.17a2 2 0 0 0 .59 1.42L12 12l4.41-4.41A2 2 0 0 0 17 6.17V2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 12h3l3-8 4 16 3-8h7"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-focus" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-checkc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 3l14 9-14 9V3z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15v2M11 11v6M15 13v4M19 8v9"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-brief" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09zM12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></symbol>
+  <symbol id="i-snooze" viewBox="0 0 24 24"><path d="M2 12a10 10 0 1 0 10-10"/><path d="M2 2h6L2 8h6M12 7v5l3 2"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+  <symbol id="i-quote" viewBox="0 0 24 24"><path d="M3 21c3 0 7-1 7-8V5H3v8h4c0 4-2 5-4 5zM14 21c3 0 7-1 7-8V5h-7v8h4c0 4-2 5-4 5z"/></symbol>
+</svg>
 
-    <div class="hero">
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#topo" id="topo"><span class="logo-mark"><svg><use href="#i-bolt"/></svg></span>DESPERTAR</a>
+    <nav class="links" aria-label="Seções">
+      <a href="#como-funciona" data-i18n="nav.how">Como funciona</a>
+      <a href="#funcionalidades" data-i18n="nav.features">Funcionalidades</a>
+      <a href="#para-quem-e" data-i18n="nav.who">Para quem é</a>
+      <a href="#precos" data-i18n="nav.pricing">Preços</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+    </nav>
+    <div class="langs" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="pt-BR" lang="pt-BR" title="Português (Brasil)">BR</button>
+      <button type="button" data-lang="pt-PT" lang="pt-PT" title="Português (Portugal)">PT</button>
+      <button type="button" data-lang="en" lang="en" title="English">EN</button>
+    </div>
+    <a class="btn go" href="app.html" data-i18n="nav.open">ABRIR O APP</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
       <div class="hero-copy">
-        <span class="eyebrow">Despertador para o telemóvel</span>
-        <h1>Acorde a horas. <em>Todos os dias.</em></h1>
-        <p class="lead">O Despertar começa a tocar baixinho, deixa-o adiar só as vezes que escolheu e regista a que horas se levantou. Ao fim de uma semana sabe exatamente como estão as suas manhãs.</p>
-        <div class="hero-ctas">
-          <a class="btn primary" href="app.html">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/></svg>
-            Abrir o Despertar
-          </a>
-          <a class="btn line" href="#manha">Ver uma manhã</a>
+        <h1><span data-i18n="hero.t1">Você não precisa de mais motivação.</span> <span class="l2 grad" data-i18n="hero.t2">Precisa terminar o que começou.</span></h1>
+        <p class="lead" data-i18n="hero.lead">DESPERTAR é o aplicativo que transforma intenção em ação. Defina uma tarefa, comece sua sessão e mantenha o compromisso até concluir.</p>
+        <div class="ctas">
+          <a class="btn go" href="app.html"><svg><use href="#i-bolt"/></svg><span data-i18n="cta.main">QUERO DESPERTAR</span></a>
+          <a class="btn line" href="#como-funciona"><span data-i18n="hero.how">Como funciona</span><svg class="i"><use href="#i-arrow"/></svg></a>
         </div>
-        <p class="hero-note">Grátis, sem conta e sem anúncios. Os dados ficam no seu telemóvel.</p>
+        <p class="trust" data-i18n="hero.trust">Grátis, sem cadastro e sem anúncios. Funciona no navegador do celular.</p>
       </div>
-      <div class="phone-col" aria-hidden="true">
+      <div aria-hidden="true">
         <div class="phone">
           <div class="screen">
-            <div class="s-sun"></div>
-            <div style="position:relative">
-              <div class="s-greet">Bom dia, Ana</div>
-              <div class="s-time">06:30</div>
-              <div class="s-label">Dias úteis</div>
-              <div class="s-sub">Toque Aurora · a subir há 12 s</div>
+            <span class="pill"><i></i><span data-i18n="ph.active">SESSÃO ATIVA</span></span>
+            <div class="ph-task"><small data-i18n="ph.current">Tarefa atual</small><strong data-i18n="ph.task">Estudar 30 minutos</strong></div>
+            <div class="ph-ring">
+              <svg viewBox="0 0 120 120"><circle class="tr" cx="60" cy="60" r="54" fill="none" stroke-width="7"/><circle class="pr" id="ph-ring" cx="60" cy="60" r="54" fill="none" stroke-width="7" stroke-linecap="round" stroke-dasharray="339.29" stroke-dashoffset="128.93"/></svg>
+              <div class="ph-count" id="ph-count">24:03</div>
             </div>
-            <div></div>
-            <div class="s-actions">
-              <div class="s-btn">Adiar 5 min (3 restantes)</div>
-              <div class="s-btn hold"><i></i><span>Manter premido para desligar</span></div>
-            </div>
+            <p class="ph-msg" data-i18n="ph.msg">Continue. Você está construindo disciplina.</p>
+            <div class="ph-prog"><div><span data-i18n="ph.progress">Progresso</span><span id="ph-pct">62%</span></div><div class="ph-bar"><span id="ph-bar"></span></div></div>
+            <div class="ph-btn" data-i18n="ph.finish">CONCLUIR TAREFA</div>
+            <div class="ph-lock"><svg class="i"><use href="#i-lock"/></svg><span data-i18n="ph.protected">Sessão protegida</span></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</header>
+  </section>
 
-<div class="specs">
-  <ul class="wrap" aria-label="Em números">
-    <li>toque gradual <b>45 s</b></li>
-    <li>adiar <b>5 · 9 · 10 · 15 min</b></li>
-    <li>até <b>5</b> adiamentos</li>
-    <li>desligar: premir <b>1,2 s</b> ou resolver <b>27 + 48</b></li>
-    <li>histórico de <b>14 dias</b></li>
-  </ul>
-</div>
-
-<main>
-  <section class="block" id="manha" aria-labelledby="manha-t">
+  <section class="block" aria-labelledby="prob-t">
     <div class="wrap">
-      <div class="block-head">
-        <span class="eyebrow">Uma manhã com o Despertar</span>
-        <h2 id="manha-t">Das 06:30 às 06:37, passo a passo</h2>
-        <p class="lead">É assim que corre uma terça-feira com o alarme «Dias úteis», adiar 5 minutos e no máximo 3 adiamentos.</p>
+      <div class="head">
+        <h2 id="prob-t"><span data-i18n="prob.t1">Você começa. Se distrai. Adia.</span><br><span class="soft" data-i18n="prob.t2">E promete tentar amanhã.</span></h2>
+        <p class="lead" data-i18n="prob.lead">A procrastinação raramente começa com uma grande decisão. Normalmente começa com uma pequena distração.</p>
       </div>
-      <ol class="morning">
-        <li>
-          <span class="m-time">06:30</span>
-          <h3>Começa baixinho</h3>
-          <p>O toque Aurora entra a 8% do volume e sobe até ao máximo em 45 segundos. No ecrã, o sol vai nascendo ao mesmo ritmo.</p>
-          <span class="m-tag">volume 8% → 100%</span>
-        </li>
-        <li>
-          <span class="m-time">06:31</span>
-          <h3>Adia uma vez</h3>
-          <p>Um toque em «Adiar 5 min». O botão mostra quantos adiamentos ainda tem, para não perder a conta meio a dormir.</p>
-          <span class="m-tag">2 restantes</span>
-        </li>
-        <li>
-          <span class="m-time">06:36</span>
-          <h3>Toca outra vez</h3>
-          <p>Agora para desligar tem de manter o botão premido 1,2 segundos. Se escolheu a conta, só desliga com o resultado certo.</p>
-          <span class="m-tag">27 + 48 = ?</span>
-        </li>
-        <li>
-          <span class="m-time">06:37</span>
-          <h3>Fica registado</h3>
-          <p>A manhã entra no histórico: hora do alarme, hora a que se levantou e quantas vezes adiou. A sequência de dias sobe para 6.</p>
-          <span class="m-tag">06:30 → 06:37 · 1 adiamento</span>
-        </li>
+      <div class="problem">
+        <article class="pcard"><svg class="i"><use href="#i-hourglass"/></svg><h3 data-i18n="prob.c1t">Procrastinação</h3><p data-i18n="prob.c1">Você sabe exatamente o que deveria fazer, mas continua deixando para depois.</p></article>
+        <article class="pcard"><svg class="i"><use href="#i-phone"/></svg><h3 data-i18n="prob.c2t">Distração</h3><p data-i18n="prob.c2">Uma notificação, uma rede social ou uma mensagem podem roubar horas do seu dia.</p></article>
+        <article class="pcard"><svg class="i"><use href="#i-wave"/></svg><h3 data-i18n="prob.c3t">Falta de constância</h3><p data-i18n="prob.c3">Começar é fácil. O verdadeiro desafio é continuar.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="sol-t">
+    <div class="wrap">
+      <div class="head center">
+        <h2 id="sol-t"><span data-i18n="sol.t">É aqui que o DESPERTAR entra.</span></h2>
+        <p class="lead" data-i18n="sol.lead">O aplicativo transforma uma intenção em um compromisso.</p>
+      </div>
+      <ol class="flow">
+        <li><span class="dot"><svg class="i"><use href="#i-list"/></svg></span><strong data-i18n="sol.s1">TAREFA</strong></li>
+        <li><span class="dot"><svg class="i"><use href="#i-lock"/></svg></span><strong data-i18n="sol.s2">COMPROMISSO</strong></li>
+        <li><span class="dot"><svg class="i"><use href="#i-focus"/></svg></span><strong data-i18n="sol.s3">FOCO</strong></li>
+        <li><span class="dot"><svg class="i"><use href="#i-checkc"/></svg></span><strong data-i18n="sol.s4">CONCLUSÃO</strong></li>
       </ol>
     </div>
   </section>
 
-  <section class="block" id="funcionalidades" aria-labelledby="func-t">
+  <section class="block" id="como-funciona" aria-labelledby="how-t">
     <div class="wrap">
-      <div class="block-head">
-        <span class="eyebrow">Funcionalidades</span>
-        <h2 id="func-t">Tudo o que um despertador precisa</h2>
+      <div class="head">
+        <span class="eyebrow" data-i18n="how.eyebrow">Como funciona</span>
+        <h2 id="how-t"><span data-i18n="how.t1">Simples de começar.</span><br><span class="grad" data-i18n="how.t2">Difícil de abandonar.</span></h2>
       </div>
-      <div class="features">
-        <article class="feature">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
-          <h3>Alarmes por dia da semana</h3>
-          <p>Escolha os dias um a um ou use os atalhos: dias úteis, fim de semana, todos ou só uma vez.</p>
-          <span class="mono">S T Q Q S · S D</span>
-        </article>
-        <article class="feature">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
-          <h3>Quatro toques suaves</h3>
-          <p>Aurora, Sino, Pássaros e Clássico. Todos podem começar baixo e subir aos poucos.</p>
-          <span class="mono">Aurora · Sino · Pássaros · Clássico</span>
-        </article>
-        <article class="feature">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/><path d="M4 4l3 3"/></svg>
-          <h3>Adiar com limite</h3>
-          <p>Defina quantos minutos e quantas vezes. Esgotados os adiamentos, o botão desaparece.</p>
-          <span class="mono">0 a 5 adiamentos</span>
-        </article>
-        <article class="feature">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V6a3 3 0 0 1 6 0v5"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg>
-          <h3>Desligar de propósito</h3>
-          <p>Manter o botão premido ou resolver uma soma. Assim não desliga o alarme sem dar por isso.</p>
-          <span class="mono">1,2 s · ou uma conta</span>
-        </article>
-        <article class="feature">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v2M11 11v6M15 13v4M19 8v9"/></svg>
-          <h3>Histórico das manhãs</h3>
-          <p>Dias seguidos a levantar, hora média e adiamentos por manhã, com um gráfico dos últimos 14 dias.</p>
-          <span class="mono">sequência · média · adiamentos</span>
-        </article>
-        <article class="feature">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-          <h3>Modo cabeceira</h3>
-          <p>Relógio grande em laranja sobre preto, ecrã sempre ligado e pouca luz no quarto durante a noite.</p>
-          <span class="mono">ecrã ligado · luz baixa</span>
-        </article>
+      <ol class="steps">
+        <li class="step"><span class="n" aria-hidden="true">01</span><svg class="i"><use href="#i-pen"/></svg><h3 data-i18n="how.s1t">ESCOLHA</h3><p data-i18n="how.s1">Defina o que você precisa fazer.</p><span class="ex" data-i18n="how.s1ex">Exemplo: "Ler 10 páginas."</span></li>
+        <li class="step"><span class="n" aria-hidden="true">02</span><svg class="i"><use href="#i-bolt"/></svg><h3 data-i18n="how.s2t">DESPERTE</h3><p data-i18n="how.s2">Inicie sua sessão de compromisso. Escolha a duração e ative o modo compromisso.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">03</span><svg class="i"><use href="#i-focus"/></svg><h3 data-i18n="how.s3t">FAÇA</h3><p data-i18n="how.s3">Mantenha o foco e realize a tarefa. O app conta o tempo e registra cada vez que você sai.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">04</span><svg class="i"><use href="#i-checkc"/></svg><h3 data-i18n="how.s4t">CONCLUA</h3><p data-i18n="how.s4">Confirme a conclusão e registre sua conquista. Você ganha XP e sua sequência cresce.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="mid">
+    <div class="wrap">
+      <h2><span data-i18n="mid.t1">E se o seu celular deixasse de ser sua maior distração?</span> <span class="grad" data-i18n="mid.t2">E se ele começasse a trabalhar a favor da sua disciplina?</span></h2>
+      <a class="btn go" href="app.html"><svg><use href="#i-bolt"/></svg><span data-i18n="cta.want">EU QUERO DESPERTAR</span></a>
+    </div>
+  </div>
+
+  <section class="block" id="funcionalidades" aria-labelledby="feat-t">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-i18n="feat.eyebrow">Funcionalidades</span>
+        <h2 id="feat-t"><span data-i18n="feat.t1">Tudo o que você precisa para</span> <span class="grad" data-i18n="feat.t2">despertar para a ação.</span></h2>
+      </div>
+      <div class="feats">
+        <article class="feat"><svg class="i"><use href="#i-list"/></svg><h3 data-i18n="feat.f1t">Tarefas</h3><p data-i18n="feat.f1">Organize o que precisa ser feito, com a duração de cada sessão.</p></article>
+        <article class="feat"><svg class="i"><use href="#i-clock"/></svg><h3 data-i18n="feat.f2t">Sessões de foco</h3><p data-i18n="feat.f2">Crie períodos de concentração de 10 a 90 minutos, com contagem regressiva.</p></article>
+        <article class="feat"><svg class="i"><use href="#i-lock"/></svg><h3 data-i18n="feat.f3t">Modo compromisso</h3><p data-i18n="feat.f3">Reduza as possibilidades de abandonar sua sessão: sem pausa, concluir só no fim e cada saída registrada.</p></article>
+        <article class="feat"><svg class="i"><use href="#i-flame"/></svg><h3 data-i18n="feat.f4t">Sequência</h3><p data-i18n="feat.f4">Mantenha seus dias consecutivos. Um dia sem concluir nada zera a contagem.</p></article>
+        <article class="feat"><svg class="i"><use href="#i-trophy"/></svg><h3 data-i18n="feat.f5t">Conquistas</h3><p data-i18n="feat.f5">Transforme progresso em motivação: 12 conquistas, XP e níveis.</p></article>
+        <article class="feat"><svg class="i"><use href="#i-chart"/></svg><h3 data-i18n="feat.f6t">Estatísticas</h3><p data-i18n="feat.f6">Veja quanto você realmente está evoluindo: horas de foco, taxa de conclusão e histórico.</p></article>
+        <article class="feat"><svg class="i"><use href="#i-bell"/></svg><h3 data-i18n="feat.f7t">Lembretes</h3><p data-i18n="feat.f7">Não deixe suas metas desaparecerem. Escolha a hora e os dias da semana.</p></article>
+        <article class="feat"><svg class="i"><use href="#i-target"/></svg><h3 data-i18n="feat.f8t">Metas</h3><p data-i18n="feat.f8">Transforme objetivos grandes em pequenas ações e acompanhe quanto falta.</p></article>
       </div>
     </div>
   </section>
 
-  <section class="block" aria-labelledby="hist-t">
+  <section class="block" aria-labelledby="prog-t">
     <div class="wrap split">
       <div class="copy">
-        <span class="eyebrow">Histórico</span>
-        <h2 id="hist-t">Veja como estão as suas manhãs</h2>
-        <p class="lead">Sempre que desliga um alarme, o Despertar guarda a hora prevista, a hora a que se levantou e os adiamentos. Se o alarme tocar 10 minutos sem resposta, fica marcado como «sem resposta».</p>
-        <p class="lead">Em poucos dias percebe se o problema é a hora do alarme ou o botão de adiar.</p>
+        <span class="eyebrow" data-i18n="prog.eyebrow">Progresso</span>
+        <h2 id="prog-t"><span data-i18n="prog.t1">Cada tarefa concluída aproxima você</span> <span class="grad" data-i18n="prog.t2">da sua melhor versão.</span></h2>
+        <p class="lead" data-i18n="prog.lead">Cada sessão concluída vale 10 XP mais 1 XP por minuto de foco. No modo compromisso, terminar sem sair do app dá mais 10 XP.</p>
       </div>
-      <div class="sample" aria-label="Exemplo do ecrã de histórico">
-        <span class="sample-tag">Exemplo</span>
+      <div class="sample">
+        <span class="tag-ex" data-i18n="prog.example">Exemplo</span>
         <div class="tiles">
-          <div class="tile"><b>6</b><span>dias seguidos a levantar</span></div>
-          <div class="tile"><b>06:41</b><span>hora média a que se levanta</span></div>
-          <div class="tile"><b>1,3</b><span>adiamentos por manhã</span></div>
+          <div class="tile fire"><svg class="i"><use href="#i-flame"/></svg><b>12</b><span data-i18n="prog.k1">Dias de sequência</span></div>
+          <div class="tile"><svg class="i"><use href="#i-checkc"/></svg><b>48</b><span data-i18n="prog.k2">Tarefas concluídas</span></div>
+          <div class="tile"><svg class="i"><use href="#i-clock"/></svg><b>21,5</b><span data-i18n="prog.k3">Horas de foco</span></div>
+          <div class="tile"><svg class="i"><use href="#i-trophy"/></svg><b>8</b><span data-i18n="prog.k4">Nível</span></div>
         </div>
-        <div class="bars">
-          <svg viewBox="0 0 340 130" role="img" aria-label="Exemplo: minutos entre o alarme e levantar em 14 dias">
-            <line class="g" x1="26" x2="334" y1="10" y2="10"/><line class="g" x1="26" x2="334" y1="57" y2="57"/><line class="g" x1="26" x2="334" y1="104" y2="104"/>
-            <text x="22" y="13" text-anchor="end">20</text><text x="22" y="60" text-anchor="end">10</text><text x="22" y="107" text-anchor="end">0</text>
-            <g id="sample-bars"></g>
-          </svg>
+        <div class="lv">
+          <div class="lv-top"><strong data-i18n="prog.level">NÍVEL 8</strong><span>320 / 400 XP</span></div>
+          <div class="bar"><span></span></div>
+          <p data-i18n="prog.next">Mais 80 XP para despertar o próximo nível.</p>
         </div>
-        <ul class="rows">
-          <li><span class="t">06:30 → 06:37</span><span class="d">Dias úteis</span><span class="pill warn">1 adiamento</span></li>
-          <li><span class="t">06:30 → 06:32</span><span class="d">Dias úteis</span><span class="pill ok">À primeira</span></li>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="para-quem-e" aria-labelledby="who-t">
+    <div class="wrap">
+      <div class="head">
+        <span class="eyebrow" data-i18n="who.eyebrow">Para quem é</span>
+        <h2 id="who-t"><span data-i18n="who.t1">O DESPERTAR é para quem</span> <span class="grad" data-i18n="who.t2">cansou de adiar.</span></h2>
+      </div>
+      <div class="who">
+        <article><svg class="i"><use href="#i-book"/></svg><h3 data-i18n="who.w1t">Estudantes</h3><p data-i18n="who.w1">Estude, revise e avance sem deixar as distrações vencerem.</p></article>
+        <article><svg class="i"><use href="#i-brief"/></svg><h3 data-i18n="who.w2t">Profissionais</h3><p data-i18n="who.w2">Conclua aquilo que realmente importa.</p></article>
+        <article><svg class="i"><use href="#i-rocket"/></svg><h3 data-i18n="who.w3t">Empreendedores</h3><p data-i18n="who.w3">Transforme planos em execução.</p></article>
+        <article><svg class="i"><use href="#i-snooze"/></svg><h3 data-i18n="who.w4t">Procrastinadores</h3><p data-i18n="who.w4">Pare de negociar com você mesmo.</p></article>
+        <article><svg class="i"><use href="#i-repeat"/></svg><h3 data-i18n="who.w5t">Quem quer criar hábitos</h3><p data-i18n="who.w5">Pequenas ações repetidas criam grandes mudanças.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-label="Antes e depois">
+    <div class="wrap ba">
+      <div class="before">
+        <h3 data-i18n="ba.before">Antes do DESPERTAR</h3>
+        <ul>
+          <li><svg class="i"><use href="#i-x"/></svg><span data-i18n="ba.b1">Vou fazer depois.</span></li>
+          <li><svg class="i"><use href="#i-x"/></svg><span data-i18n="ba.b2">Só mais cinco minutos.</span></li>
+          <li><svg class="i"><use href="#i-x"/></svg><span data-i18n="ba.b3">Amanhã eu começo.</span></li>
+          <li><svg class="i"><use href="#i-x"/></svg><span data-i18n="ba.b4">Hoje estou sem motivação.</span></li>
+        </ul>
+      </div>
+      <div class="after">
+        <h3 data-i18n="ba.after">Depois do DESPERTAR</h3>
+        <ul>
+          <li><svg class="i"><use href="#i-checkc"/></svg><span data-i18n="ba.a1">Eu comecei.</span></li>
+          <li><svg class="i"><use href="#i-checkc"/></svg><span data-i18n="ba.a2">Eu mantive o foco.</span></li>
+          <li><svg class="i"><use href="#i-checkc"/></svg><span data-i18n="ba.a3">Eu concluí.</span></li>
+          <li><svg class="i"><use href="#i-checkc"/></svg><span data-i18n="ba.a4">Eu evoluí.</span></li>
         </ul>
       </div>
     </div>
   </section>
 
-  <section class="block" id="backup" aria-labelledby="backup-t">
-    <div class="wrap split">
-      <div class="copy">
-        <span class="eyebrow">Cópia de segurança</span>
-        <h2 id="backup-t">O seu backup é um ficheiro simples</h2>
-        <p class="lead">Em Ajustes descarrega o <strong>despertar-backup.json</strong> com o seu nome, os alarmes e o histórico. Para mudar de telemóvel, importa o mesmo ficheiro e fica tudo como estava.</p>
-        <ol class="steps">
-          <li><div><strong>Ajustes → Descarregar backup</strong><span>Guarde o ficheiro no Drive, no e-mail ou no computador.</span></div></li>
-          <li><div><strong>No telemóvel novo, abra o Despertar</strong><span>Ajustes → Importar ficheiro e escolha o backup.</span></div></li>
-          <li><div><strong>Confirme a substituição</strong><span>O Despertar mostra quantos alarmes e registos vai trazer antes de mudar alguma coisa.</span></div></li>
-        </ol>
+  <section class="block" aria-labelledby="q-t">
+    <div class="wrap">
+      <div class="head">
+        <h2 id="q-t" data-i18n="q.t">Exemplos de experiência do usuário</h2>
       </div>
-      <pre class="code" aria-label="Formato do ficheiro de backup"><span class="c">// despertar-backup.json</span>
-{
-  <span class="k">"name"</span>: <span class="s">"Ana"</span>,
-  <span class="k">"alarms"</span>: [
-    {
-      <span class="k">"time"</span>: <span class="s">"06:30"</span>,
-      <span class="k">"label"</span>: <span class="s">"Dias úteis"</span>,
-      <span class="k">"days"</span>: [1, 2, 3, 4, 5],
-      <span class="k">"sound"</span>: <span class="s">"aurora"</span>,
-      <span class="k">"snoozeMinutes"</span>: 5,
-      <span class="k">"maxSnoozes"</span>: 3
-    }
-  ],
-  <span class="k">"history"</span>: [
-    {
-      <span class="k">"scheduledFor"</span>: <span class="s">"2026-10-20T06:30"</span>,
-      <span class="k">"dismissedAt"</span>: <span class="s">"2026-10-20T06:37"</span>,
-      <span class="k">"snoozes"</span>: 1
-    }
-  ]
-}</pre>
+      <div class="quotes">
+        <figure class="quote" style="margin:0"><p data-i18n="q.q1">“Eu sempre começava uma tarefa e acabava no Instagram. A ideia do DESPERTAR mudou a forma como eu encaro minhas obrigações.”</p><figcaption class="who-q"><span class="av">A</span><div><strong>Ana S.</strong><span data-i18n="q.r1">Estudante universitária</span></div></figcaption></figure>
+        <figure class="quote" style="margin:0"><p data-i18n="q.q2">“Finalmente encontrei uma maneira de transformar intenção em ação.”</p><figcaption class="who-q"><span class="av">C</span><div><strong>Carlos M.</strong><span data-i18n="q.r2">Designer freelancer</span></div></figcaption></figure>
+        <figure class="quote" style="margin:0"><p data-i18n="q.q3">“O que eu mais gostei foi a sensação de compromisso. Quando começo, quero terminar.”</p><figcaption class="who-q"><span class="av">B</span><div><strong>Beatriz R.</strong><span data-i18n="q.r3">Empreendedora</span></div></figcaption></figure>
+      </div>
+      <p class="note-ex" data-i18n="q.note">Estes relatos são exemplos ilustrativos da experiência que o DESPERTAR quer criar.</p>
     </div>
   </section>
 
-  <section class="block" aria-labelledby="night-t">
+  <section class="block" id="precos" aria-labelledby="price-t">
     <div class="wrap">
-      <div class="night">
-        <div class="copy">
-          <span class="eyebrow">Antes da primeira noite</span>
-          <h2 id="night-t">Três passos para não falhar</h2>
-          <p class="warn-box">O Despertar funciona no navegador. Para tocar, tem de estar aberto: um navegador não consegue acordar um telemóvel com a app fechada. Por isso, deixe-o aberto no modo cabeceira.</p>
-        </div>
-        <ol class="steps">
-          <li><div><strong>Instale no ecrã principal</strong><span>No Chrome do Android: menu ⋮ → Adicionar ao ecrã principal. Abre como uma app, sem barra de endereço.</span></div></li>
-          <li><div><strong>Toque uma vez no ecrã para ativar o som</strong><span>Os navegadores só deixam tocar som depois de um toque. A app avisa quando falta este passo.</span></div></li>
-          <li><div><strong>À noite, ligue o modo cabeceira e ponha a carregar</strong><span>O ecrã fica ligado e escuro, e o alarme toca à hora certa, mesmo com o volume a começar baixo.</span></div></li>
-        </ol>
+      <div class="head center">
+        <span class="eyebrow" data-i18n="price.eyebrow">Preços</span>
+        <h2 id="price-t"><span data-i18n="price.t1">Comece gratuitamente.</span> <span class="grad" data-i18n="price.t2">Desperte de verdade.</span></h2>
+      </div>
+      <div class="prices">
+        <article class="plan">
+          <h3 data-i18n="price.free">GRATUITO</h3>
+          <p class="sub" data-i18n="price.freeSub">Para começar hoje</p>
+          <ul>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.f1">Tarefas e metas</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.f2">Sessões de foco ilimitadas</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.f3">Modo compromisso</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.f4">Histórico e estatísticas</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.f5">Sequência de dias, XP e conquistas</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.f6">Lembretes</span></li>
+          </ul>
+          <a class="btn go" href="app.html" data-i18n="price.freeCta">COMEÇAR GRÁTIS</a>
+        </article>
+        <article class="plan premium">
+          <span class="badge" data-i18n="price.popular">Mais popular</span>
+          <h3>PREMIUM</h3>
+          <p class="sub" data-i18n="price.soon">Em breve</p>
+          <ul>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.p1">Modo compromisso avançado</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.p2">Desafios</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.p3">Gamificação completa</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.p4">Relatórios</span></li>
+            <li><svg class="i"><use href="#i-check"/></svg><span data-i18n="price.p5">Recursos avançados</span></li>
+          </ul>
+          <span class="soon" data-i18n="price.soonCta">Em desenvolvimento</span>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="block" id="perguntas" aria-labelledby="faq-t">
+  <section class="block" id="faq" aria-labelledby="faq-t">
     <div class="wrap">
-      <div class="block-head">
-        <span class="eyebrow">Perguntas</span>
-        <h2 id="faq-t">Perguntas frequentes</h2>
+      <div class="head center">
+        <h2 id="faq-t" data-i18n="faq.t">Perguntas frequentes</h2>
+        <p class="lead" data-i18n="faq.lead">Tire suas dúvidas sobre o DESPERTAR</p>
       </div>
       <div class="faq">
-        <details>
-          <summary>Toca com o telemóvel bloqueado?</summary>
-          <p>Só se a app estiver aberta. Com o modo cabeceira ligado, o ecrã não se bloqueia e o alarme toca normalmente. Se fechar a app ou o telemóvel suspender o navegador, o alarme não toca. Para alarmes críticos, mantenha também o despertador do sistema como reserva.</p>
-        </details>
-        <details>
-          <summary>Os meus dados vão para algum servidor?</summary>
-          <p>Não. Nome, alarmes e histórico ficam guardados no navegador do seu telemóvel. A única cópia fora dele é o ficheiro de backup que descarregar.</p>
-        </details>
-        <details>
-          <summary>Posso usar no iPhone?</summary>
-          <p>Sim, no Safari: Partilhar → Adicionar ao ecrã principal. As mesmas regras aplicam-se: deixe a app aberta e toque no ecrã uma vez para ativar o som.</p>
-        </details>
-        <details>
-          <summary>Tenho um ficheiro despertar-backup.json. Como o uso?</summary>
-          <p>Abra a app, vá a Ajustes → Importar ficheiro e escolha o ficheiro. Também pode colar o texto do backup em «Colar texto». A app mostra o que vai importar antes de substituir os dados atuais.</p>
-        </details>
-        <details>
-          <summary>Quanto custa?</summary>
-          <p>Nada. Não há conta, assinatura nem anúncios.</p>
-        </details>
+        <details><summary data-i18n="faq.q1">O DESPERTAR realmente bloqueia meu celular?</summary><p data-i18n="faq.a1">Não. Um app que roda no navegador não consegue bloquear outros apps do celular. O modo compromisso coloca a sessão em tela cheia, mantém a tela ligada, só libera o botão de concluir quando o tempo acaba e registra cada vez que você sai do app. Você vê esse número na sessão e nas estatísticas.</p></details>
+        <details><summary data-i18n="faq.q2">Posso criar minhas próprias tarefas?</summary><p data-i18n="faq.a2">Sim. Você escreve a tarefa, escolhe quanto tempo dura a sessão e, se quiser, liga a tarefa a uma meta.</p></details>
+        <details><summary data-i18n="faq.q3">O aplicativo cria tarefas automaticamente?</summary><p data-i18n="faq.a3">Não. Quem decide o que fazer é você. Para começar, o app mostra algumas sugestões, como «Ler 10 páginas», que você adiciona com um toque.</p></details>
+        <details><summary data-i18n="faq.q4">Como o aplicativo sabe que terminei?</summary><p data-i18n="faq.a4">Você confirma. No modo compromisso, o botão CONCLUIR TAREFA só libera quando o tempo da sessão acaba. Sem o modo compromisso, você pode pausar e concluir antes.</p></details>
+        <details><summary data-i18n="faq.q5">Funciona em Android e iPhone?</summary><p data-i18n="faq.a5">Sim. O DESPERTAR funciona no navegador do Android e do iPhone e pode ser instalado na tela inicial como um app. Os dados ficam no seu aparelho, e você pode levar tudo para outro celular com o arquivo de backup.</p></details>
+        <details><summary data-i18n="faq.q6">Existe versão gratuita?</summary><p data-i18n="faq.a6">Sim. Tudo o que existe hoje é gratuito: tarefas, metas, sessões, modo compromisso, lembretes, sequência, conquistas e estatísticas. O Premium ainda está em desenvolvimento.</p></details>
+        <details><summary data-i18n="faq.q7">Quando o aplicativo será lançado?</summary><p data-i18n="faq.a7">A versão web já pode ser usada agora, de graça. As versões para a Play Store e a App Store ainda não têm data.</p></details>
       </div>
     </div>
   </section>
@@ -510,34 +550,192 @@ details p { padding-bottom: 18px; color: var(--muted); max-width: 66ch; }
 
 <footer class="final">
   <div class="wrap">
-    <span class="eyebrow" style="color:var(--dawn-ink)">Amanhã às 06:30</span>
-    <h2>Programe o primeiro alarme hoje à noite</h2>
-    <p class="lead">Demora menos de um minuto: escolha a hora, os dias e o toque.</p>
-    <a class="btn primary" href="app.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/></svg>
-      Abrir o Despertar
-    </a>
+    <h2><span data-i18n="end.t1">Pare de adiar.</span><br><span class="grad" data-i18n="end.t2">Desperte para a ação.</span></h2>
+    <p class="lead" data-i18n="end.lead">Você não precisa mudar tudo hoje. Só precisa terminar a próxima tarefa.</p>
+    <a class="btn go" href="app.html"><svg><use href="#i-bolt"/></svg><span data-i18n="cta.main">QUERO DESPERTAR</span></a>
+    <p class="trust" data-i18n="end.free">Grátis, agora mesmo. Sem conta e sem cadastro.</p>
     <div class="foot">
-      <span>Despertar · despertador para o telemóvel</span>
-      <span>Os dados ficam no seu dispositivo.</span>
+      <span><strong>DESPERTAR</strong> · <em data-i18n="foot.tag">Você só sai quando termina.</em></span>
+      <nav aria-label="Rodapé">
+        <a href="#topo" data-i18n="foot.home">Início</a>
+        <a href="#como-funciona" data-i18n="nav.how">Como funciona</a>
+        <a href="#funcionalidades" data-i18n="nav.features">Funcionalidades</a>
+        <a href="#precos" data-i18n="nav.pricing">Preços</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+      </nav>
+      <span data-i18n="foot.copy">© 2026 DESPERTAR. Todos os direitos reservados.</span>
     </div>
   </div>
 </footer>
 
 <script>
-// Barras de exemplo no histórico (minutos entre o alarme e levantar)
 (() => {
-  const vals = [2, 7, 0, 12, 3, 9, 1, 0, 6, 14, 2, 7, 0, 4];
-  const snz = [0, 1, 0, 2, 0, 1, 0, 0, 1, 2, 0, 1, 0, 0];
-  const L = 26, R = 6, W = 340, top = 20, y0 = 104, y1 = 10, bw = (W - L - R) / vals.length;
-  let s = "";
-  vals.forEach((v, i) => {
-    const h = Math.max(3, (y0 - y1) * v / top), x = L + i * bw;
-    s += '<rect class="' + (snz[i] ? "b" : "z") + '" x="' + (x + bw * 0.18).toFixed(1) + '" y="' + (y0 - h).toFixed(1) + '" width="' + (bw * 0.64).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="2"/>';
-    if (i % 2 === 1) s += '<text x="' + (x + bw / 2).toFixed(1) + '" y="122" text-anchor="middle">' + (7 + i) + "</text>";
+  // Traduções: o pt-BR é o texto da própria página; aqui ficam pt-PT e inglês.
+  const DICT = {
+    "pt-PT": {
+      "meta.title": "DESPERTAR", "meta.desc": "DESPERTAR é a app que o ajuda a transformar tarefas em ação, combater a procrastinação e construir disciplina todos os dias.",
+      "nav.how": "Como funciona", "nav.features": "Funcionalidades", "nav.who": "Para quem é", "nav.pricing": "Preços", "nav.faq": "FAQ", "nav.open": "ABRIR A APP",
+      "hero.t1": "Não precisa de mais motivação.", "hero.t2": "Precisa de terminar o que começou.",
+      "hero.lead": "O DESPERTAR é a app que transforma intenção em ação. Defina uma tarefa, comece a sua sessão e mantenha o compromisso até concluir.",
+      "cta.main": "QUERO DESPERTAR", "hero.how": "Como funciona", "hero.trust": "Grátis, sem registo e sem anúncios. Funciona no navegador do telemóvel.",
+      "ph.active": "SESSÃO ATIVA", "ph.current": "Tarefa atual", "ph.task": "Estudar 30 minutos", "ph.msg": "Continue. Está a construir disciplina.", "ph.progress": "Progresso", "ph.finish": "CONCLUIR TAREFA", "ph.protected": "Sessão protegida",
+      "prob.t1": "Começa. Distrai-se. Adia.", "prob.t2": "E promete tentar amanhã.", "prob.lead": "A procrastinação raramente começa com uma grande decisão. Normalmente começa com uma pequena distração.",
+      "prob.c1t": "Procrastinação", "prob.c1": "Sabe exatamente o que devia fazer, mas continua a deixar para depois.",
+      "prob.c2t": "Distração", "prob.c2": "Uma notificação, uma rede social ou uma mensagem podem roubar horas ao seu dia.",
+      "prob.c3t": "Falta de constância", "prob.c3": "Começar é fácil. O verdadeiro desafio é continuar.",
+      "sol.t": "É aqui que entra o DESPERTAR.", "sol.lead": "A app transforma uma intenção num compromisso.", "sol.s1": "TAREFA", "sol.s2": "COMPROMISSO", "sol.s3": "FOCO", "sol.s4": "CONCLUSÃO",
+      "how.eyebrow": "Como funciona", "how.t1": "Simples de começar.", "how.t2": "Difícil de abandonar.",
+      "how.s1t": "ESCOLHA", "how.s1": "Defina o que precisa de fazer.", "how.s1ex": "Exemplo: «Ler 10 páginas.»",
+      "how.s2t": "DESPERTE", "how.s2": "Inicie a sua sessão de compromisso. Escolha a duração e ligue o modo compromisso.",
+      "how.s3t": "FAÇA", "how.s3": "Mantenha o foco e realize a tarefa. A app conta o tempo e regista cada vez que sai.",
+      "how.s4t": "CONCLUA", "how.s4": "Confirme a conclusão e registe a sua conquista. Ganha XP e a sua sequência cresce.",
+      "mid.t1": "E se o seu telemóvel deixasse de ser a sua maior distração?", "mid.t2": "E se passasse a trabalhar a favor da sua disciplina?", "cta.want": "EU QUERO DESPERTAR",
+      "feat.eyebrow": "Funcionalidades", "feat.t1": "Tudo o que precisa para", "feat.t2": "despertar para a ação.",
+      "feat.f1t": "Tarefas", "feat.f1": "Organize o que tem de ser feito, com a duração de cada sessão.",
+      "feat.f2t": "Sessões de foco", "feat.f2": "Crie períodos de concentração de 10 a 90 minutos, com contagem decrescente.",
+      "feat.f3t": "Modo compromisso", "feat.f3": "Reduza as hipóteses de abandonar a sessão: sem pausa, concluir só no fim e cada saída registada.",
+      "feat.f4t": "Sequência", "feat.f4": "Mantenha os seus dias seguidos. Um dia sem concluir nada põe a contagem a zero.",
+      "feat.f5t": "Conquistas", "feat.f5": "Transforme progresso em motivação: 12 conquistas, XP e níveis.",
+      "feat.f6t": "Estatísticas", "feat.f6": "Veja quanto está realmente a evoluir: horas de foco, taxa de conclusão e histórico.",
+      "feat.f7t": "Lembretes", "feat.f7": "Não deixe as suas metas desaparecer. Escolha a hora e os dias da semana.",
+      "feat.f8t": "Metas", "feat.f8": "Transforme objetivos grandes em pequenas ações e acompanhe quanto falta.",
+      "prog.eyebrow": "Progresso", "prog.t1": "Cada tarefa concluída aproxima-o", "prog.t2": "da sua melhor versão.",
+      "prog.lead": "Cada sessão concluída vale 10 XP mais 1 XP por minuto de foco. No modo compromisso, terminar sem sair da app dá mais 10 XP.",
+      "prog.example": "Exemplo", "prog.k1": "Dias seguidos", "prog.k2": "Tarefas concluídas", "prog.k3": "Horas de foco", "prog.k4": "Nível", "prog.level": "NÍVEL 8", "prog.next": "Mais 80 XP para despertar o próximo nível.",
+      "who.eyebrow": "Para quem é", "who.t1": "O DESPERTAR é para quem", "who.t2": "se cansou de adiar.",
+      "who.w1t": "Estudantes", "who.w1": "Estude, reveja e avance sem deixar que as distrações ganhem.",
+      "who.w2t": "Profissionais", "who.w2": "Conclua aquilo que realmente importa.",
+      "who.w3t": "Empreendedores", "who.w3": "Transforme planos em execução.",
+      "who.w4t": "Procrastinadores", "who.w4": "Pare de negociar consigo mesmo.",
+      "who.w5t": "Quem quer criar hábitos", "who.w5": "Pequenas ações repetidas criam grandes mudanças.",
+      "ba.before": "Antes do DESPERTAR", "ba.b1": "Faço depois.", "ba.b2": "Só mais cinco minutos.", "ba.b3": "Amanhã começo.", "ba.b4": "Hoje não estou motivado.",
+      "ba.after": "Depois do DESPERTAR", "ba.a1": "Comecei.", "ba.a2": "Mantive o foco.", "ba.a3": "Concluí.", "ba.a4": "Evoluí.",
+      "q.t": "Exemplos de experiência do utilizador",
+      "q.q1": "“Começava sempre uma tarefa e acabava no Instagram. A ideia do DESPERTAR mudou a forma como encaro as minhas obrigações.”", "q.r1": "Estudante universitária",
+      "q.q2": "“Finalmente encontrei uma forma de transformar intenção em ação.”", "q.r2": "Designer freelancer",
+      "q.q3": "“O que mais gostei foi a sensação de compromisso. Quando começo, quero terminar.”", "q.r3": "Empreendedora",
+      "q.note": "Estes relatos são exemplos ilustrativos da experiência que o DESPERTAR quer criar.",
+      "price.eyebrow": "Preços", "price.t1": "Comece gratuitamente.", "price.t2": "Desperte a sério.",
+      "price.free": "GRATUITO", "price.freeSub": "Para começar hoje", "price.f1": "Tarefas e metas", "price.f2": "Sessões de foco ilimitadas", "price.f3": "Modo compromisso", "price.f4": "Histórico e estatísticas", "price.f5": "Dias seguidos, XP e conquistas", "price.f6": "Lembretes", "price.freeCta": "COMEÇAR GRÁTIS",
+      "price.popular": "Mais popular", "price.soon": "Brevemente", "price.p1": "Modo compromisso avançado", "price.p2": "Desafios", "price.p3": "Gamificação completa", "price.p4": "Relatórios", "price.p5": "Recursos avançados", "price.soonCta": "Em desenvolvimento",
+      "faq.t": "Perguntas frequentes", "faq.lead": "Tire as suas dúvidas sobre o DESPERTAR",
+      "faq.q1": "O DESPERTAR bloqueia mesmo o meu telemóvel?", "faq.a1": "Não. Uma app que corre no navegador não consegue bloquear outras apps do telemóvel. O modo compromisso põe a sessão em ecrã inteiro, mantém o ecrã ligado, só disponibiliza o botão de concluir quando o tempo acaba e regista cada vez que sai da app. Vê esse número na sessão e nas estatísticas.",
+      "faq.q2": "Posso criar as minhas próprias tarefas?", "faq.a2": "Sim. Escreve a tarefa, escolhe quanto tempo dura a sessão e, se quiser, associa a tarefa a uma meta.",
+      "faq.q3": "A app cria tarefas automaticamente?", "faq.a3": "Não. Quem decide o que fazer é o utilizador. Para começar, a app mostra algumas sugestões, como «Ler 10 páginas», que adiciona com um toque.",
+      "faq.q4": "Como é que a app sabe que terminei?", "faq.a4": "É o utilizador que confirma. No modo compromisso, o botão CONCLUIR TAREFA só fica disponível quando o tempo da sessão acaba. Sem o modo compromisso, pode pausar e concluir antes.",
+      "faq.q5": "Funciona em Android e iPhone?", "faq.a5": "Sim. O DESPERTAR funciona no navegador do Android e do iPhone e pode ser instalado no ecrã principal como uma app. Os dados ficam no seu dispositivo e pode levar tudo para outro telemóvel com o ficheiro de cópia de segurança.",
+      "faq.q6": "Existe versão gratuita?", "faq.a6": "Sim. Tudo o que existe hoje é gratuito: tarefas, metas, sessões, modo compromisso, lembretes, dias seguidos, conquistas e estatísticas. O Premium ainda está em desenvolvimento.",
+      "faq.q7": "Quando vai ser lançada a app?", "faq.a7": "A versão web já pode ser usada agora, de graça. As versões para a Play Store e a App Store ainda não têm data.",
+      "end.t1": "Pare de adiar.", "end.t2": "Desperte para a ação.", "end.lead": "Não precisa de mudar tudo hoje. Só precisa de terminar a próxima tarefa.", "end.free": "Grátis, já. Sem conta e sem registo.",
+      "foot.tag": "Só sai quando termina.", "foot.home": "Início", "foot.copy": "© 2026 DESPERTAR. Todos os direitos reservados."
+    },
+    "en": {
+      "meta.title": "DESPERTAR", "meta.desc": "DESPERTAR is the app that helps you turn tasks into action, beat procrastination and build discipline every day.",
+      "nav.how": "How it works", "nav.features": "Features", "nav.who": "Who it's for", "nav.pricing": "Pricing", "nav.faq": "FAQ", "nav.open": "OPEN THE APP",
+      "hero.t1": "You don't need more motivation.", "hero.t2": "You need to finish what you started.",
+      "hero.lead": "DESPERTAR is the app that turns intention into action. Pick a task, start your session and keep the commitment until it's done.",
+      "cta.main": "WAKE ME UP", "hero.how": "How it works", "hero.trust": "Free, no sign-up, no ads. Runs in your phone's browser.",
+      "ph.active": "ACTIVE SESSION", "ph.current": "Current task", "ph.task": "Study for 30 minutes", "ph.msg": "Keep going. You're building discipline.", "ph.progress": "Progress", "ph.finish": "FINISH TASK", "ph.protected": "Protected session",
+      "prob.t1": "You start. You get distracted. You put it off.", "prob.t2": "And promise to try tomorrow.", "prob.lead": "Procrastination rarely starts with a big decision. It usually starts with a small distraction.",
+      "prob.c1t": "Procrastination", "prob.c1": "You know exactly what you should be doing, but you keep leaving it for later.",
+      "prob.c2t": "Distraction", "prob.c2": "A notification, a social feed or a message can steal hours from your day.",
+      "prob.c3t": "Inconsistency", "prob.c3": "Starting is easy. The real challenge is keeping going.",
+      "sol.t": "This is where DESPERTAR comes in.", "sol.lead": "The app turns an intention into a commitment.", "sol.s1": "TASK", "sol.s2": "COMMITMENT", "sol.s3": "FOCUS", "sol.s4": "DONE",
+      "how.eyebrow": "How it works", "how.t1": "Easy to start.", "how.t2": "Hard to quit.",
+      "how.s1t": "CHOOSE", "how.s1": "Decide what you need to do.", "how.s1ex": "Example: “Read 10 pages.”",
+      "how.s2t": "WAKE UP", "how.s2": "Start your commitment session. Pick the length and turn on commitment mode.",
+      "how.s3t": "DO IT", "how.s3": "Stay focused and get the task done. The app counts the time and records every time you leave.",
+      "how.s4t": "FINISH", "how.s4": "Confirm it's done and log your win. You earn XP and your streak grows.",
+      "mid.t1": "What if your phone stopped being your biggest distraction?", "mid.t2": "What if it started working for your discipline?", "cta.want": "I WANT TO WAKE UP",
+      "feat.eyebrow": "Features", "feat.t1": "Everything you need to", "feat.t2": "wake up and act.",
+      "feat.f1t": "Tasks", "feat.f1": "Organise what needs doing, with a session length for each one.",
+      "feat.f2t": "Focus sessions", "feat.f2": "Set focus blocks from 10 to 90 minutes, with a countdown.",
+      "feat.f3t": "Commitment mode", "feat.f3": "Make quitting harder: no pausing, finish only at the end, and every exit recorded.",
+      "feat.f4t": "Streak", "feat.f4": "Keep your days in a row. A day with nothing finished resets the count.",
+      "feat.f5t": "Achievements", "feat.f5": "Turn progress into motivation: 12 achievements, XP and levels.",
+      "feat.f6t": "Stats", "feat.f6": "See how much you're really improving: focus hours, completion rate and history.",
+      "feat.f7t": "Reminders", "feat.f7": "Don't let your goals fade. Pick the time and the days of the week.",
+      "feat.f8t": "Goals", "feat.f8": "Turn big goals into small actions and track how much is left.",
+      "prog.eyebrow": "Progress", "prog.t1": "Every task you finish brings you closer", "prog.t2": "to your best self.",
+      "prog.lead": "Each finished session is worth 10 XP plus 1 XP per minute of focus. In commitment mode, finishing without leaving the app adds 10 XP.",
+      "prog.example": "Example", "prog.k1": "Day streak", "prog.k2": "Tasks done", "prog.k3": "Focus hours", "prog.k4": "Level", "prog.level": "LEVEL 8", "prog.next": "80 more XP to wake up the next level.",
+      "who.eyebrow": "Who it's for", "who.t1": "DESPERTAR is for anyone", "who.t2": "tired of putting things off.",
+      "who.w1t": "Students", "who.w1": "Study, revise and move forward without letting distractions win.",
+      "who.w2t": "Professionals", "who.w2": "Finish what really matters.",
+      "who.w3t": "Founders", "who.w3": "Turn plans into execution.",
+      "who.w4t": "Procrastinators", "who.w4": "Stop negotiating with yourself.",
+      "who.w5t": "Habit builders", "who.w5": "Small actions, repeated, create big changes.",
+      "ba.before": "Before DESPERTAR", "ba.b1": "I'll do it later.", "ba.b2": "Just five more minutes.", "ba.b3": "I'll start tomorrow.", "ba.b4": "I'm not motivated today.",
+      "ba.after": "After DESPERTAR", "ba.a1": "I started.", "ba.a2": "I stayed focused.", "ba.a3": "I finished.", "ba.a4": "I improved.",
+      "q.t": "What using it could feel like",
+      "q.q1": "“I'd always start a task and end up on Instagram. The idea behind DESPERTAR changed how I deal with my responsibilities.”", "q.r1": "University student",
+      "q.q2": "“I finally found a way to turn intention into action.”", "q.r2": "Freelance designer",
+      "q.q3": "“What I liked most was the feeling of commitment. Once I start, I want to finish.”", "q.r3": "Founder",
+      "q.note": "These quotes are illustrative examples of the experience DESPERTAR aims to create.",
+      "price.eyebrow": "Pricing", "price.t1": "Start for free.", "price.t2": "Really wake up.",
+      "price.free": "FREE", "price.freeSub": "To start today", "price.f1": "Tasks and goals", "price.f2": "Unlimited focus sessions", "price.f3": "Commitment mode", "price.f4": "History and stats", "price.f5": "Day streak, XP and achievements", "price.f6": "Reminders", "price.freeCta": "START FREE",
+      "price.popular": "Most popular", "price.soon": "Coming soon", "price.p1": "Advanced commitment mode", "price.p2": "Challenges", "price.p3": "Full gamification", "price.p4": "Reports", "price.p5": "Advanced features", "price.soonCta": "In development",
+      "faq.t": "Frequently asked questions", "faq.lead": "Everything you might want to know about DESPERTAR",
+      "faq.q1": "Does DESPERTAR really lock my phone?", "faq.a1": "No. An app running in the browser can't block other apps on your phone. Commitment mode puts the session in full screen, keeps the screen on, only unlocks the finish button when time is up, and records every time you leave the app. You see that number in the session and in your stats.",
+      "faq.q2": "Can I create my own tasks?", "faq.a2": "Yes. You write the task, choose how long the session lasts and, if you like, link it to a goal.",
+      "faq.q3": "Does the app create tasks automatically?", "faq.a3": "No. You decide what to do. To get you started, the app shows a few ideas, like “Read 10 pages”, that you can add with one tap.",
+      "faq.q4": "How does the app know I've finished?", "faq.a4": "You confirm it. In commitment mode, the FINISH TASK button only unlocks when the session time is up. Without commitment mode, you can pause and finish early.",
+      "faq.q5": "Does it work on Android and iPhone?", "faq.a5": "Yes. DESPERTAR runs in the browser on Android and iPhone and can be installed on your home screen like an app. Your data stays on your device, and you can move everything to another phone with the backup file.",
+      "faq.q6": "Is there a free version?", "faq.a6": "Yes. Everything available today is free: tasks, goals, sessions, commitment mode, reminders, streaks, achievements and stats. Premium is still in development.",
+      "faq.q7": "When will the app launch?", "faq.a7": "The web version is ready to use now, for free. The Play Store and App Store versions don't have a date yet.",
+      "end.t1": "Stop putting it off.", "end.t2": "Wake up and act.", "end.lead": "You don't need to change everything today. You just need to finish the next task.", "end.free": "Free, right now. No account, no sign-up.",
+      "foot.tag": "You only leave when you finish.", "foot.home": "Home", "foot.copy": "© 2026 DESPERTAR. All rights reserved."
+    }
+  };
+  const LANG_KEY = "despertar:lang";
+  const base = {};
+  document.querySelectorAll("[data-i18n]").forEach((el) => { if (!(el.dataset.i18n in base)) base[el.dataset.i18n] = el.textContent; });
+  const metaDesc = document.querySelector('meta[name="description"]');
+  base["meta.desc"] = metaDesc ? metaDesc.content : "";
+  function detect() {
+    try { const s = localStorage.getItem(LANG_KEY); if (s === "pt-BR" || DICT[s]) return s; } catch (e) {}
+    for (const l of (navigator.languages || [navigator.language || ""]).map((x) => String(x).toLowerCase())) {
+      if (l.startsWith("pt-pt")) return "pt-PT"; if (l.startsWith("pt")) return "pt-BR"; if (l.startsWith("en")) return "en";
+    }
+    return "pt-BR";
+  }
+  function apply(lang) {
+    const d = DICT[lang] || {};
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach((el) => { const k = el.dataset.i18n; el.textContent = d[k] !== undefined ? d[k] : base[k]; });
+    if (metaDesc) metaDesc.content = d["meta.desc"] || base["meta.desc"];
+    document.querySelectorAll(".langs [data-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    phoneMsgs = (PHONE_MSGS[lang] || PHONE_MSGS["pt-BR"]);
+  }
+  const PHONE_MSGS = {
+    "pt-BR": ["Continue. Você está construindo disciplina.", "Você começou. Agora termine.", "Uma tarefa de cada vez."],
+    "pt-PT": ["Continue. Está a construir disciplina.", "Começou. Agora termine.", "Uma tarefa de cada vez."],
+    "en": ["Keep going. You're building discipline.", "You started. Now finish.", "One task at a time."]
+  };
+  let phoneMsgs = PHONE_MSGS["pt-BR"];
+  document.querySelector(".langs").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-lang]"); if (!b) return;
+    try { localStorage.setItem(LANG_KEY, b.dataset.lang); } catch (err) {}
+    apply(b.dataset.lang);
   });
-  const g = document.getElementById("sample-bars");
-  if (g) g.innerHTML = s;
+  apply(detect());
+
+  // Sessão de demonstração no telemóvel: 30 min, começa em 24:03 e conta para baixo.
+  const TOTAL = 30 * 60, ring = document.getElementById("ph-ring"), cnt = document.getElementById("ph-count"), pct = document.getElementById("ph-pct"), bar = document.getElementById("ph-bar"), msg = document.querySelector('[data-i18n="ph.msg"]');
+  let left = 24 * 60 + 3, n = 0;
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function draw() {
+    const done = (TOTAL - left) / TOTAL;
+    cnt.textContent = String(Math.floor(left / 60)).padStart(2, "0") + ":" + String(left % 60).padStart(2, "0");
+    ring.style.strokeDashoffset = String(339.29 * (1 - done));
+    pct.textContent = Math.floor(done * 100) + "%"; bar.style.width = done * 100 + "%";
+  }
+  draw();
+  if (!reduce) setInterval(() => {
+    left = left > 0 ? left - 1 : 24 * 60 + 3; n++;
+    if (n % 8 === 0) msg.textContent = phoneMsgs[(n / 8) % phoneMsgs.length];
+    draw();
+  }, 1000);
 })();
 </script>
 <!-- artifact:end-body -->
