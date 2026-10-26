@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ============ SEO: troque os textos entre colchetes ============ -->
+  <title>[TÍTULO DO EBOOK] — [SUBTÍTULO CURTO]</title>
+  <meta name="description" content="[DESCRIÇÃO DE ATÉ 155 CARACTERES: PARA QUEM É E O QUE O EBOOK ENTREGA]">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="[TÍTULO DO EBOOK]">
+  <meta property="og:description" content="[DESCRIÇÃO CURTA PARA COMPARTILHAMENTO]">
+  <meta property="og:image" content="og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#F7F3EC">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #F7F3EC;        /* neutro claro */
+      --surface: #FFFDF9;
+      --ink: #1C1A17;       /* quase-preto */
+      --ink-soft: #57524A;
+      --accent: #A8431F;    /* acento */
+      --accent-ink: #FFFFFF;
+      --line: #E4DDD1;
+      --radius: 14px;
+      --shadow: 0 1px 2px rgba(28, 26, 23, .04), 0 8px 24px rgba(28, 26, 23, .05);
+      --max: 1120px;
+      --gutter: 20px;
+      --font-head: "Fraunces", Georgia, serif;
+      --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+    h1, h2, h3 { font-family: var(--font-head); font-weight: 700; line-height: 1.12; margin: 0 0 .5em; letter-spacing: -.01em; }
+    h1 { font-size: clamp(2.5rem, 4.2vw + 1rem, 4rem); }
+    h2 { font-size: clamp(1.9rem, 2.4vw + 1rem, 2.75rem); }
+    h3 { font-size: 1.3rem; font-weight: 600; }
+    p { margin: 0 0 1em; }
+
+    .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+    .measure { max-width: 66ch; }
+    section { padding: clamp(72px, 10vw, 128px) 0; }
+    .eyebrow { font-size: .8rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .lead { font-size: 1.15rem; color: var(--ink-soft); }
+
+    /* Campos ainda não preenchidos: destacados para facilitar a revisão */
+    .ph { background: #FFF1B8; color: #5C4400; border-radius: 4px; padding: 0 .2em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+    /* Botão CTA */
+    .cta {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+      min-height: 56px; padding: 0 28px;
+      background: var(--accent); color: var(--accent-ink);
+      font: 600 1.05rem/1 var(--font-body);
+      text-decoration: none; border: 0; border-radius: 999px; cursor: pointer;
+      box-shadow: 0 6px 18px rgba(168, 67, 31, .25);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .cta:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(168, 67, 31, .3); }
+    .cta[aria-disabled="true"] { opacity: .6; cursor: not-allowed; transform: none; }
+    .cta-note { font-size: .9rem; color: var(--ink-soft); margin-top: .75rem; }
+
+    /* Topo */
+    .top { padding: 18px 0; }
+    .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { font-family: var(--font-head); font-weight: 700; font-size: 1.15rem; text-decoration: none; }
+    .top nav a { font-size: .95rem; color: var(--ink-soft); text-decoration: none; margin-left: 20px; }
+    .top nav a:hover { color: var(--ink); }
+    @media (max-width: 640px) { .top nav { display: none; } }
+
+    /* Hero */
+    .hero { padding-top: 24px; }
+    .hero .wrap { display: grid; gap: 40px; align-items: center; }
+    .hero .wrap > * { min-width: 0; }
+    .hero-cover { order: -1; justify-self: center; }
+    h1, h2 { overflow-wrap: break-word; }
+    @media (max-width: 899px) {
+      .hero .wrap { gap: 28px; }
+      .hero-cover .book { width: min(170px, 44vw); padding: 18px 16px; }
+      .hero-cover .book strong { font-size: 1.1rem; }
+      .hero-cover .cover-img { width: min(180px, 46vw); }
+    }
+    .hero h1 { margin-bottom: .4em; }
+    .proof-inline { display: flex; align-items: center; gap: 10px; margin-top: 22px; font-size: .95rem; color: var(--ink-soft); }
+    .proof-inline::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: none; }
+    @media (min-width: 900px) {
+      .hero .wrap { grid-template-columns: 1.15fr .85fr; gap: 64px; }
+      .hero-cover { order: 0; }
+    }
+
+    /* Capa do livro desenhada em CSS — substitua por <img> quando tiver a capa */
+    .book {
+      position: relative; width: min(280px, 64vw); aspect-ratio: 2 / 3;
+      border-radius: 4px 12px 12px 4px;
+      background: linear-gradient(160deg, #2A2621 0%, #1C1A17 100%);
+      color: #F7F3EC; padding: 28px 24px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: -10px 0 0 -4px #3A352E, 0 30px 60px rgba(28, 26, 23, .25);
+      transform: rotate(-2deg);
+    }
+    .book::before { content: ""; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,.08); }
+    .book small { font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: #E9B49B; }
+    .book strong { font-family: var(--font-head); font-size: 1.7rem; line-height: 1.1; }
+    .book span { font-size: .85rem; color: #CFC7BA; }
+    .book .ph { background: rgba(255, 241, 184, .2); color: #FFF1B8; }
+    .cover-img { width: min(300px, 66vw); border-radius: 6px; box-shadow: 0 30px 60px rgba(28, 26, 23, .25); }
+
+    /* Dor */
+    .pain { background: var(--surface); border-block: 1px solid var(--line); }
+    .pain-list { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 14px; }
+    .pain-list li { padding-left: 28px; position: relative; font-size: 1.1rem; }
+    .pain-list li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+
+    /* Apresentação */
+    .about .wrap { display: grid; gap: 40px; }
+    .included { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); align-self: start; }
+    .included h3 { margin-bottom: 16px; }
+    .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+    .check li { padding-left: 30px; position: relative; }
+    .check li::before {
+      content: ""; position: absolute; left: 0; top: .45em; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center / 12px no-repeat;
+    }
+    @media (min-width: 900px) { .about .wrap { grid-template-columns: 1.1fr .9fr; gap: 64px; } }
+
+    /* Benefícios */
+    .grid { display: grid; gap: 20px; margin-top: 40px; }
+    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1000px) { .grid.three { grid-template-columns: repeat(3, 1fr); } }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+    .card p { margin: 0; color: var(--ink-soft); }
+
+    /* Como funciona */
+    .steps { list-style: none; padding: 0; margin: 40px 0 0; display: grid; gap: 28px; counter-reset: step; }
+    .steps li { counter-increment: step; display: grid; grid-template-columns: 56px 1fr; gap: 18px; align-items: start; }
+    .steps li::before {
+      content: counter(step); width: 56px; height: 56px; border-radius: 50%;
+      display: grid; place-items: center; background: var(--ink); color: var(--bg);
+      font: 700 1.3rem/1 var(--font-head);
+    }
+    .steps h3 { margin: 12px 0 4px; }
+    .steps p { margin: 0; color: var(--ink-soft); }
+    @media (min-width: 900px) {
+      .steps { grid-template-columns: repeat(3, 1fr); gap: 36px; }
+      .steps li { grid-template-columns: 1fr; }
+    }
+
+    /* Prova social */
+    .proof { background: var(--surface); border-block: 1px solid var(--line); }
+    .quote { margin: 0; }
+    .quote blockquote { margin: 0 0 20px; font-size: 1.05rem; }
+    .quote figcaption { display: flex; align-items: center; gap: 12px; font-size: .95rem; }
+    .quote img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: var(--line); }
+    .quote figcaption span { display: block; color: var(--ink-soft); font-size: .85rem; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px; margin-top: 40px; text-align: center; }
+    .stats strong { display: block; font: 700 2.2rem/1.1 var(--font-head); color: var(--accent); }
+    .stats span { font-size: .95rem; color: var(--ink-soft); }
+
+    /* Oferta */
+    .offer-box {
+      max-width: 620px; margin: 40px auto 0; background: var(--surface);
+      border: 2px solid var(--ink); border-radius: 20px; padding: clamp(28px, 5vw, 48px);
+      box-shadow: var(--shadow); text-align: center;
+    }
+    .price-old { color: var(--ink-soft); text-decoration: line-through; font-size: 1rem; }
+    .price { font: 700 clamp(2.6rem, 5vw, 3.4rem)/1 var(--font-head); margin: 6px 0; }
+    .price-cond { color: var(--ink-soft); font-size: .95rem; margin-bottom: 28px; }
+    .offer-box .check { text-align: left; margin: 0 auto 28px; max-width: 420px; }
+    .guarantee { display: flex; gap: 12px; align-items: flex-start; text-align: left; background: var(--bg); border-radius: 12px; padding: 16px; margin-bottom: 20px; font-size: .95rem; }
+    .guarantee svg { flex: none; color: var(--accent); }
+    .offer-box .cta { width: 100%; }
+
+    /* FAQ */
+    .faq-list { margin-top: 32px; border-top: 1px solid var(--line); }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-item h3 { margin: 0; font-family: var(--font-body); font-size: 1.05rem; font-weight: 600; }
+    .faq-q {
+      width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      padding: 22px 0; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer;
+    }
+    .faq-q::after { content: "+"; font: 400 1.6rem/1 var(--font-body); color: var(--accent); transition: transform .2s ease; }
+    .faq-q[aria-expanded="true"]::after { transform: rotate(45deg); }
+    .faq-a { padding: 0 0 22px; color: var(--ink-soft); }
+    .faq-a p { margin: 0; }
+
+    /* CTA final */
+    .final { background: var(--ink); color: var(--bg); text-align: center; }
+    .final p { color: #CFC7BA; }
+    .final .cta { background: var(--bg); color: var(--ink); box-shadow: none; }
+
+    /* Rodapé */
+    footer { padding: 48px 0 120px; font-size: .9rem; color: var(--ink-soft); }
+    footer .wrap { display: grid; gap: 16px; }
+    footer nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+    footer a { text-decoration: underline; text-underline-offset: 3px; }
+    @media (min-width: 900px) { footer { padding-bottom: 48px; } }
+
+    /* Barra fixa no mobile */
+    .sticky {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px var(--gutter) calc(12px + env(safe-area-inset-bottom));
+      background: rgba(255, 253, 249, .96); border-top: 1px solid var(--line);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      transform: translateY(110%); transition: transform .25s ease;
+    }
+    .sticky.show { transform: none; }
+    .sticky .price-mini { font: 700 1.2rem/1.1 var(--font-head); }
+    .sticky .price-mini small { display: block; font: 400 .75rem/1.3 var(--font-body); color: var(--ink-soft); }
+    .sticky .cta { min-height: 48px; padding: 0 20px; font-size: .95rem; }
+    @media (min-width: 900px) { .sticky { display: none; } }
+
+    /* Animação de entrada */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .cta, .sticky, .faq-q::after { transition: none; }
+    }
+    .no-js .reveal { opacity: 1; transform: none; }
+  </style>
+</head>
+<body class="no-js">
+
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="#inicio"><span class="ph">[NOME DO EBOOK OU MARCA]</span></a>
+      <nav aria-label="Seções da página">
+        <a href="#conteudo">O que tem dentro</a>
+        <a href="#oferta">Preço</a>
+        <a href="#perguntas">Dúvidas</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 1. HERO -->
+    <section class="hero" id="inicio">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow">Ebook · <span class="ph">[Nº DE PÁGINAS]</span> páginas</p>
+          <h1><span class="ph">[TRANSFORMAÇÃO EM ATÉ 12 PALAVRAS]</span></h1>
+          <p class="lead measure">Para <span class="ph">[PÚBLICO-ALVO]</span> que quer <span class="ph">[RESULTADO DESEJADO]</span>. Um guia direto para <span class="ph">[O QUE O EBOOK ENTREGA]</span>.</p>
+          <a class="cta" data-cta href="#oferta">Quero o ebook</a>
+          <p class="proof-inline"><span class="ph">[PROVA SOCIAL REAL: Nº DE LEITORES, NOTA OU SELO]</span></p>
+        </div>
+        <div class="hero-cover">
+          <!-- Quando tiver a capa, troque o bloco .book por:
+               <img class="cover-img" src="capa.jpg" alt="Capa do ebook [TÍTULO]" width="600" height="900"> -->
+          <div class="book" role="img" aria-label="Capa do ebook">
+            <small>Ebook</small>
+            <strong><span class="ph">[TÍTULO DO EBOOK]</span></strong>
+            <span><span class="ph">[AUTOR]</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DOR -->
+    <section class="pain">
+      <div class="wrap measure">
+        <p class="eyebrow">Você se reconhece?</p>
+        <h2><span class="ph">[O PROBLEMA, DITO EM UMA FRASE]</span></h2>
+        <ul class="pain-list">
+          <li class="reveal"><span class="ph">[SITUAÇÃO CONCRETA 1 QUE O LEITOR VIVE]</span></li>
+          <li class="reveal"><span class="ph">[SITUAÇÃO CONCRETA 2]</span></li>
+          <li class="reveal"><span class="ph">[SITUAÇÃO CONCRETA 3]</span></li>
+          <li class="reveal"><span class="ph">[O QUE ISSO CUSTA PARA ELE HOJE]</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3. APRESENTAÇÃO -->
+    <section class="about" id="conteudo">
+      <div class="wrap">
+        <div class="measure">
+          <p class="eyebrow">O ebook</p>
+          <h2><span class="ph">[TÍTULO DO EBOOK]</span></h2>
+          <p><span class="ph">[PARÁGRAFO 1: O QUE É O EBOOK E DE ONDE VEM O MÉTODO]</span></p>
+          <p><span class="ph">[PARÁGRAFO 2: COMO ELE LEVA O LEITOR DO PROBLEMA AO RESULTADO]</span></p>
+        </div>
+        <div class="included reveal">
+          <h3>O que está incluído</h3>
+          <ul class="check">
+            <li><span class="ph">[CAPÍTULO OU MÓDULO 1]</span></li>
+            <li><span class="ph">[CAPÍTULO OU MÓDULO 2]</span></li>
+            <li><span class="ph">[CAPÍTULO OU MÓDULO 3]</span></li>
+            <li><span class="ph">[CAPÍTULO OU MÓDULO 4]</span></li>
+            <li><span class="ph">[BÔNUS, SE HOUVER]</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. BENEFÍCIOS -->
+    <section class="benefits">
+      <div class="wrap">
+        <div class="measure">
+          <p class="eyebrow">Depois de ler</p>
+          <h2>O que muda para você</h2>
+        </div>
+        <div class="grid three">
+          <article class="card reveal"><h3><span class="ph">[BENEFÍCIO 1]</span></h3><p><span class="ph">[RESULTADO CONCRETO EM UMA FRASE]</span></p></article>
+          <article class="card reveal"><h3><span class="ph">[BENEFÍCIO 2]</span></h3><p><span class="ph">[RESULTADO CONCRETO EM UMA FRASE]</span></p></article>
+          <article class="card reveal"><h3><span class="ph">[BENEFÍCIO 3]</span></h3><p><span class="ph">[RESULTADO CONCRETO EM UMA FRASE]</span></p></article>
+          <article class="card reveal"><h3><span class="ph">[BENEFÍCIO 4]</span></h3><p><span class="ph">[RESULTADO CONCRETO EM UMA FRASE]</span></p></article>
+          <article class="card reveal"><h3><span class="ph">[BENEFÍCIO 5]</span></h3><p><span class="ph">[RESULTADO CONCRETO EM UMA FRASE]</span></p></article>
+          <article class="card reveal"><h3><span class="ph">[BENEFÍCIO 6]</span></h3><p><span class="ph">[RESULTADO CONCRETO EM UMA FRASE]</span></p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. COMO FUNCIONA -->
+    <section class="how">
+      <div class="wrap">
+        <div class="measure">
+          <p class="eyebrow">Como funciona</p>
+          <h2>Do clique à leitura em minutos</h2>
+        </div>
+        <ol class="steps">
+          <li class="reveal"><div><h3>Faça o pedido</h3><p>Clique em “Quero o ebook” e pague em <span class="ph">[PLATAFORMA DE PAGAMENTO]</span>.</p></div></li>
+          <li class="reveal"><div><h3>Receba o acesso</h3><p>O link para baixar chega em <span class="ph">[ONDE: E-MAIL / ÁREA DE MEMBROS]</span> logo após a confirmação.</p></div></li>
+          <li class="reveal"><div><h3>Leia e aplique</h3><p><span class="ph">[O QUE O LEITOR FAZ PRIMEIRO COM O CONTEÚDO]</span></p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 6. PROVA SOCIAL — use apenas depoimentos reais. Sem depoimentos, apague esta seção inteira. -->
+    <section class="proof">
+      <div class="wrap">
+        <div class="measure">
+          <p class="eyebrow">Quem já leu</p>
+          <h2>O que os leitores dizem</h2>
+        </div>
+        <div class="grid three">
+          <figure class="card quote reveal">
+            <blockquote><p>“<span class="ph">[DEPOIMENTO REAL COM RESULTADO CONCRETO]</span>”</p></blockquote>
+            <figcaption><img src="depoimento-1.jpg" alt="Foto de [NOME]" width="48" height="48" loading="lazy" onerror="this.style.visibility='hidden'"><div><strong><span class="ph">[NOME]</span></strong><span><span class="ph">[CIDADE OU PROFISSÃO]</span></span></div></figcaption>
+          </figure>
+          <figure class="card quote reveal">
+            <blockquote><p>“<span class="ph">[DEPOIMENTO REAL COM RESULTADO CONCRETO]</span>”</p></blockquote>
+            <figcaption><img src="depoimento-2.jpg" alt="Foto de [NOME]" width="48" height="48" loading="lazy" onerror="this.style.visibility='hidden'"><div><strong><span class="ph">[NOME]</span></strong><span><span class="ph">[CIDADE OU PROFISSÃO]</span></span></div></figcaption>
+          </figure>
+          <figure class="card quote reveal">
+            <blockquote><p>“<span class="ph">[DEPOIMENTO REAL COM RESULTADO CONCRETO]</span>”</p></blockquote>
+            <figcaption><img src="depoimento-3.jpg" alt="Foto de [NOME]" width="48" height="48" loading="lazy" onerror="this.style.visibility='hidden'"><div><strong><span class="ph">[NOME]</span></strong><span><span class="ph">[CIDADE OU PROFISSÃO]</span></span></div></figcaption>
+          </figure>
+        </div>
+        <!-- Números: use apenas dados reais. Sem números, apague este bloco. -->
+        <div class="stats reveal">
+          <div><strong><span class="ph">[Nº]</span></strong><span>leitores</span></div>
+          <div><strong><span class="ph">[NOTA]</span></strong><span>avaliação média</span></div>
+          <div><strong><span class="ph">[Nº]</span></strong><span>anos de experiência do autor</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. OFERTA E PREÇO -->
+    <section class="offer" id="oferta">
+      <div class="wrap">
+        <div class="measure" style="margin: 0 auto; text-align: center;">
+          <p class="eyebrow">Oferta</p>
+          <h2>Tudo o que você recebe</h2>
+        </div>
+        <div class="offer-box reveal">
+          <p class="price-old">De <span class="ph">[PREÇO CHEIO, SE HOUVER]</span></p>
+          <p class="price"><span class="ph" data-price>[R$ PREÇO]</span></p>
+          <p class="price-cond"><span class="ph">[CONDIÇÃO: À VISTA / ATÉ 12x DE R$ X]</span></p>
+          <ul class="check">
+            <li>Ebook <span class="ph">[TÍTULO]</span> em PDF</li>
+            <li><span class="ph">[ITEM INCLUÍDO 2]</span></li>
+            <li><span class="ph">[BÔNUS, SE HOUVER]</span></li>
+            <li>Acesso imediato após a confirmação do pagamento</li>
+          </ul>
+          <div class="guarantee">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            <span><strong>Garantia de <span class="ph">[7]</span> dias.</strong> Se não gostar, peça o reembolso dentro do prazo e receba 100% do valor de volta.</span>
+          </div>
+          <a class="cta" data-cta href="#oferta">Quero o ebook</a>
+          <p class="cta-note">Pagamento seguro via <span class="ph">[PLATAFORMA]</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. PERGUNTAS FREQUENTES -->
+    <section class="faq" id="perguntas">
+      <div class="wrap measure">
+        <p class="eyebrow">Dúvidas</p>
+        <h2>Perguntas frequentes</h2>
+        <div class="faq-list">
+          <div class="faq-item">
+            <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-1">Como recebo o ebook?</button></h3>
+            <div class="faq-a" id="faq-1" hidden><p>Assim que o pagamento é confirmado, você recebe o link de acesso em <span class="ph">[E-MAIL / ÁREA DE MEMBROS]</span>. No Pix e no cartão, isso costuma levar poucos minutos.</p></div>
+          </div>
+          <div class="faq-item">
+            <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-2">Esse ebook funciona para mim?</button></h3>
+            <div class="faq-a" id="faq-2" hidden><p><span class="ph">[PARA QUEM É E PARA QUEM NÃO É — SEJA HONESTO]</span></p></div>
+          </div>
+          <div class="faq-item">
+            <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-3">E se eu não gostar?</button></h3>
+            <div class="faq-a" id="faq-3" hidden><p>Você tem <span class="ph">[7]</span> dias de garantia. Peça o reembolso dentro desse prazo e devolvemos todo o valor, sem perguntas.</p></div>
+          </div>
+          <div class="faq-item">
+            <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-4">Quais formas de pagamento são aceitas?</button></h3>
+            <div class="faq-a" id="faq-4" hidden><p><span class="ph">[EX.: PIX, CARTÃO EM ATÉ 12x, BOLETO]</span></p></div>
+          </div>
+          <div class="faq-item">
+            <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-5">Posso ler no celular?</button></h3>
+            <div class="faq-a" id="faq-5" hidden><p>Sim. O ebook é um arquivo <span class="ph">[PDF]</span> que abre no celular, no tablet e no computador.</p></div>
+          </div>
+          <div class="faq-item">
+            <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-6">Quanto tempo leva para ler?</button></h3>
+            <div class="faq-a" id="faq-6" hidden><p><span class="ph">[Nº DE PÁGINAS E TEMPO MÉDIO DE LEITURA]</span></p></div>
+          </div>
+          <div class="faq-item">
+            <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-7">Ainda tenho dúvidas. Com quem falo?</button></h3>
+            <div class="faq-a" id="faq-7" hidden><p>Fale com a gente pelo <a data-whatsapp href="#perguntas">WhatsApp</a> ou pelo <a data-email>e-mail</a>.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. CTA FINAL -->
+    <section class="final">
+      <div class="wrap measure">
+        <h2><span class="ph">[REPITA A PROMESSA PRINCIPAL]</span></h2>
+        <p>Acesso imediato, garantia de <span class="ph">[7]</span> dias.</p>
+        <a class="cta" data-cta href="#oferta">Quero o ebook</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 10. RODAPÉ -->
+  <footer>
+    <div class="wrap">
+      <strong><span class="ph">[NOME DO NEGÓCIO / AUTOR]</span></strong>
+      <nav aria-label="Contato e links legais">
+        <a data-whatsapp href="#perguntas">WhatsApp</a>
+        <a data-email>E-mail</a>
+        <a data-instagram>Instagram</a>
+        <a href="privacidade.html">Política de Privacidade</a>
+        <a href="termos.html">Termos de Uso</a>
+      </nav>
+      <p>© <span data-year>2026</span> <span class="ph">[NOME DO NEGÓCIO]</span>. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Barra fixa no mobile -->
+  <div class="sticky" aria-hidden="true">
+    <div class="price-mini"><span data-price-mini></span><small>acesso imediato</small></div>
+    <a class="cta" data-cta href="#oferta" tabindex="-1">Quero o ebook</a>
+  </div>
+
+  <script>
+    /* =====================================================
+       CONFIGURAÇÃO — preencha estas linhas
+       ===================================================== */
+    const LINK_DE_COMPRA = "";            // ex.: "https://pay.hotmart.com/XXXX"
+    const WHATSAPP = "";                  // só números, com DDI e DDD: "5511999999999"
+    const MENSAGEM_WHATSAPP = "Olá! Tenho uma dúvida sobre o ebook.";
+    const EMAIL = "";                     // ex.: "contato@seusite.com.br"
+    const INSTAGRAM = "";                 // ex.: "https://instagram.com/seuperfil"
+    /* ===================================================== */
+
+    document.body.classList.remove("no-js");
+
+    // Botões de compra: todos levam ao mesmo link
+    document.querySelectorAll("[data-cta]").forEach(function (btn) {
+      if (LINK_DE_COMPRA) {
+        btn.href = LINK_DE_COMPRA;
+        btn.rel = "noopener";
+      } else if (btn.closest(".offer-box")) {
+        // Sem link configurado: o botão da oferta não finge que funciona
+        btn.setAttribute("aria-disabled", "true");
+        btn.textContent = "Link de compra ainda não configurado";
+        btn.addEventListener("click", function (e) { e.preventDefault(); });
+      }
+    });
+
+    // WhatsApp
+    document.querySelectorAll("[data-whatsapp]").forEach(function (a) {
+      if (WHATSAPP) {
+        a.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(MENSAGEM_WHATSAPP);
+        a.target = "_blank";
+        a.rel = "noopener";
+      } else if (a.closest("nav")) {
+        a.remove();
+      } else {
+        a.replaceWith(a.textContent);
+      }
+    });
+
+    // E-mail e Instagram: sem valor, o link some
+    document.querySelectorAll("[data-email]").forEach(function (a) {
+      if (EMAIL) a.href = "mailto:" + EMAIL; else a.closest("nav") ? a.remove() : a.replaceWith(a.textContent);
+    });
+    document.querySelectorAll("[data-instagram]").forEach(function (a) {
+      if (INSTAGRAM) { a.href = INSTAGRAM; a.target = "_blank"; a.rel = "noopener"; } else a.remove();
+    });
+
+    // Preço na barra fixa = mesmo preço da oferta
+    var price = document.querySelector("[data-price]");
+    var priceMini = document.querySelector("[data-price-mini]");
+    if (price && priceMini) priceMini.textContent = price.textContent;
+
+    document.querySelector("[data-year]").textContent = new Date().getFullYear();
+
+    // FAQ em acordeão (teclado: Enter/Espaço já funcionam em <button>)
+    document.querySelectorAll(".faq-q").forEach(function (q) {
+      q.addEventListener("click", function () {
+        var open = q.getAttribute("aria-expanded") === "true";
+        q.setAttribute("aria-expanded", String(!open));
+        document.getElementById(q.getAttribute("aria-controls")).hidden = open;
+      });
+    });
+
+    if ("IntersectionObserver" in window) {
+      // Barra fixa aparece depois do hero
+      var sticky = document.querySelector(".sticky");
+      var stickyCta = sticky.querySelector(".cta");
+      new IntersectionObserver(function (entries) {
+        var past = !entries[0].isIntersecting && entries[0].boundingClientRect.top < 0;
+        sticky.classList.toggle("show", past);
+        sticky.setAttribute("aria-hidden", String(!past));
+        stickyCta.tabIndex = past ? 0 : -1;
+      }).observe(document.querySelector(".hero"));
+
+      // Entrada suave dos blocos
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        });
+      }, { rootMargin: "0px 0px -10% 0px" });
+      document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+    } else {
+      document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
+    }
+  </script>
+</body>
+</html>
