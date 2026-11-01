@@ -185,7 +185,13 @@
       border: 2px solid var(--ink); border-radius: 20px; padding: clamp(28px, 5vw, 48px);
       box-shadow: var(--shadow); text-align: center;
     }
-    .price-old { color: var(--ink-soft); text-decoration: line-through; font-size: 1rem; }
+    .currency { display: inline-flex; padding: 4px; margin-bottom: 20px; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; }
+    .currency button {
+      min-height: 40px; padding: 0 16px; border: 0; border-radius: 999px; background: none;
+      color: var(--ink-soft); font: 500 .9rem/1 var(--font-body); cursor: pointer;
+    }
+    .currency button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+    .no-js .currency { display: none; }
     .price { font: 700 clamp(2.6rem, 5vw, 3.4rem)/1 var(--font-head); margin: 6px 0; }
     .price-cond { color: var(--ink-soft); font-size: .95rem; margin-bottom: 28px; }
     .offer-box .check { text-align: left; margin: 0 auto 28px; max-width: 420px; }
@@ -388,9 +394,12 @@
           <h2>Tudo o que você recebe</h2>
         </div>
         <div class="offer-box reveal">
-          <p class="price-old">De <span class="ph">[PREÇO CHEIO, SE HOUVER]</span></p>
-          <p class="price"><span class="ph" data-price>[R$ PREÇO]</span></p>
-          <p class="price-cond"><span class="ph">[CONDIÇÃO: À VISTA / ATÉ 12x DE R$ X]</span></p>
+          <div class="currency" role="group" aria-label="Escolha a moeda">
+            <button type="button" data-currency="BRL" aria-pressed="true">Brasil · R$</button>
+            <button type="button" data-currency="EUR" aria-pressed="false">Europa · €</button>
+          </div>
+          <p class="price" data-price aria-live="polite">R$ 97,00</p>
+          <p class="price-cond">Pagamento único</p>
           <ul class="check">
             <li>Ebook <span class="ph">[TÍTULO]</span> em PDF</li>
             <li><span class="ph">[ITEM INCLUÍDO 2]</span></li>
@@ -481,7 +490,10 @@
     /* =====================================================
        CONFIGURAÇÃO — preencha estas linhas
        ===================================================== */
-    const LINK_DE_COMPRA = "";            // ex.: "https://pay.hotmart.com/XXXX"
+    const PRECOS = {
+      BRL: { valor: "R$ 97,00", link: "" },  // link: checkout em reais, ex.: "https://pay.hotmart.com/XXXX"
+      EUR: { valor: "15,97 €",  link: "" }   // link: checkout em euros
+    };
     const WHATSAPP = "";                  // só números, com DDI e DDD: "5511999999999"
     const MENSAGEM_WHATSAPP = "Olá! Tenho uma dúvida sobre o ebook.";
     const EMAIL = "";                     // ex.: "contato@seusite.com.br"
@@ -490,18 +502,51 @@
 
     document.body.classList.remove("no-js");
 
-    // Botões de compra: todos levam ao mesmo link
+    // Moeda: visitantes com fuso horário na Europa começam em euro
+    var moeda = "BRL";
+    try {
+      if (Intl.DateTimeFormat().resolvedOptions().timeZone.indexOf("Europe/") === 0) moeda = "EUR";
+    } catch (e) {}
+
+    var ctaText = document.querySelector("[data-cta]").textContent;
+
+    function aplicarMoeda(m) {
+      moeda = m;
+      var oferta = PRECOS[m];
+      document.querySelector("[data-price]").textContent = oferta.valor;
+      document.querySelector("[data-price-mini]").textContent = oferta.valor;
+      document.querySelectorAll("[data-currency]").forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.dataset.currency === m));
+      });
+      // Botões de compra: todos levam ao checkout da moeda escolhida
+      document.querySelectorAll("[data-cta]").forEach(function (btn) {
+        var naOferta = btn.closest(".offer-box");
+        if (oferta.link) {
+          btn.href = oferta.link;
+          btn.rel = "noopener";
+          btn.removeAttribute("aria-disabled");
+          btn.textContent = ctaText;
+        } else {
+          btn.href = "#oferta";
+          btn.removeAttribute("rel");
+          if (naOferta) {
+            // Sem link configurado: o botão da oferta não finge que funciona
+            btn.setAttribute("aria-disabled", "true");
+            btn.textContent = "Link de compra ainda não configurado";
+          }
+        }
+      });
+    }
+
     document.querySelectorAll("[data-cta]").forEach(function (btn) {
-      if (LINK_DE_COMPRA) {
-        btn.href = LINK_DE_COMPRA;
-        btn.rel = "noopener";
-      } else if (btn.closest(".offer-box")) {
-        // Sem link configurado: o botão da oferta não finge que funciona
-        btn.setAttribute("aria-disabled", "true");
-        btn.textContent = "Link de compra ainda não configurado";
-        btn.addEventListener("click", function (e) { e.preventDefault(); });
-      }
+      btn.addEventListener("click", function (e) {
+        if (btn.getAttribute("aria-disabled") === "true") e.preventDefault();
+      });
     });
+    document.querySelectorAll("[data-currency]").forEach(function (b) {
+      b.addEventListener("click", function () { aplicarMoeda(b.dataset.currency); });
+    });
+    aplicarMoeda(moeda);
 
     // WhatsApp
     document.querySelectorAll("[data-whatsapp]").forEach(function (a) {
@@ -523,11 +568,6 @@
     document.querySelectorAll("[data-instagram]").forEach(function (a) {
       if (INSTAGRAM) { a.href = INSTAGRAM; a.target = "_blank"; a.rel = "noopener"; } else a.remove();
     });
-
-    // Preço na barra fixa = mesmo preço da oferta
-    var price = document.querySelector("[data-price]");
-    var priceMini = document.querySelector("[data-price-mini]");
-    if (price && priceMini) priceMini.textContent = price.textContent;
 
     document.querySelector("[data-year]").textContent = new Date().getFullYear();
 

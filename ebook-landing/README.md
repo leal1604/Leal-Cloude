@@ -12,15 +12,15 @@ Página de vendas em um único arquivo (`index.html`), sem build e sem dependên
 ## O que trocar
 
 1. **Textos:** tudo que está entre `[COLCHETES]` aparece com fundo amarelo na página. Procure por `[` no `index.html` e troque. Depois de trocar, apague o `<span class="ph">` que envolve o texto (ou deixe: só some o fundo amarelo quando você apagar).
-2. **Link de compra, WhatsApp, e-mail e Instagram:** no final do `index.html`, no bloco `CONFIGURAÇÃO`:
+2. **Preços e links de compra:** no final do `index.html`, no bloco `CONFIGURAÇÃO`:
    ```js
-   const LINK_DE_COMPRA = "https://pay.hotmart.com/XXXX";
-   const WHATSAPP = "5511999999999";
-   const EMAIL = "contato@seusite.com.br";
-   const INSTAGRAM = "https://instagram.com/seuperfil";
+   const PRECOS = {
+     BRL: { valor: "R$ 97,00", link: "https://pay.hotmart.com/XXXX" },
+     EUR: { valor: "15,97 €",  link: "https://pay.hotmart.com/YYYY" }
+   };
    ```
-   Todos os botões “Quero o ebook” passam a usar o mesmo link. Campo vazio = o link some da página.
-3. **Preço:** procure `[R$ PREÇO]`. A barra fixa do celular copia esse valor sozinha.
+   A oferta tem um seletor Brasil (R$) / Europa (€). Quem acessa com fuso horário da Europa já vê o preço em euro. Todos os botões “Quero o ebook” e a barra fixa do celular seguem a moeda escolhida. Se a sua plataforma converte a moeda sozinha, use o mesmo link nas duas linhas. Para mudar o preço, troque também o `R$ 97,00` em `<p class="price"` (é o que aparece se o JavaScript não carregar).
+3. **WhatsApp, e-mail e Instagram:** no mesmo bloco, em `WHATSAPP` (só números, com DDI e DDD), `EMAIL` e `INSTAGRAM`. Campo vazio = o link some da página.
 4. **Capa:** coloque `capa.jpg` na pasta e siga o comentário logo acima de `<div class="book"`.
 5. **Depoimentos:** use só depoimentos reais. Coloque as fotos como `depoimento-1.jpg`, `depoimento-2.jpg`, `depoimento-3.jpg`. Sem depoimentos, apague a seção marcada com `<!-- 6. PROVA SOCIAL`.
 6. **Cores:** no topo do `<style>`, em `:root` (`--accent` é a cor dos botões).
