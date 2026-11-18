@@ -41,4 +41,4 @@ Atualize este arquivo sempre que a pessoa der uma informação nova. Campos `[PR
 | 2026-11-18 | — | Diagnóstico inicial; skill criada | Em andamento: pesquisa de produto e prep center |
 | 2026-11-18 | — | Rascunhos de pedido de cotação criados no Gmail: PrepTag (SP, diz ser SPN), Grin Store (SP/RJ/MG), doVale (São José dos Campos, pré-lançamento) | Enviados em 2026-11-18 (contato por e-mail; WhatsApp só depois da resposta). Aguardando respostas |
 | 2026-11-18 | — | Análise de capital: marca própria inviável agora (custo GS1); caminho = revenda de fabricante nacional com EAN, 1 produto primeiro | Aguardando validação de produto e fornecedor |
-| 2026-11-18 | — | Rascunhos de cotação a fabricantes de organizadores em Pedreira/SP: Pratic, Niquelart, Plasdorta, Plastbon | Aguardando aprovação para envio |
+| 2026-11-18 | — | Rascunhos de cotação a fabricantes de organizadores em Pedreira/SP: Pratic, Niquelart, Plasdorta, Plastbon | Enviados em 2026-11-18. Aguardando respostas |
