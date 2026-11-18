@@ -6,33 +6,34 @@ Atualize este arquivo sempre que a pessoa der uma informação nova. Campos `[PR
 
 | Campo | Valor |
 |---|---|
-| Marketplace | [PREENCHER: ex. Amazon.com.br] |
-| Plano | [PREENCHER: Individual / Profissional] |
-| Registro de Marca | [PREENCHER: sim / não / em andamento] |
-| Marca(s) | [PREENCHER] |
-| Regime tributário / alíquota sobre venda | [PREENCHER: ex. Simples Nacional, X%] |
-| Logística | [PREENCHER: FBA / DBA / envio próprio] |
+| Marketplace | Amazon.com.br |
+| Plano | Conta ativa — [PREENCHER: confirmar se Profissional] |
+| Registro de Marca | Não |
+| Marca(s) | Nenhuma ainda |
+| CNPJ / regime / UF / IE | [PREENCHER: tem CNPJ? MEI, Simples ou Normal? Estado? Inscrição Estadual?] |
+| Logística | FBA, via prep center (a escolher) |
 
 ## Produtos
 
 | SKU | Produto | ASIN | GTIN/EAN | Custo unit. | Preço | Status |
 |---|---|---|---|---|---|---|
-| [PREENCHER] | | | | | | |
+| — | Nenhum produto ainda. Meta: escolher 2 produtos + fornecedores | | Sem GTIN | | | Pesquisa |
 
 ## Metas e anúncios
 
 | Campo | Valor |
 |---|---|
-| Orçamento diário de ads | [PREENCHER] |
-| Objetivo atual | [PREENCHER: lançar / lucrar / girar estoque] |
+| Orçamento diário de ads | A definir (pessoa pediu análise) |
+| Objetivo atual | Lançar os 2 primeiros produtos |
 | ACoS-alvo | [calcular em precificacao.md] |
 | TACoS-alvo | [PREENCHER] |
 
 ## Problemas conhecidos
 
-- [PREENCHER: anúncios suprimidos, categorias bloqueadas, alertas de saúde da conta]
+- Nenhum conhecido. Pendências: definir caminho (revenda x marca própria), GTIN, prep center.
 
 ## Histórico
 
 | Data | SKU/ASIN | Ação | Resultado |
 |---|---|---|---|
+| 2026-11-18 | — | Diagnóstico inicial; skill criada | Em andamento: pesquisa de produto e prep center |

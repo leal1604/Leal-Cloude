@@ -32,6 +32,8 @@ Pergunte numa única mensagem, no máximo 7 perguntas:
 
 Devolva um **diagnóstico** em 3 blocos: o que está bom, o que está bloqueando venda agora, e o plano em ordem de prioridade.
 
+Se a pessoa ainda não tem produto, siga `references/pesquisa-produto.md`: caminho (revenda x marca própria), critérios de escolha, validação, fornecedores, requisitos fiscais do FBA Brasil e perguntas para o prep center.
+
 ## Etapa 2. Margem antes de tudo
 
 Antes de cadastrar ou anunciar, calcule a margem com `references/precificacao.md`. Entregue sempre a tabela:
