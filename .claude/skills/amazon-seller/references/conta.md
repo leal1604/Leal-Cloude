@@ -38,4 +38,4 @@ Atualize este arquivo sempre que a pessoa der uma informação nova. Campos `[PR
 | Data | SKU/ASIN | Ação | Resultado |
 |---|---|---|---|
 | 2026-11-18 | — | Diagnóstico inicial; skill criada | Em andamento: pesquisa de produto e prep center |
-| 2026-11-18 | — | Rascunhos de pedido de cotação criados no Gmail: PrepTag (SP, diz ser SPN), Grin Store (SP/RJ/MG), doVale (São José dos Campos, pré-lançamento) | Aguardando envio e respostas |
+| 2026-11-18 | — | Rascunhos de pedido de cotação criados no Gmail: PrepTag (SP, diz ser SPN), Grin Store (SP/RJ/MG), doVale (São José dos Campos, pré-lançamento) | Enviados em 2026-11-18 (contato por e-mail; WhatsApp só depois da resposta). Aguardando respostas |
