@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vale o Clique | Mais vendidos na Amazon, organizados por categoria</title>
+  <meta name="description" content="Descubra os produtos mais vendidos na Amazon.es em Computadores, Eletrónica, Casa e Cozinha, Beleza, Automóvel e mais. Preços consultados e links diretos para a Amazon.">
+  <meta name="theme-color" content="#0f1e33">
+  <link rel="canonical" href="https://criasitesbraga.com/valeoclique/">
+
+  <!-- Open Graph (WhatsApp, Facebook).  -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:site_name" content="Vale o Clique">
+  <meta property="og:title" content="Vale o Clique | Descobertas que valem o clique">
+  <meta property="og:description" content="Os mais vendidos da Amazon.es organizados por categoria, com preço consultado e link direto.">
+  <meta property="og:url" content="https://criasitesbraga.com/valeoclique/">
+  <meta property="og:image" content="https://criasitesbraga.com/valeoclique/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://m.media-amazon.com">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Google Analytics 4: descomente e troque G-XXXXXXXXXX pelo seu ID de medição.
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  -->
+</head>
+<body>
+  <a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+
+  <header class="topbar">
+    <div class="wrap topbar__row">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menu" aria-controls="drawer" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+
+      <a href="#" class="logo" aria-label="Vale o Clique, página inicial">
+        <svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true">
+          <g stroke="#ff7a00" stroke-width="3" stroke-linecap="round"><path d="M14 3v6M4 13h6M6 5l4 4M22 5l-4 4"/></g>
+          <path d="M15 14l17 7-7 2.5 6 7-3 2.5-6-7-3.5 6.5z" fill="#fff" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+        <span class="logo__text">Vale o <b>Clique</b></span>
+      </a>
+
+      <form class="search" role="search" onsubmit="return false">
+        <label for="search" class="sr-only">Pesquisar produtos</label>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="O que procura hoje?" autocomplete="off">
+        <button type="button" class="search__clear" id="searchClear" aria-label="Limpar pesquisa" hidden>×</button>
+      </form>
+
+      <button class="fav-link" id="favToggle" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.3C1 8 3.4 4.5 7 4.5c2 0 3.5 1.1 5 2.9 1.5-1.8 3-2.9 5-2.9 3.6 0 6 3.5 4.5 7.2C19.5 16.4 12 21 12 21z"/></svg>
+        <span class="fav-link__label">Favoritos</span>
+        <span class="badge" id="favCount">0</span>
+      </button>
+    </div>
+
+    <nav class="catnav" aria-label="Categorias">
+      <ul class="wrap catnav__list" id="catNav"></ul>
+    </nav>
+  </header>
+
+  <!-- Gaveta do menu (telemóvel) -->
+  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+  <aside class="drawer" id="drawer" aria-label="Menu" aria-hidden="true">
+    <div class="drawer__head">
+      <span class="logo__text">Vale o <b>Clique</b></span>
+      <button class="icon-btn" id="drawerClose" aria-label="Fechar menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <p class="drawer__title">Categorias</p>
+    <ul class="drawer__list" id="drawerCats"></ul>
+    <p class="drawer__title">Site</p>
+    <ul class="drawer__list">
+      <li><a href="#como-funciona">Como funciona</a></li>
+      <li><a href="#sobre">Sobre nós</a></li>
+      <li><a href="#privacidade">Privacidade</a></li>
+    </ul>
+  </aside>
+
+  <main id="conteudo">
+    <!-- BANNER: coloque a sua arte em assets/banner.jpg (desktop) e assets/banner-mobile.jpg (telemóvel) -->
+    <section class="hero" aria-label="Destaque">
+      <picture class="hero__media">
+        <source media="(max-width: 700px)" srcset="assets/banner-mobile.jpg">
+        <img src="assets/banner.jpg" alt="" width="1920" height="640" fetchpriority="high"
+             onerror="this.closest('.hero').classList.add('hero--empty')">
+      </picture>
+      <div class="hero__placeholder" aria-hidden="true">
+        <span>Espaço do banner</span>
+        <small>assets/banner.jpg · 1920 × 640 px<br>assets/banner-mobile.jpg · 1080 × 1080 px</small>
+      </div>
+      <div class="wrap hero__content">
+        <h1>Descobertas que <span>valem o clique.</span></h1>
+        <p>Produtos populares e oportunidades para o seu dia a dia.</p>
+        <a href="#produtos" class="btn btn--primary">Explorar ofertas
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>
+      </div>
+    </section>
+
+    <!-- Botões de categoria -->
+    <section class="wrap cats" aria-label="Escolher categoria">
+      <div class="cats__scroller" id="catButtons"></div>
+    </section>
+
+    <div class="wrap layout" id="produtos">
+      <!-- Filtros -->
+      <div class="filters-backdrop" id="filtersBackdrop" hidden></div>
+      <aside class="filters" id="filters" aria-label="Filtros">
+        <div class="filters__head">
+          <h2>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+            Filtrar produtos
+          </h2>
+          <button class="icon-btn filters__close" id="filtersClose" aria-label="Fechar filtros">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+
+        <fieldset class="fgroup">
+          <legend>Categoria</legend>
+          <div id="catChecks"></div>
+        </fieldset>
+
+        <fieldset class="fgroup">
+          <legend>Faixa de preço</legend>
+          <p class="range-out"><span id="priceMinOut"></span> – <span id="priceMaxOut"></span></p>
+          <div class="range">
+            <div class="range__track"><div class="range__fill" id="rangeFill"></div></div>
+            <input type="range" id="priceMin" aria-label="Preço mínimo" step="1">
+            <input type="range" id="priceMax" aria-label="Preço máximo" step="1">
+          </div>
+          <label class="check check--small"><input type="checkbox" id="includeNoPrice" checked> Incluir produtos sem preço na consulta</label>
+        </fieldset>
+
+        <fieldset class="fgroup">
+          <legend>Avaliação na Amazon</legend>
+          <label class="check"><input type="radio" name="rating" value="0" checked> Todas</label>
+          <label class="check"><input type="radio" name="rating" value="4.5"> 4,5 ★ ou mais</label>
+          <label class="check"><input type="radio" name="rating" value="4"> 4 ★ ou mais</label>
+        </fieldset>
+
+        <div class="filters__actions">
+          <button class="btn btn--ghost" id="resetFilters">Limpar filtros</button>
+          <button class="btn btn--primary filters__apply" id="filtersApply">Ver resultados</button>
+        </div>
+      </aside>
+
+      <!-- Lista de produtos -->
+      <section class="results" aria-live="polite">
+        <div class="results__bar">
+          <div>
+            <h2 class="section-title" id="resultsTitle">Mais vendidos na Amazon</h2>
+            <p class="muted" id="resultsMeta">A carregar produtos…</p>
+          </div>
+          <div class="results__tools">
+            <button class="btn btn--ghost filter-btn" id="filterBtn" aria-controls="filters" aria-expanded="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              Filtrar <span class="badge badge--dark" id="filterCount" hidden>0</span>
+            </button>
+            <label class="sort">
+              <span class="sr-only">Ordenar</span>
+              <select id="sort">
+                <option value="rank">Ordenar: ranking</option>
+                <option value="price-asc">Menor preço</option>
+                <option value="price-desc">Maior preço</option>
+                <option value="reviews">Mais avaliações</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div id="sections"></div>
+        <div class="empty" id="empty" hidden>
+          <p><strong>Nenhum produto encontrado.</strong></p>
+          <p class="muted">Experimente outra palavra ou limpe os filtros.</p>
+          <button class="btn btn--primary" id="emptyReset">Limpar filtros</button>
+        </div>
+
+        <p class="source-note">
+          Fonte: <a href="https://www.amazon.es/gp/bestsellers/" target="_blank" rel="nofollow noopener">Os mais vendidos na Amazon.es</a>.
+          A posição (#) é a do ranking da Amazon em cada categoria no dia da consulta.
+          Preços, avaliações e disponibilidade podem mudar a qualquer momento. Confirme sempre na Amazon.
+        </p>
+      </section>
+    </div>
+
+    <!-- Selos de confiança -->
+    <section class="trust wrap" aria-label="Porque confiar">
+      <div class="trust__item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>
+        <div><strong>Compra 100% na Amazon</strong><span>Pagamento, entrega e devoluções são tratados pela Amazon.</span></div>
+      </div>
+      <div class="trust__item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+        <div><strong>Ranking real</strong><span>Seleção a partir da lista oficial de mais vendidos.</span></div>
+      </div>
+      <div class="trust__item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <div><strong>Preço com data</strong><span>Mostramos quando o preço foi consultado.</span></div>
+      </div>
+      <div class="trust__item">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+        <div><strong>Sem registo</strong><span>Não pedimos dados pessoais nem pagamentos.</span></div>
+      </div>
+    </section>
+
+    <!-- Páginas informativas -->
+    <section class="info wrap">
+      <details id="como-funciona" class="info__box">
+        <summary>Como funciona</summary>
+        <p>O Vale o Clique seleciona produtos da lista oficial de <strong>mais vendidos da Amazon.es</strong> e organiza-os por categoria. Ao clicar num produto, é levado diretamente para a página do anúncio na Amazon, onde vê o preço atual e faz a compra com toda a segurança da Amazon.</p>
+        <p>Não temos carrinho, nem pagamentos, nem registo. A compra acontece sempre na Amazon.</p>
+      </details>
+      <details id="sobre" class="info__box">
+        <summary>Sobre nós</summary>
+        <p>Somos um site independente de recomendações. Poupamos-lhe tempo ao reunir, num só lugar, os produtos que mais se vendem na Amazon em cada categoria, com o preço consultado e a data da consulta.</p>
+        <p>Participamos no Programa de Associados da Amazon. Quando compra através dos nossos links, podemos receber uma comissão, sem qualquer custo extra para si.</p>
+      </details>
+      <details id="privacidade" class="info__box">
+        <summary>Política de privacidade</summary>
+        <p><strong>Dados que recolhemos.</strong> Este site não pede nome, email nem pagamento. Os seus favoritos ficam guardados apenas no seu navegador (armazenamento local) e não são enviados para nós.</p>
+        <p><strong>Links de afiliado.</strong> Os links para a Amazon contêm o nosso identificador de associado. A Amazon pode usar cookies para atribuir a compra, de acordo com a <a href="https://www.amazon.es/gp/help/customer/display.html?nodeId=201909010" target="_blank" rel="nofollow noopener">política de privacidade da Amazon</a>.</p>
+        <p><strong>Estatísticas.</strong> Se ativarmos o Google Analytics, serão recolhidos dados anónimos de navegação (páginas vistas, dispositivo, país) para melhorar o site.</p>
+        <p><strong>Os seus direitos.</strong> Pode limpar os favoritos a qualquer momento apagando os dados do site no seu navegador. Para qualquer questão, contacte-nos pelo email indicado no rodapé.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__grid">
+      <div>
+        <span class="logo__text logo__text--footer">Vale o <b>Clique</b></span>
+        <p class="footer__small">Descobertas que valem o clique.</p>
+      </div>
+      <nav aria-label="Rodapé">
+        <a href="#sobre">Sobre nós</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#privacidade">Privacidade</a>
+        <a href="mailto:contacto@valeoclique.net">Contacto</a>
+      </nav>
+    </div>
+    <div class="wrap footer__legal">
+      <p><strong>Este site contém links de afiliado. Podemos receber comissão por compras feitas pelos links, sem custo extra pra você. As compras são feitas diretamente na Amazon.</strong></p>
+      <p>Como Associado da Amazon, o Vale o Clique recebe por compras qualificadas. Amazon e o logótipo da Amazon são marcas registadas da Amazon.com, Inc. ou das suas afiliadas. Preços e disponibilidade exatos à data/hora indicada e sujeitos a alteração.</p>
+      <p class="footer__small">Atualizado em <span class="js-updated"></span> · © <span id="year"></span> Vale o Clique</p>
+    </div>
+  </footer>
+
+  <button class="to-top" id="toTop" aria-label="Voltar ao topo" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+  </button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/app.js" defer></script>
+</body>
+</html>
