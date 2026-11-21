@@ -34,3 +34,7 @@ Exemplo de leitura: preço R$ 100, margem antes de ads R$ 30 → ACoS de equilí
 - Margem antes de ads < 15%: produto não sustenta campanha. Opções: kit, preço maior, custo menor, trocar FBA↔DBA, outro tamanho de embalagem (faixa de tarifa).
 - Preço logo acima de um degrau de tarifa: às vezes R$ 1 a menos muda a faixa e melhora a margem — simule os dois.
 - Produto pesado/volumoso: compare FBA x DBA x envio próprio antes de decidir.
+
+## Peso dimensional (importante para itens leves e volumosos)
+
+A tarifa FBA usa o maior entre peso real e peso dimensional = C × L × A (cm) ÷ 6.000. Cestos e caixas vazios são leves mas volumosos: um cesto de 40,5 × 22 × 12 cm pesa ~1,8 kg dimensional e cai numa faixa de tarifa bem mais cara. Prefira itens compactos (ou que encaixam) e simule sempre com as medidas da embalagem.
