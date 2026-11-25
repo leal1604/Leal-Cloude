@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://criasitesbraga.com/valeoclique/sitemap.xml
+Sitemap: https://valeoclique.net/sitemap.xml

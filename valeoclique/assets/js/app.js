@@ -318,7 +318,7 @@
       : state.cats.length === 1 ? 'Mais vendidos em ' + catById[state.cats[0]].nome
       : 'Mais vendidos na Amazon';
     $('#resultsTitle').textContent = title;
-    $('#resultsMeta').textContent = list.length + (list.length === 1 ? ' produto' : ' produtos') + ' · Fonte: Amazon.es';
+    $('#resultsMeta').hidden = true;
 
     var n = (state.cats.length ? 1 : 0) + (state.priceTouched && (state.min > bounds.min || state.max < bounds.max) ? 1 : 0) + (state.rating ? 1 : 0) + (!state.noPrice ? 1 : 0);
     $('#filterCount').hidden = !n; $('#filterCount').textContent = n;

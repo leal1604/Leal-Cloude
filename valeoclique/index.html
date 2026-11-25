@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Vale o Clique | Mais vendidos na Amazon, organizados por categoria</title>
-  <meta name="description" content="Descubra os produtos mais vendidos na Amazon.es em Computadores, Eletrónica, Casa e Cozinha, Beleza, Automóvel e mais. Preços consultados e links diretos para a Amazon.">
+  <meta name="description" content="Descubra os produtos mais vendidos na Amazon.es em Computadores, Eletrónica, Casa e Cozinha, Beleza, Automóvel e mais. Preços de referência e ligações diretas para a Amazon.">
   <meta name="theme-color" content="#0f1e33">
-  <link rel="canonical" href="https://criasitesbraga.com/valeoclique/">
+  <link rel="canonical" href="https://valeoclique.net/">
 
   <!-- Open Graph (WhatsApp, Facebook).  -->
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_PT">
   <meta property="og:site_name" content="Vale o Clique">
   <meta property="og:title" content="Vale o Clique | Descobertas que valem o clique">
-  <meta property="og:description" content="Os mais vendidos da Amazon.es organizados por categoria, com preço consultado e link direto.">
-  <meta property="og:url" content="https://criasitesbraga.com/valeoclique/">
-  <meta property="og:image" content="https://criasitesbraga.com/valeoclique/assets/og-image.png">
+  <meta property="og:description" content="Os mais vendidos da Amazon.es organizados por categoria, com preço de referência e ligação direta.">
+  <meta property="og:url" content="https://valeoclique.net/">
+  <meta property="og:image" content="https://valeoclique.net/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
@@ -23,7 +23,7 @@
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <link rel="preconnect" href="https://m.media-amazon.com">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261124">
 
   <!-- Google Analytics 4: descomente e troque G-XXXXXXXXXX pelo seu ID de medição.
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -59,6 +59,8 @@
         <button type="button" class="search__clear" id="searchClear" aria-label="Limpar pesquisa" hidden>×</button>
       </form>
 
+      <a class="blog-link" href="/blog/">Blog</a>
+
       <button class="fav-link" id="favToggle" aria-pressed="false">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.3C1 8 3.4 4.5 7 4.5c2 0 3.5 1.1 5 2.9 1.5-1.8 3-2.9 5-2.9 3.6 0 6 3.5 4.5 7.2C19.5 16.4 12 21 12 21z"/></svg>
         <span class="fav-link__label">Favoritos</span>
@@ -84,6 +86,7 @@
     <ul class="drawer__list" id="drawerCats"></ul>
     <p class="drawer__title">Site</p>
     <ul class="drawer__list">
+      <li><a href="/blog/">Blog</a></li>
       <li><a href="#como-funciona">Como funciona</a></li>
       <li><a href="#sobre">Sobre nós</a></li>
       <li><a href="#privacidade">Privacidade</a></li>
@@ -135,7 +138,7 @@
         </fieldset>
 
         <fieldset class="fgroup">
-          <legend>Faixa de preço</legend>
+          <legend>Intervalo de preço</legend>
           <p class="range-out"><span id="priceMinOut"></span> – <span id="priceMaxOut"></span></p>
           <div class="range">
             <div class="range__track"><div class="range__fill" id="rangeFill"></div></div>
@@ -173,7 +176,7 @@
             <label class="sort">
               <span class="sr-only">Ordenar</span>
               <select id="sort">
-                <option value="rank">Ordenar: ranking</option>
+                <option value="rank">Ordenar: posição no ranking</option>
                 <option value="price-asc">Menor preço</option>
                 <option value="price-desc">Maior preço</option>
                 <option value="reviews">Mais avaliações</option>
@@ -209,7 +212,7 @@
       </div>
       <div class="trust__item">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-        <div><strong>Preço com data</strong><span>Mostramos quando o preço foi consultado.</span></div>
+        <div><strong>Preço de referência</strong><span>O preço final é sempre o indicado na Amazon.</span></div>
       </div>
       <div class="trust__item">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
@@ -226,15 +229,15 @@
       </details>
       <details id="sobre" class="info__box">
         <summary>Sobre nós</summary>
-        <p>Somos um site independente de recomendações. Poupamos-lhe tempo ao reunir, num só lugar, os produtos que mais se vendem na Amazon em cada categoria, com o preço consultado e a data da consulta.</p>
+        <p>Somos um site independente de recomendações. Poupamos-lhe tempo ao reunir, num só lugar, os produtos que mais se vendem na Amazon em cada categoria, com um preço de referência.</p>
         <p>Participamos no Programa de Associados da Amazon. Quando compra através dos nossos links, podemos receber uma comissão, sem qualquer custo extra para si.</p>
       </details>
       <details id="privacidade" class="info__box">
         <summary>Política de privacidade</summary>
-        <p><strong>Dados que recolhemos.</strong> Este site não pede nome, email nem pagamento. Os seus favoritos ficam guardados apenas no seu navegador (armazenamento local) e não são enviados para nós.</p>
+        <p><strong>Dados que recolhemos.</strong> Este site não pede nome, e-mail nem pagamento. Os seus favoritos ficam guardados apenas no seu navegador (armazenamento local) e não são enviados para nós.</p>
         <p><strong>Links de afiliado.</strong> Os links para a Amazon contêm o nosso identificador de associado. A Amazon pode usar cookies para atribuir a compra, de acordo com a <a href="https://www.amazon.es/gp/help/customer/display.html?nodeId=201909010" target="_blank" rel="nofollow noopener">política de privacidade da Amazon</a>.</p>
         <p><strong>Estatísticas.</strong> Se ativarmos o Google Analytics, serão recolhidos dados anónimos de navegação (páginas vistas, dispositivo, país) para melhorar o site.</p>
-        <p><strong>Os seus direitos.</strong> Pode limpar os favoritos a qualquer momento apagando os dados do site no seu navegador. Para qualquer questão, contacte-nos pelo email indicado no rodapé.</p>
+        <p><strong>Os seus direitos.</strong> Pode limpar os favoritos a qualquer momento apagando os dados do site no seu navegador. Para qualquer questão, contacte-nos pelo e-mail indicado no rodapé.</p>
       </details>
     </section>
   </main>
@@ -246,6 +249,7 @@
         <p class="footer__small">Descobertas que valem o clique.</p>
       </div>
       <nav aria-label="Rodapé">
+        <a href="/blog/">Blog</a>
         <a href="#sobre">Sobre nós</a>
         <a href="#como-funciona">Como funciona</a>
         <a href="#privacidade">Privacidade</a>
@@ -253,7 +257,7 @@
       </nav>
     </div>
     <div class="wrap footer__legal">
-      <p><strong>Este site contém links de afiliado. Podemos receber comissão por compras feitas pelos links, sem custo extra pra você. As compras são feitas diretamente na Amazon.</strong></p>
+      <p><strong>Este site contém links de afiliado. Podemos receber comissão por compras feitas pelos links, sem qualquer custo extra para si. As compras são feitas diretamente na Amazon.</strong></p>
       <p>Como Associado da Amazon, o Vale o Clique recebe por compras qualificadas. Amazon e o logótipo da Amazon são marcas registadas da Amazon.com, Inc. ou das suas afiliadas. Preços e disponibilidade exatos à data/hora indicada e sujeitos a alteração.</p>
       <p class="footer__small">Atualizado em <span class="js-updated"></span> · © <span id="year"></span> Vale o Clique</p>
     </div>
@@ -264,6 +268,6 @@
   </button>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="assets/js/app.js" defer></script>
+  <script src="assets/js/app.js?v=20261124" defer></script>
 </body>
 </html>
