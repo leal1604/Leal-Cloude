@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://valeoclique.net/sitemap.xml
+Sitemap: https://valeoclique.net/blog/sitemap_index.xml
