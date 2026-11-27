@@ -29,11 +29,11 @@
     {
       "tipo": "produto",
       "posicao": "1/5",
-      "imagem": "ecodecalk.jpg",
-      "nome": "Descalcificador De'Longhi",
+      "imagem": "brita.jpg",
+      "nome": "Filtros BRITA Maxtra Pro (6 un.)",
       "nota": "4,7",
-      "detalhe": "168 mil avaliações",
-      "fala": "Um, o descalcificador De'Longhi, que salva a tua máquina de café."
+      "detalhe": "18 mil avaliações",
+      "fala": "Um, os filtros BRITA, para meses de água filtrada em casa."
     },
     {
       "tipo": "produto",
@@ -65,11 +65,11 @@
     {
       "tipo": "produto",
       "posicao": "5/5",
-      "imagem": "g502.jpg",
-      "nome": "Rato Logitech G502",
-      "nota": "4,6",
-      "detalhe": "39 mil avaliações",
-      "fala": "E cinco, o rato Logitech G502, o preferido dos gamers."
+      "imagem": "corretor.jpg",
+      "nome": "Corretor de olheiras Maybelline",
+      "nota": "4,5",
+      "detalhe": "30 mil avaliações",
+      "fala": "E cinco, o corretor de olheiras Maybelline, um dos mais vendidos de beleza."
     },
     {
       "tipo": "cta",
