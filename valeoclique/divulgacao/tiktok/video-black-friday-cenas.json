@@ -9,24 +9,22 @@
   "fonte": "Inter",
   "fonteItalica": "Instrument Serif",
   "legenda": true,
-  "narracao": null,
-  "palavras": null,
+  "narracao": "narracao.mp3",
+  "palavras": "palavras.json",
   "trilha": null,
   "cenas": [
     {
       "tipo": "gancho",
       "titulo": "Antes de comprar na Black Friday ✋",
       "destaque": "Black Friday",
-      "fala": "Antes de comprar na Black Friday ✋",
-      "duracao": 2.3
+      "fala": "Antes de comprar na Black Friday ✋"
     },
     {
       "tipo": "titulo",
       "titulo": "5 achados que toda a gente está a comprar",
       "destaque": "toda a gente",
       "subtitulo": "Entre os mais vendidos da Amazon.es",
-      "fala": "Dos mais vendidos da Amazon.es",
-      "duracao": 2.8
+      "fala": "vê estes 5, entre os mais vendidos da Amazon em Espanha."
     },
     {
       "tipo": "produto",
@@ -35,8 +33,7 @@
       "nome": "Descalcificador De'Longhi",
       "nota": "4,7",
       "detalhe": "168 mil avaliações",
-      "fala": "Salva a máquina de café",
-      "duracao": 2.6
+      "fala": "Um, o descalcificador De'Longhi, que salva a tua máquina de café."
     },
     {
       "tipo": "produto",
@@ -45,8 +42,7 @@
       "nome": "Tomada inteligente Tapo",
       "nota": "4,6",
       "detalhe": "77 mil avaliações",
-      "fala": "Liga e desliga pelo telemóvel",
-      "duracao": 2.6
+      "fala": "Dois, a tomada Tapo, que ligas e desligas pelo telemóvel."
     },
     {
       "tipo": "produto",
@@ -55,8 +51,7 @@
       "nome": "Câmara Tapo 360º",
       "nota": "4,7",
       "detalhe": "54 mil avaliações",
-      "fala": "Vê a casa de qualquer lado",
-      "duracao": 2.6
+      "fala": "Três, a câmara Tapo, que roda 360 graus e mostra a casa no telemóvel."
     },
     {
       "tipo": "produto",
@@ -65,8 +60,7 @@
       "nome": "Adaptador Bluetooth TP-Link",
       "nota": "4,6",
       "detalhe": "60 mil avaliações",
-      "fala": "Bluetooth em qualquer computador",
-      "duracao": 2.6
+      "fala": "Quatro, o adaptador TP-Link, que põe Bluetooth em qualquer computador."
     },
     {
       "tipo": "produto",
@@ -75,16 +69,14 @@
       "nome": "Rato Logitech G502",
       "nota": "4,6",
       "detalhe": "39 mil avaliações",
-      "fala": "O preferido dos gamers",
-      "duracao": 2.6
+      "fala": "E cinco, o rato Logitech G502, o preferido dos gamers."
     },
     {
       "tipo": "cta",
       "chamada": "Qual levavas? Comenta",
       "palavra": "1 a 5",
       "promessa": "Preço de hoje em valeoclique.net 🛍️",
-      "fala": "Qual levavas? Comenta de 1 a 5 e vê o preço de hoje em valeoclique.net",
-      "duracao": 3.8
+      "fala": "Qual é que levavas? Comenta de 1 a 5 e vê o preço de hoje em valeoclique.net."
     }
   ]
 }
