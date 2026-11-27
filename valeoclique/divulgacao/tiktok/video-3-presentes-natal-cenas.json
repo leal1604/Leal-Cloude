@@ -11,7 +11,7 @@
   "legenda": true,
   "narracao": "narracao.mp3",
   "palavras": "palavras.json",
-  "trilha": null,
+  "trilha": "trilha.mp3",
   "cenas": [
     {
       "tipo": "gancho",
@@ -53,5 +53,6 @@
       "promessa": "e eu respondo com as 10 ideias completas",
       "fala": "Comenta NATAL e eu respondo com as 10 ideias completas."
     }
-  ]
+  ],
+  "volumeTrilha": 0.45
 }

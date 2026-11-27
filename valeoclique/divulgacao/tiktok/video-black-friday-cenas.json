@@ -11,7 +11,7 @@
   "legenda": true,
   "narracao": "narracao.mp3",
   "palavras": "palavras.json",
-  "trilha": null,
+  "trilha": "trilha.mp3",
   "cenas": [
     {
       "tipo": "gancho",
@@ -78,5 +78,6 @@
       "promessa": "Preço de hoje em valeoclique.net 🛍️",
       "fala": "Qual é que levavas? Comenta de 1 a 5 e vê o preço de hoje em valeoclique.net."
     }
-  ]
+  ],
+  "volumeTrilha": 0.45
 }
