@@ -1,0 +1,57 @@
+{
+  "cores": {
+    "fundo": "#0f1e33",
+    "texto": "#FFFFFF",
+    "destaque": "#FF7A00",
+    "suave": "#C9D3E1",
+    "sobreDestaque": "#0f1e33"
+  },
+  "fonte": "Inter",
+  "fonteItalica": "Instrument Serif",
+  "legenda": true,
+  "narracao": "narracao.mp3",
+  "palavras": "palavras.json",
+  "trilha": null,
+  "cenas": [
+    {
+      "tipo": "gancho",
+      "titulo": "3 presentes que ninguém vai devolver 🎁",
+      "destaque": "ninguém vai devolver",
+      "fala": "3 presentes que ninguém vai devolver."
+    },
+    {
+      "tipo": "produto",
+      "posicao": "1/3",
+      "imagem": "oneblade.jpg",
+      "nome": "Philips OneBlade 360",
+      "nota": "4,4",
+      "detalhe": "Para quem tem barba",
+      "fala": "Para quem tem barba, a Philips OneBlade corta, contorna e faz a barba com a mesma lâmina."
+    },
+    {
+      "tipo": "produto",
+      "posicao": "2/3",
+      "imagem": "cecotec.jpg",
+      "nome": "Varinha Cecotec 1500 W",
+      "nota": "4,3",
+      "detalhe": "Para quem cozinha",
+      "fala": "Para quem gosta de cozinhar, esta varinha de 1500 watts faz sopas, purés e batidos num instante."
+    },
+    {
+      "tipo": "produto",
+      "posicao": "3/3",
+      "imagem": "arcos.jpg",
+      "nome": "Facas Arcos (3 un.)",
+      "nota": "4,8",
+      "detalhe": "Para o amigo secreto",
+      "fala": "E para o amigo secreto, as facas Arcos, das mais vendidas de cozinha na Amazon."
+    },
+    {
+      "tipo": "cta",
+      "chamada": "Comenta",
+      "palavra": "NATAL",
+      "promessa": "e eu respondo com as 10 ideias completas",
+      "fala": "Comenta NATAL e eu respondo com as 10 ideias completas."
+    }
+  ]
+}
