@@ -1,5 +1,11 @@
 {
-  "cores": { "fundo": "#0f1e33", "texto": "#FFFFFF", "destaque": "#FF7A00", "suave": "#C9D3E1", "sobreDestaque": "#0f1e33" },
+  "cores": {
+    "fundo": "#0f1e33",
+    "texto": "#FFFFFF",
+    "destaque": "#FF7A00",
+    "suave": "#C9D3E1",
+    "sobreDestaque": "#0f1e33"
+  },
   "fonte": "Inter",
   "fonteItalica": "Instrument Serif",
   "legenda": true,
@@ -7,22 +13,78 @@
   "palavras": null,
   "trilha": null,
   "cenas": [
-    { "tipo": "gancho", "titulo": "Antes de comprar na Black Friday ✋", "destaque": "Black Friday",
-      "fala": "Antes de comprar na Black Friday ✋", "duracao": 2.3 },
-    { "tipo": "titulo", "titulo": "5 achados que toda a gente está a comprar", "destaque": "toda a gente",
-      "subtitulo": "Entre os mais vendidos da Amazon.es", "fala": "Dos mais vendidos da Amazon.es", "duracao": 2.8 },
-    { "tipo": "produto", "posicao": "1/5", "imagem": "ecodecalk.jpg", "nome": "Descalcificador De'Longhi",
-      "nota": "4,7", "detalhe": "168 mil avaliações", "fala": "Salva a máquina de café", "duracao": 2.6 },
-    { "tipo": "produto", "posicao": "2/5", "imagem": "p100.jpg", "nome": "Tomada inteligente Tapo",
-      "nota": "4,6", "detalhe": "77 mil avaliações", "fala": "Liga e desliga pelo telemóvel", "duracao": 2.6 },
-    { "tipo": "produto", "posicao": "3/5", "imagem": "c210.jpg", "nome": "Câmara Tapo 360º",
-      "nota": "4,7", "detalhe": "54 mil avaliações", "fala": "Vê a casa de qualquer lado", "duracao": 2.6 },
-    { "tipo": "produto", "posicao": "4/5", "imagem": "skyhigh.jpg", "nome": "Máscara Maybelline Sky High",
-      "nota": "4,2", "detalhe": "64 mil avaliações", "fala": "A máscara sempre esgotada", "duracao": 2.6 },
-    { "tipo": "produto", "posicao": "5/5", "imagem": "g502.jpg", "nome": "Rato Logitech G502",
-      "nota": "4,6", "detalhe": "39 mil avaliações", "fala": "O preferido dos gamers", "duracao": 2.6 },
-    { "tipo": "cta", "chamada": "Qual levavas? Comenta", "palavra": "1 a 5",
+    {
+      "tipo": "gancho",
+      "titulo": "Antes de comprar na Black Friday ✋",
+      "destaque": "Black Friday",
+      "fala": "Antes de comprar na Black Friday ✋",
+      "duracao": 2.3
+    },
+    {
+      "tipo": "titulo",
+      "titulo": "5 achados que toda a gente está a comprar",
+      "destaque": "toda a gente",
+      "subtitulo": "Entre os mais vendidos da Amazon.es",
+      "fala": "Dos mais vendidos da Amazon.es",
+      "duracao": 2.8
+    },
+    {
+      "tipo": "produto",
+      "posicao": "1/5",
+      "imagem": "ecodecalk.jpg",
+      "nome": "Descalcificador De'Longhi",
+      "nota": "4,7",
+      "detalhe": "168 mil avaliações",
+      "fala": "Salva a máquina de café",
+      "duracao": 2.6
+    },
+    {
+      "tipo": "produto",
+      "posicao": "2/5",
+      "imagem": "p100.jpg",
+      "nome": "Tomada inteligente Tapo",
+      "nota": "4,6",
+      "detalhe": "77 mil avaliações",
+      "fala": "Liga e desliga pelo telemóvel",
+      "duracao": 2.6
+    },
+    {
+      "tipo": "produto",
+      "posicao": "3/5",
+      "imagem": "c210.jpg",
+      "nome": "Câmara Tapo 360º",
+      "nota": "4,7",
+      "detalhe": "54 mil avaliações",
+      "fala": "Vê a casa de qualquer lado",
+      "duracao": 2.6
+    },
+    {
+      "tipo": "produto",
+      "posicao": "4/5",
+      "imagem": "ub500.jpg",
+      "nome": "Adaptador Bluetooth TP-Link",
+      "nota": "4,6",
+      "detalhe": "60 mil avaliações",
+      "fala": "Bluetooth em qualquer computador",
+      "duracao": 2.6
+    },
+    {
+      "tipo": "produto",
+      "posicao": "5/5",
+      "imagem": "g502.jpg",
+      "nome": "Rato Logitech G502",
+      "nota": "4,6",
+      "detalhe": "39 mil avaliações",
+      "fala": "O preferido dos gamers",
+      "duracao": 2.6
+    },
+    {
+      "tipo": "cta",
+      "chamada": "Qual levavas? Comenta",
+      "palavra": "1 a 5",
       "promessa": "Preço de hoje em valeoclique.net 🛍️",
-      "fala": "Qual levavas? Comenta de 1 a 5 e vê o preço de hoje em valeoclique.net", "duracao": 3.8 }
+      "fala": "Qual levavas? Comenta de 1 a 5 e vê o preço de hoje em valeoclique.net",
+      "duracao": 3.8
+    }
   ]
 }
