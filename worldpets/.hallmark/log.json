@@ -1,0 +1,36 @@
+[
+ {
+  "shape": "Letter",
+  "theme": "grid",
+  "axes": "light/grotesk-sans/cool",
+  "hero": "Corridor",
+  "nav": "edge-aligned",
+  "footer": "letter close",
+  "imagery": "one library stand-in",
+  "photos": [
+   "Cat_November_2010-1a"
+  ],
+  "entry": "hero head",
+  "fingerprint": "letter+field rows+index+red statement",
+  "sections": [
+   "Corridor hero",
+   "Letter",
+   "Rows on field",
+   "Index",
+   "Statement on mark field",
+   "Letter close"
+  ],
+  "signature": "affiliate disclosure as the loudest statement on the red field",
+  "waived": [
+   "58",
+   "44c",
+   "77",
+   "78",
+   "79",
+   "49b"
+  ],
+  "prompt": "World Pets blog, Portugal, Amazon.es affiliate",
+  "date": "2026-11-28",
+  "mode": "build"
+ }
+]
